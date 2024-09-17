@@ -25,8 +25,8 @@ Siga os passos abaixo para configurar e rodar o projeto localmente.
 ### Passo 1: Clonar o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/smartdiet.git
-cd smartdiet
+git clone https://github.com/MatheusMoreira6/SmartDiet.git
+cd SmartDiet
 ```
 
 ### Passo 2: Instalar Dependências
