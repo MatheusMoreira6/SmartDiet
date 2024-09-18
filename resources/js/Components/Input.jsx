@@ -1,19 +1,14 @@
-const Input = ({ label, name, type = "text", value, onChange }) => {
+const Input = ({ name, type = "text", value, onChange, placeHolder }) => {
     return (
-        <>
-            <label htmlFor={name} className="form-label">
-                {label}
-            </label>
-
-            <input
-                type={type}
-                id={name}
-                name={name}
-                value={value}
-                onChange={onChange}
-                className="form-control"
-            />
-        </>
+        <input
+            id={name}
+            name={name}
+            type={type}
+            value={value}
+            onChange={onChange}
+            placeholder={placeHolder}
+            className="form-control"
+        />
     );
 };
 
