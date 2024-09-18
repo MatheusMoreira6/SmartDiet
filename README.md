@@ -13,10 +13,10 @@ O **SmartDiet** é um sistema desenvolvido para otimizar o gerenciamento de paci
 
 ## Requisitos
 
-- **PHP** (>= 7.4)
-- **Composer**
-- **Node.js** (>= 14.x)
-- **PostgreSQL**
+- **PHP** (>= 8.2)
+- **Composer** (>= 2.7.7)
+- **Node.js** (>= 20.16.0)
+- **PostgreSQL** (>= 16.4)
 
 ## Instalação
 
