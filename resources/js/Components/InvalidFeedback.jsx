@@ -1,5 +1,5 @@
-const InvalidFeedback = ({ error }) => {
-    return <div className="invalid-feedback">{error}</div>;
+const InvalidFeedback = ({ children }) => {
+    return <div className="invalid-feedback">{children}</div>;
 };
 
 export default InvalidFeedback;

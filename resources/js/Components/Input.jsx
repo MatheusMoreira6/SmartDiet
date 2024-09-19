@@ -1,4 +1,11 @@
-const Input = ({ name, type = "text", value, onChange, placeHolder }) => {
+const Input = ({
+    name,
+    type = "text",
+    value,
+    onChange,
+    placeHolder,
+    required,
+}) => {
     return (
         <input
             id={name}
@@ -8,6 +15,7 @@ const Input = ({ name, type = "text", value, onChange, placeHolder }) => {
             onChange={onChange}
             placeholder={placeHolder}
             className="form-control"
+            required={required}
         />
     );
 };

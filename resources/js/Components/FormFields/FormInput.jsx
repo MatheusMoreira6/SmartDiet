@@ -1,10 +1,21 @@
 import Label from "../Label";
 import Input from "../Input";
+import InvalidFeedback from "../InvalidFeedback";
 
-const FormInput = ({ label, name, type, value, onChange, placeHolder }) => {
+const FormInput = ({
+    label,
+    name,
+    type,
+    value,
+    onChange,
+    placeHolder,
+    textError,
+}) => {
     return (
         <>
-            <Label htmlFor={name}>{label}</Label>
+            <Label htmlFor={name} required={textError ? true : false}>
+                {label}
+            </Label>
 
             <Input
                 name={name}
@@ -12,7 +23,10 @@ const FormInput = ({ label, name, type, value, onChange, placeHolder }) => {
                 value={value}
                 onChange={onChange}
                 placeHolder={placeHolder}
+                required={textError ? true : false}
             />
+
+            {textError ? <InvalidFeedback>{textError}</InvalidFeedback> : null}
         </>
     );
 };
