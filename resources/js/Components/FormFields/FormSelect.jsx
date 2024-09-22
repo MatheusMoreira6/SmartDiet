@@ -1,7 +1,7 @@
 import Label from "../Label";
 import Select from "../Select";
 
-const FormSelect = ({ name, label, options, value, onChange }) => {
+const FormSelect = ({ name, label, options, value, onChange, autoFocus }) => {
     return (
         <>
             <Label htmlFor={name}>{label}</Label>
@@ -11,6 +11,7 @@ const FormSelect = ({ name, label, options, value, onChange }) => {
                 options={options}
                 value={value}
                 onChange={onChange}
+                autoFocus={autoFocus}
             />
         </>
     );
