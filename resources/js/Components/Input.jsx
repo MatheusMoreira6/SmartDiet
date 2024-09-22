@@ -14,10 +14,10 @@ const Input = ({
             type={type}
             value={value}
             onChange={onChange}
+            autoFocus={autoFocus}
             placeholder={placeHolder}
             className="form-control"
             required={required}
-            autoFocus={autoFocus}
         />
     );
 };
