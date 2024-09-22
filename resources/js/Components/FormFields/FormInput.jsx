@@ -10,6 +10,7 @@ const FormInput = ({
     onChange,
     placeHolder,
     textError,
+    autoFocus,
 }) => {
     return (
         <>
@@ -24,6 +25,7 @@ const FormInput = ({
                 onChange={onChange}
                 placeHolder={placeHolder}
                 required={textError ? true : false}
+                autoFocus={autoFocus}
             />
 
             {textError ? <InvalidFeedback>{textError}</InvalidFeedback> : null}

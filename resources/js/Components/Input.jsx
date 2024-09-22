@@ -5,6 +5,7 @@ const Input = ({
     onChange,
     placeHolder,
     required,
+    autoFocus,
 }) => {
     return (
         <input
@@ -16,6 +17,7 @@ const Input = ({
             placeholder={placeHolder}
             className="form-control"
             required={required}
+            autoFocus={autoFocus}
         />
     );
 };
