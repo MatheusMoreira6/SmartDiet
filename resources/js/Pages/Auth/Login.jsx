@@ -1,48 +1,93 @@
-import { useState } from "react";
+import { useRef } from "react";
+import { Head, useForm, Link } from "@inertiajs/react";
 import FormInput from "@/Components/FormFields/FormInput";
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const { data, setData, post, processing, errors, reset } = useForm({
+        email: "",
+        password: "",
+    });
+
+    const formRef = useRef(null);
+
+    const hendleSubmit = (e) => {
+        e.preventDefault();
+
+        if (formRef.current.checkValidity()) {
+            formRef.current.classList.remove("was-validated");
+
+            post(route("login"), {
+                onFinish: () => reset("password"),
+            });
+        } else {
+            formRef.current.classList.add("was-validated");
+        }
+    };
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100 bg-primary">
-            <div className="card p-4" style={{ width: "400px" }}>
-                <h2 className="text-start mb-4">Login</h2>
+        <div className="d-flex flex-column justify-content-center align-items-center vh-100 vw-100">
+            <Head title="Login" />
 
-                <p className="text-center text-muted">
-                    Digite os seus dados de acesso no campo abaixo.
-                </p>
+            <div className="card shadow-lg" style={{ width: "400px" }}>
+                <div className="card-body py-4 px-5">
+                    <h1 className="fs-4 card-title fw-bold mb-4">Login</h1>
 
-                <form className="needs-validation" noValidate>
-                    <div className="mb-3">
-                        <FormInput
-                            label={"E-mail"}
-                            name={"email"}
-                            type={"text"}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeHolder={"Digite seu e-mail"}
-                            textError={"Insira um e-mail válido"}
-                        />
-                    </div>
+                    <form
+                        noValidate
+                        ref={formRef}
+                        onSubmit={hendleSubmit}
+                        className="needs-validation"
+                    >
+                        <div className="mb-3">
+                            <FormInput
+                                label={"E-mail"}
+                                name={"email"}
+                                type={"email"}
+                                value={data.email}
+                                autoFocus={true}
+                                placeHolder={"Digite seu e-mail"}
+                                textError={"Insira um e-mail válido"}
+                                onChange={(e) =>
+                                    setData("email", e.target.value)
+                                }
+                            />
+                        </div>
 
-                    <div className="mb-3">
-                        <FormInput
-                            label={"Senha"}
-                            name={"password"}
-                            type={"text"}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeHolder={"Digite sua senha"}
-                            textError={"Insira sua senha"}
-                        />
-                    </div>
+                        <div className="mb-4">
+                            <FormInput
+                                label={"Senha"}
+                                name={"password"}
+                                type={"password"}
+                                value={data.password}
+                                placeHolder={"Digite sua senha"}
+                                textError={"Insira sua senha"}
+                                onChange={(e) =>
+                                    setData("password", e.target.value)
+                                }
+                            />
+                        </div>
 
-                    <button type="submit" className="btn btn-primary w-100">
-                        Login
-                    </button>
-                </form>
+                        <div className="mb-4 text-danger">
+                            {errors.email && <span>{errors.email}</span>}
+                            {errors.password && <span>{errors.password}</span>}
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="btn btn-primary w-100"
+                        >
+                            {processing ? "Carregando..." : "Login"}
+                        </button>
+                    </form>
+                </div>
+
+                <div className="card-footer py-3 border-0">
+                    <p className="text-center mb-0">
+                        Não tem uma conta?{" "}
+                        <Link href={route("cadastrar")}>Cadastre-se</Link>
+                    </p>
+                </div>
             </div>
         </div>
     );
