@@ -25,11 +25,11 @@ const Login = () => {
     };
 
     return (
-        <div className="d-flex vh-100 vw-100">
+        <div className="d-flex vh-100 vw-100 py-3 px-1 overflow-auto">
             <Head title="Login" />
 
             <div className="card m-auto shadow-lg" style={{ width: "400px" }}>
-                <div className="card-body py-4 px-5">
+                <div className="card-body p-4">
                     <h1 className="fs-4 card-title fw-bold mb-4">Login</h1>
 
                     <form
