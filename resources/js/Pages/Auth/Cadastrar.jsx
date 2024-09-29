@@ -4,7 +4,7 @@ import FormInput from "@/Components/FormFields/FormInput";
 
 const Cadastrar = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
+        nome: "",
         cpf: "",
         telefone: "",
         email: "",
@@ -47,14 +47,14 @@ const Cadastrar = () => {
                         <div className="mb-3">
                             <FormInput
                                 label={"Nome"}
-                                name={"name"}
+                                name={"nome"}
                                 type={"text"}
-                                value={data.name}
+                                value={data.nome}
                                 autoFocus={true}
                                 placeHolder={"Digite seu nome"}
                                 textError={"Insira um nome"}
                                 onChange={(e) =>
-                                    setData("name", e.target.value)
+                                    setData("nome", e.target.value)
                                 }
                             />
                         </div>
