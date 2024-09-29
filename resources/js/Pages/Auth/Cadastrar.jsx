@@ -21,7 +21,7 @@ const Cadastrar = () => {
             formRef.current.classList.remove("was-validated");
 
             post(route("cadastrar"), {
-                onFinish: () => reset("password"),
+                onFinish: () => reset("password", "password_confirmation"),
             });
         } else {
             formRef.current.classList.add("was-validated");
@@ -65,6 +65,7 @@ const Cadastrar = () => {
                                 name={"cpf"}
                                 type={"text"}
                                 value={data.cpf}
+                                mask={"999.999.999-99"}
                                 placeHolder={"Digite seu CPF"}
                                 textError={"Insira um CPF válido"}
                                 onChange={(e) => setData("cpf", e.target.value)}
@@ -77,6 +78,7 @@ const Cadastrar = () => {
                                 name={"telefone"}
                                 type={"text"}
                                 value={data.telefone}
+                                mask={"(99) 99999-9999"}
                                 placeHolder={"Digite seu telefone"}
                                 textError={"Insira um telefone válido"}
                                 onChange={(e) =>
@@ -128,6 +130,11 @@ const Cadastrar = () => {
                                     )
                                 }
                             />
+                        </div>
+
+                        <div className="mb-4 text-danger">
+                            {errors.email && <span>{errors.email}</span>}
+                            {errors.password && <span>{errors.password}</span>}
                         </div>
 
                         <button
