@@ -1,6 +1,9 @@
+import InputMask from "react-input-mask";
+
 const Input = ({
     name,
     type = "text",
+    mask,
     value,
     onChange,
     placeHolder,
@@ -8,10 +11,11 @@ const Input = ({
     autoFocus,
 }) => {
     return (
-        <input
+        <InputMask
             id={name}
             name={name}
             type={type}
+            mask={mask}
             value={value}
             onChange={onChange}
             autoFocus={autoFocus}

@@ -6,6 +6,7 @@ const FormInput = ({
     label,
     name,
     type,
+    mask,
     value,
     onChange,
     autoFocus,
@@ -21,6 +22,7 @@ const FormInput = ({
             <Input
                 name={name}
                 type={type}
+                mask={mask}
                 value={value}
                 onChange={onChange}
                 autoFocus={autoFocus}
