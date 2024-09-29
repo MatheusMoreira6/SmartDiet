@@ -122,7 +122,7 @@ const Cadastrar = () => {
                                 type={"password"}
                                 value={data.password_confirmation}
                                 placeHolder={"Confirme sua senha"}
-                                textError={"As senhas não conferem"}
+                                textError={"Insira novamente sua senha"}
                                 onChange={(e) =>
                                     setData(
                                         "password_confirmation",
