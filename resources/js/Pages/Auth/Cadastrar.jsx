@@ -29,10 +29,10 @@ const Cadastrar = () => {
     };
 
     return (
-        <div className="d-flex flex-column justify-content-center align-items-center vh-100 vw-100">
+        <div className="d-flex vh-100 vw-100">
             <Head title="Cadastro" />
 
-            <div className="card shadow-lg" style={{ width: "400px" }}>
+            <div className="card m-auto shadow-lg" style={{ width: "400px" }}>
                 <div className="card-body py-4 px-5">
                     <h1 className="fs-4 card-title fw-bold mb-4">
                         Cadastre-se
