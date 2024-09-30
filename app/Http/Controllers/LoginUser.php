@@ -30,9 +30,7 @@ class LoginUser extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!Auth::attempt($credentials)) {
-            return Inertia::render('Auth/Login', [
-                'errors' => ['error' => 'Email ou senha inválidos'],
-            ]);
+            return redirect()->back()->withErrors(['error' => 'Email ou senha inválidos']);
         }
 
         return redirect()->route('dashboard.home');

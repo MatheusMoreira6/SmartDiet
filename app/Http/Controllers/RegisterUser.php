@@ -40,9 +40,7 @@ class RegisterUser extends Controller
         $request->validate($regras, $feedback);
 
         if ($request->password !== $request->password_confirmation) {
-            return Inertia::render('Auth/Cadastrar', [
-                'errors' => ['error' => 'As senhas não conferem'],
-            ]);
+            return redirect()->back()->withErrors(['error' => 'As senhas não conferem']);
         }
 
         $user = User::create([
@@ -54,9 +52,7 @@ class RegisterUser extends Controller
         ]);
 
         if (!$user) {
-            return Inertia::render('Auth/Cadastrar', [
-                'errors' => ['error' => 'Falha ao cadastrar o usuário'],
-            ]);
+            return redirect()->back()->withErrors(['error' => 'Falha ao cadastrar o usuário']);
         }
 
         Auth::attempt($request->only('email', 'password'));
