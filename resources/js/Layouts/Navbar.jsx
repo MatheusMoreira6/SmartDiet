@@ -5,7 +5,7 @@ const Navbar = ({ children }) => {
         <>
             <header>
                 <nav className="navbar navbar-expand-md" style={{background: '#47c98d'}}>
-                    <div className="container-fluid bg-success">
+                    <div className="container-fluid">
                         <Link
                             className="navbar-brand"
                             href={route("dashboard.home")}
