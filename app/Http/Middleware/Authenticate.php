@@ -17,8 +17,12 @@ class Authenticate
     public function handle(Request $request, Closure $next): Response
     {
         // Verifica se o usuário está autenticado
-        if (!Auth::check()) {
+        if (!Auth::check() && !$request->routeIs('login.user') && !$request->routeIs('register.user')) {
             return redirect()->route('login.user');
+        }
+
+        if (Auth::check() && ($request->routeIs('login.user') || $request->routeIs('register.user'))) {
+            return redirect()->route('dashboard.home');
         }
 
         return $next($request);
