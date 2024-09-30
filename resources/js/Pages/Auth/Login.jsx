@@ -16,7 +16,7 @@ const Login = () => {
         if (formRef.current.checkValidity()) {
             formRef.current.classList.remove("was-validated");
 
-            post(route("login"), {
+            post(route("login.user"), {
                 onFinish: () => reset("password"),
             });
         } else {
@@ -67,9 +67,10 @@ const Login = () => {
                             />
                         </div>
 
-                        <div className="mb-4 text-danger">
+                        <div className="mb-4 text-center fw-semibold text-danger">
                             {errors.email && <span>{errors.email}</span>}
                             {errors.password && <span>{errors.password}</span>}
+                            {errors.error && <span>{errors.error}</span>}
                         </div>
 
                         <button
@@ -85,7 +86,7 @@ const Login = () => {
                 <div className="card-footer py-3 border-0">
                     <p className="text-center mb-0">
                         Não tem uma conta?{" "}
-                        <Link href={route("cadastrar")}>Cadastre-se</Link>
+                        <Link href={route("register.user")}>Cadastre-se</Link>
                     </p>
                 </div>
             </div>

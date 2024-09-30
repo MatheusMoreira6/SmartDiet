@@ -1,24 +1,29 @@
 <?php
 
+use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\LoginUser;
+use App\Http\Controllers\RegisterUser;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Auth/Login');
-})->name('/');
+Route::controller(LoginUser::class)->group(function () {
+    Route::get('/login', 'index')->name('login.user');
+    Route::post('/login', 'login')->name('login.user');
+    Route::get('/logout', 'logout')->name('logout.user');
+});
 
-Route::post('/login', function () {
-    return redirect()->route('home');
-})->name('login');
+Route::controller(RegisterUser::class)->group(function () {
+    Route::get('/cadastrar', 'index')->name('register.user');
+    Route::post('/cadastrar', 'cadastrar')->name('register.user');
+});
 
-Route::get('/cadastrar', function () {
-    return Inertia::render('Auth/Cadastrar');
-})->name('cadastrar');
+Route::middleware([Authenticate::class])->group(function () {
+    Route::get('/', [Dashboard::class, 'index'])->name('dashboard.home');
+});
 
-Route::post('/cadastrar', function () {
-    return redirect()->route('home');
-})->name('cadastrar');
-
-Route::get('/home', function () {
-    return Inertia::render('Dashboard/Home');
-})->name('home');
+/**
+ * Fallback
+ */
+Route::fallback(function () {
+    abort(404, 'Página não encontrada');
+});

@@ -20,7 +20,7 @@ const Cadastrar = () => {
         if (formRef.current.checkValidity()) {
             formRef.current.classList.remove("was-validated");
 
-            post(route("cadastrar"), {
+            post(route("register.user"), {
                 onFinish: () => reset("password", "password_confirmation"),
             });
         } else {
@@ -132,9 +132,16 @@ const Cadastrar = () => {
                             />
                         </div>
 
-                        <div className="mb-4 text-danger">
+                        <div className="mb-4 text-center fw-semibold text-danger">
+                            {errors.nome && <span>{errors.nome}</span>}
+                            {errors.cpf && <span>{errors.cpf}</span>}
+                            {errors.telefone && <span>{errors.telefone}</span>}
                             {errors.email && <span>{errors.email}</span>}
                             {errors.password && <span>{errors.password}</span>}
+                            {errors.password_confirmation && (
+                                <span>{errors.password_confirmation}</span>
+                            )}
+                            {errors.error && <span>{errors.error}</span>}
                         </div>
 
                         <button
@@ -150,7 +157,9 @@ const Cadastrar = () => {
                 <div className="card-footer py-3 border-0">
                     <p className="text-center mb-0">
                         Já tem conta?{" "}
-                        <Link href={route("/")}>Clique aqui para logar</Link>
+                        <Link href={route("login.user")}>
+                            Clique aqui para logar
+                        </Link>
                     </p>
                 </div>
             </div>
