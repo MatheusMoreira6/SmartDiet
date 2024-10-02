@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
-class RegisterUser extends Controller
+class RegisterAdmin extends Controller
 {
     public function index()
     {
@@ -57,6 +57,6 @@ class RegisterUser extends Controller
 
         Auth::attempt($request->only('email', 'password'));
 
-        return redirect()->route('dashboard.home');
+        return redirect()->route('admin.home');
     }
 }

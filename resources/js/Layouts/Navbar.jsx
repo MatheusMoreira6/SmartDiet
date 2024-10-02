@@ -2,123 +2,117 @@ import { Link } from "@inertiajs/react";
 
 const Navbar = ({ children }) => {
     return (
-        <>
-            <header>
-                <nav className="navbar navbar-expand-md" style={{background: '#47c98d'}}>
-                    <div className="container-fluid">
-                        <Link
-                            className="navbar-brand"
-                            href={route("dashboard.home")}
+        <nav
+            className="navbar navbar-expand-md"
+            style={{ background: "#47c98d" }}
+        >
+            <div className="container-fluid">
+                <Link className="navbar-brand" href={route("admin.home")}>
+                    Offcanvas navbar
+                </Link>
+
+                <button
+                    type="button"
+                    className="navbar-toggler"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar"
+                    aria-controls="offcanvasNavbar"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+
+                <div
+                    tabIndex="-1"
+                    id="offcanvasNavbar"
+                    className="offcanvas offcanvas-end"
+                    aria-labelledby="offcanvasNavbarLabel"
+                >
+                    <div className="offcanvas-header">
+                        <h5
+                            id="offcanvasNavbarLabel"
+                            className="offcanvas-title"
                         >
-                            Offcanvas navbar
-                        </Link>
+                            SmartDiet
+                        </h5>
 
                         <button
                             type="button"
-                            className="navbar-toggler"
-                            data-bs-toggle="offcanvas"
-                            data-bs-target="#offcanvasNavbar"
-                            aria-controls="offcanvasNavbar"
-                            aria-label="Toggle navigation"
-                        >
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
+                            aria-label="Close"
+                            className="btn-close"
+                            data-bs-dismiss="offcanvas"
+                        ></button>
+                    </div>
 
-                        <div
-                            tabIndex="-1"
-                            id="offcanvasNavbar"
-                            className="offcanvas offcanvas-end"
-                            aria-labelledby="offcanvasNavbarLabel"
-                        >
-                            <div className="offcanvas-header">
-                                <h5
-                                    id="offcanvasNavbarLabel"
-                                    className="offcanvas-title"
+                    <div className="offcanvas-body">
+                        <ul className="navbar-nav justify-content-around flex-grow-1">
+                            <li className="nav-item">
+                                <Link
+                                    className="nav-link active"
+                                    href={route("admin.home")}
                                 >
-                                    SmartDiet
-                                </h5>
+                                    Home
+                                </Link>
+                            </li>
 
-                                <button
-                                    type="button"
-                                    aria-label="Close"
-                                    className="btn-close"
-                                    data-bs-dismiss="offcanvas"
-                                ></button>
-                            </div>
+                            <li className="nav-item">
+                                <Link
+                                    className="nav-link"
+                                    href={route("admin.home")}
+                                >
+                                    Link
+                                </Link>
+                            </li>
 
-                            <div className="offcanvas-body">
-                                <ul className="navbar-nav justify-content-around flex-grow-1">
-                                    <li className="nav-item">
+                            <li className="nav-item dropdown">
+                                <a
+                                    className="nav-link dropdown-toggle"
+                                    href="#"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <i class="bi bi-person-circle"></i>
+                                </a>
+
+                                <ul className="dropdown-menu">
+                                    <li>
                                         <Link
-                                            className="nav-link active"
-                                            href={route("dashboard.home")}
+                                            className="dropdown-item"
+                                            href={route("dashboard.profile")}
                                         >
-                                            Home
+                                            Perfil
                                         </Link>
                                     </li>
 
-                                    <li className="nav-item">
+                                    <li>
                                         <Link
-                                            className="nav-link"
-                                            href={route("dashboard.home")}
+                                            className="dropdown-item"
+                                            href={route("dashboard.settings")}
                                         >
-                                            Link
+                                            Configurações
                                         </Link>
                                     </li>
 
-                                    <li className="nav-item dropdown">
-                                        <a
-                                            className="nav-link dropdown-toggle"
-                                            href="#"
-                                            role="button"
-                                            data-bs-toggle="dropdown"
-                                            aria-expanded="false"
+                                    <li>
+                                        <hr className="dropdown-divider" />
+                                    </li>
+
+                                    <li>
+                                        <Link
+                                            className="dropdown-item"
+                                            href={route("logout.user")}
                                         >
-                                            Dropdown
-                                        </a>
-
-                                        <ul className="dropdown-menu">
-                                            <li>
-                                                <a
-                                                    className="dropdown-item"
-                                                    href="#"
-                                                >
-                                                    Action
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a
-                                                    className="dropdown-item"
-                                                    href="#"
-                                                >
-                                                    Another action
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <hr className="dropdown-divider" />
-                                            </li>
-
-                                            <li>
-                                                <a
-                                                    className="dropdown-item"
-                                                    href="#"
-                                                >
-                                                    Something else here
-                                                </a>
-                                            </li>
-                                        </ul>
+                                            Logout
+                                        </Link>
                                     </li>
                                 </ul>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
-                </nav>
-            </header>
-
-            <body>{children}</body>
-        </>
+                </div>
+            </div>
+        </nav>
     );
 };
 

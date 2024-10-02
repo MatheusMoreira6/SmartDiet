@@ -20,7 +20,7 @@ const Cadastrar = () => {
         if (formRef.current.checkValidity()) {
             formRef.current.classList.remove("was-validated");
 
-            post(route("register.user"), {
+            post(route("register.admin"), {
                 onFinish: () => reset("password", "password_confirmation"),
             });
         } else {

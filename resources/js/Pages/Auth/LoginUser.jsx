@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
 import FormInput from "@/Components/FormFields/FormInput";
 
-const Login = () => {
+const LoginUser = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: "",
         password: "",
@@ -86,7 +86,7 @@ const Login = () => {
                 <div className="card-footer py-3 border-0">
                     <p className="text-center mb-0">
                         Não tem uma conta?{" "}
-                        <Link href={route("register.user")}>Cadastre-se</Link>
+                        <Link href={route("register.admin")}>Cadastre-se</Link>
                     </p>
                 </div>
             </div>
@@ -94,4 +94,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginUser;

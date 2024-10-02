@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class Authenticate
+class AuthenticateAdmin
 {
     /**
      * Handle an incoming request.
@@ -17,12 +17,8 @@ class Authenticate
     public function handle(Request $request, Closure $next): Response
     {
         // Verifica se o usuário está autenticado
-        if (!Auth::check() && !$request->routeIs('login.user') && !$request->routeIs('register.user')) {
+        if (!Auth::check()) {
             return redirect()->route('login.user');
-        }
-
-        if (Auth::check() && ($request->routeIs('login.user') || $request->routeIs('register.user'))) {
-            return redirect()->route('dashboard.home');
         }
 
         return $next($request);
