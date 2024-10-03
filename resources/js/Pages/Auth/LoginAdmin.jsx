@@ -16,7 +16,7 @@ const LoginAdmin = () => {
         if (formRef.current.checkValidity()) {
             formRef.current.classList.remove("was-validated");
 
-            post(route("login.user"), {
+            post(route("login.admin"), {
                 onFinish: () => reset("password"),
             });
         } else {
@@ -26,11 +26,17 @@ const LoginAdmin = () => {
 
     return (
         <div className="d-flex vh-100 vw-100 py-3 px-1 overflow-auto">
-            <Head title="Login" />
+            <Head title="Login Nutricionista" />
 
             <div className="card m-auto shadow-lg" style={{ width: "400px" }}>
                 <div className="card-body p-4">
-                    <h1 className="fs-4 card-title fw-bold mb-4">Login</h1>
+                    <h1 className="fs-4 card-title fw-bold mb-4">
+                        Login
+                        <span className="fs-5 fw-normal text-muted">
+                            {" "}
+                            - Nutricionista
+                        </span>
+                    </h1>
 
                     <form
                         noValidate
@@ -84,9 +90,14 @@ const LoginAdmin = () => {
                 </div>
 
                 <div className="card-footer py-3 border-0">
-                    <p className="text-center mb-0">
+                    <p className="text-center fw-semibold mb-0">
                         Não tem uma conta?{" "}
-                        <Link href={route("register.admin")}>Cadastre-se</Link>
+                        <Link
+                            className="fw-normal"
+                            href={route("register.admin")}
+                        >
+                            Cadastre-se
+                        </Link>
                     </p>
                 </div>
             </div>

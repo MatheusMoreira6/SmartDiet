@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class Dashboard extends Controller
+class DashboardAdmin extends Controller
 {
     public function index()
     {
-        return Inertia::render('Dashboard/Home');
+        return Inertia::render('Admin/Home');
     }
 }

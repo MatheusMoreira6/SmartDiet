@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Nutricionista;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
@@ -12,7 +15,7 @@ class RegisterAdmin extends Controller
 {
     public function index()
     {
-        return Inertia::render('Auth/Cadastrar');
+        return Inertia::render('Auth/RegisterAdmin');
     }
 
     public function cadastrar(Request $request)
@@ -43,15 +46,23 @@ class RegisterAdmin extends Controller
             return redirect()->back()->withErrors(['error' => 'As senhas não conferem']);
         }
 
-        $user = User::create([
-            'nome' => $request->nome,
-            'cpf' => $request->cpf,
-            'telefone' => $request->telefone,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            DB::transaction(function () use ($request) {
+                $user = User::create([
+                    'nome' => $request->nome,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'administrador' => true,
+                ]);
 
-        if (!$user) {
+                Nutricionista::create([
+                    'user_id' => $user->id,
+                    'nome' => $request->nome,
+                    'cpf' => $request->cpf,
+                    'telefone' => $request->telefone,
+                ]);
+            });
+        } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Falha ao cadastrar o usuário']);
         }
 

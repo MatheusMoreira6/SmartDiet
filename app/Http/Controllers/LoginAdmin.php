@@ -10,7 +10,7 @@ class LoginAdmin extends Controller
 {
     public function index()
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Auth/LoginAdmin');
     }
 
     public function login(Request $request)
@@ -29,7 +29,9 @@ class LoginAdmin extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (!Auth::attempt($credentials)) {
+        if (!Auth::attempt($credentials) || !Auth::user()->administrador) {
+            Auth::logout();
+
             return redirect()->back()->withErrors(['error' => 'Email ou senha inválidos']);
         }
 
@@ -40,6 +42,6 @@ class LoginAdmin extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('login.user');
+        return redirect()->route('login.admin');
     }
 }

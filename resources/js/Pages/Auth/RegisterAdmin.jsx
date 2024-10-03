@@ -30,7 +30,7 @@ const Cadastrar = () => {
 
     return (
         <div className="d-flex vh-100 vw-100 py-3 px-1 overflow-auto">
-            <Head title="Cadastro" />
+            <Head title="Cadastro Nutricionista" />
 
             <div className="card m-auto shadow-lg" style={{ width: "400px" }}>
                 <div className="card-body p-4">
@@ -155,9 +155,9 @@ const Cadastrar = () => {
                 </div>
 
                 <div className="card-footer py-3 border-0">
-                    <p className="text-center mb-0">
+                    <p className="text-center fw-semibold mb-0">
                         Já tem conta?{" "}
-                        <Link href={route("login.user")}>
+                        <Link className="fw-normal" href={route("login.admin")}>
                             Clique aqui para logar
                         </Link>
                     </p>

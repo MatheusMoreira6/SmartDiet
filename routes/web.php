@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\DashboardAdmin;
+use App\Http\Controllers\DashboardUser;
 use App\Http\Controllers\LoginAdmin;
 use App\Http\Controllers\LoginUser;
 use App\Http\Controllers\RegisterAdmin;
@@ -12,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware([CheckLogout::class])->group(function () {
 
     Route::controller(LoginUser::class)->group(function () {
-        Route::get('/login', 'index')->name('login.user');
-        Route::post('/login', 'login')->name('login.user');
+        Route::get('/user/login', 'index')->name('login.user');
+        Route::post('/user/login', 'login')->name('login.user');
     });
 
     Route::controller(LoginAdmin::class)->group(function () {
@@ -22,50 +23,44 @@ Route::middleware([CheckLogout::class])->group(function () {
     });
 
     Route::controller(RegisterAdmin::class)->group(function () {
-        Route::get('/admin/cadastrar', 'index')->name('register.admin');
-        Route::post('/admin/cadastrar', 'cadastrar')->name('register.admin');
+        Route::get('/admin/register', 'index')->name('register.admin');
+        Route::post('/admin/register', 'cadastrar')->name('register.admin');
     });
 });
 
-Route::middleware([AuthenticateAdmin::class])->group(function () {
+Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function () {
 
-    // Logout
-    Route::get('/logout', [LoginUser::class, 'logout'])->name('logout.user');
+    Route::get('/', [DashboardAdmin::class, 'index'])->name('admin.home');
 
-    Route::prefix('admin')->group(function () {
-        Route::get('/', [Dashboard::class, 'index'])->name('admin.home');
-
-        Route::prefix('profile')->group(function () {
-            Route::get('/', [Dashboard::class, 'profile'])->name('admin.profile');
-        });
-
-        Route::prefix('settings')->group(function () {
-            Route::get('/', [Dashboard::class, 'settings'])->name('admin.settings');
-        });
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [DashboardAdmin::class, 'profile'])->name('admin.profile');
     });
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [DashboardAdmin::class, 'settings'])->name('admin.settings');
+    });
+
+    Route::get('/logout', [LoginAdmin::class, 'logout'])->name('logout.admin');
 });
 
-Route::middleware([AuthenticateUser::class])->group(function () {
+Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () {
 
-    // Logout
-    Route::get('/logout', [LoginUser::class, 'logout'])->name('logout.user');
+    Route::get('/', [DashboardUser::class, 'index'])->name('user.home');
 
-    Route::prefix('user')->group(function () {
-        Route::get('/', [Dashboard::class, 'index'])->name('user.home');
-
-        Route::prefix('profile')->group(function () {
-            Route::get('/', [Dashboard::class, 'profile'])->name('user.profile');
-        });
-
-        Route::prefix('settings')->group(function () {
-            Route::get('/', [Dashboard::class, 'settings'])->name('user.settings');
-        });
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [DashboardUser::class, 'profile'])->name('user.profile');
     });
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [DashboardUser::class, 'settings'])->name('user.settings');
+    });
+
+    Route::get('/logout', [LoginUser::class, 'logout'])->name('logout.user');
 });
 
 /**
  * Fallback
  */
 Route::fallback(function () {
-    abort(404, 'Página não encontrada');
+    return redirect()->route('login.user');
 });

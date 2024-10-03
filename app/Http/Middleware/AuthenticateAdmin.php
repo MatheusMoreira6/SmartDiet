@@ -18,9 +18,13 @@ class AuthenticateAdmin
     {
         // Verifica se o usuário está autenticado
         if (!Auth::check()) {
-            return redirect()->route('login.user');
+            return redirect()->route('login.admin');
         }
 
-        return $next($request);
+        if (Auth::user()->administrador) {
+            return $next($request);
+        } else {
+            return redirect()->route('user.home');
+        }
     }
 }

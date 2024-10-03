@@ -18,7 +18,11 @@ class CheckLogout
     {
         // Verifica se o usuário está deslogado
         if (Auth::check()) {
-            return redirect()->route('admin.home');
+            if (Auth::user()->administrador) {
+                return redirect()->route('admin.home');
+            } else {
+                return redirect()->route('user.home');
+            }
         }
 
         return $next($request);

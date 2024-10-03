@@ -21,6 +21,10 @@ class AuthenticateUser
             return redirect()->route('login.user');
         }
 
-        return $next($request);
+        if (!Auth::user()->administrador) {
+            return $next($request);
+        } else {
+            return redirect()->route('admin.home');
+        }
     }
 }

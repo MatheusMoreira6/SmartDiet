@@ -26,11 +26,17 @@ const LoginUser = () => {
 
     return (
         <div className="d-flex vh-100 vw-100 py-3 px-1 overflow-auto">
-            <Head title="Login" />
+            <Head title="Login Paciente" />
 
             <div className="card m-auto shadow-lg" style={{ width: "400px" }}>
                 <div className="card-body p-4">
-                    <h1 className="fs-4 card-title fw-bold mb-4">Login</h1>
+                    <h1 className="fs-4 card-title fw-bold mb-4">
+                        Login
+                        <span className="fs-5 fw-normal text-muted">
+                            {" "}
+                            - Paciente
+                        </span>
+                    </h1>
 
                     <form
                         noValidate
@@ -84,9 +90,11 @@ const LoginUser = () => {
                 </div>
 
                 <div className="card-footer py-3 border-0">
-                    <p className="text-center mb-0">
-                        Não tem uma conta?{" "}
-                        <Link href={route("register.admin")}>Cadastre-se</Link>
+                    <p className="text-center fw-semibold mb-0">
+                        Nutricionista?{" "}
+                        <Link className="fw-normal" href={route("login.admin")}>
+                            Clique aqui para logar
+                        </Link>
                     </p>
                 </div>
             </div>

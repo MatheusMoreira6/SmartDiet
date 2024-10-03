@@ -10,7 +10,7 @@ class LoginUser extends Controller
 {
     public function index()
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Auth/LoginUser');
     }
 
     public function login(Request $request)
@@ -29,11 +29,13 @@ class LoginUser extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (!Auth::attempt($credentials)) {
+        if (!Auth::attempt($credentials) || Auth::user()->administrador) {
+            Auth::logout();
+
             return redirect()->back()->withErrors(['error' => 'Email ou senha inválidos']);
         }
 
-        return redirect()->route('admin.home');
+        return redirect()->route('user.home');
     }
 
     public function logout()
