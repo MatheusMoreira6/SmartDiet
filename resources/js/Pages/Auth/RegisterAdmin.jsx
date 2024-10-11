@@ -5,6 +5,8 @@ import FormInput from "@/Components/FormFields/FormInput";
 const Cadastrar = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         nome: "",
+        sobrenome: "",
+        data_nascimento: "",
         cpf: "",
         telefone: "",
         email: "",
@@ -55,6 +57,35 @@ const Cadastrar = () => {
                                 textError={"Insira um nome"}
                                 onChange={(e) =>
                                     setData("nome", e.target.value)
+                                }
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <FormInput
+                                label={"Sobrenome"}
+                                name={"sobrenome"}
+                                type={"text"}
+                                value={data.sobrenome}
+                                placeHolder={"Digite seu sobrenome"}
+                                textError={"Insira um sobrenome"}
+                                onChange={(e) =>
+                                    setData("sobrenome", e.target.value)
+                                }
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <FormInput
+                                label={"Data de Nascimento"}
+                                name={"data_nascimento"}
+                                type={"text"}
+                                value={data.data_nascimento}
+                                mask={"99/99/9999"}
+                                placeHolder={"__/__/____"}
+                                textError={"Insira uma data de nascimento"}
+                                onChange={(e) =>
+                                    setData("data_nascimento", e.target.value)
                                 }
                             />
                         </div>
@@ -133,15 +164,9 @@ const Cadastrar = () => {
                         </div>
 
                         <div className="mb-4 text-center fw-semibold text-danger">
-                            {errors.nome && <span>{errors.nome}</span>}
-                            {errors.cpf && <span>{errors.cpf}</span>}
-                            {errors.telefone && <span>{errors.telefone}</span>}
-                            {errors.email && <span>{errors.email}</span>}
-                            {errors.password && <span>{errors.password}</span>}
-                            {errors.password_confirmation && (
-                                <span>{errors.password_confirmation}</span>
-                            )}
-                            {errors.error && <span>{errors.error}</span>}
+                            {Object.keys(errors).map((key) => (
+                                <span>{errors[key]}</span>
+                            ))}
                         </div>
 
                         <button

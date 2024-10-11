@@ -74,9 +74,9 @@ const LoginAdmin = () => {
                         </div>
 
                         <div className="mb-4 text-center fw-semibold text-danger">
-                            {errors.email && <span>{errors.email}</span>}
-                            {errors.password && <span>{errors.password}</span>}
-                            {errors.error && <span>{errors.error}</span>}
+                            {Object.keys(errors).map((key) => (
+                                <span>{errors[key]}</span>
+                            ))}
                         </div>
 
                         <button

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use App\Libraries\LibValidation;
 
 class RegisterAdmin extends Controller
 {
@@ -22,6 +23,8 @@ class RegisterAdmin extends Controller
     {
         $regras = [
             'nome' => 'required|min:3|max:100',
+            'sobrenome' => 'required|min:3|max:100',
+            'data_nascimento' => 'required',
             'cpf' => 'required|size:14',
             'telefone' => 'required|size:15',
             'email' => 'email',
@@ -33,6 +36,9 @@ class RegisterAdmin extends Controller
             'required' => 'O campo :attribute precisa ser preenchido',
             'nome.min' => 'O campo nome precisa ter no mínimo 3 caracteres',
             'nome.max' => 'O campo nome deve ter no máximo 100 caracteres',
+            'sobrenome.min' => 'O campo sobrenome precisa ter no mínimo 3 caracteres',
+            'sobrenome.max' => 'O campo sobrenome deve ter no máximo 100 caracteres',
+            'data_nascimento' => 'A data de nascimento é obrigatória',
             'cpf.size' => 'O CPF deve ter 14 caracteres',
             'telefone.size' => 'O telefone deve ter 15 caracteres',
             'email' => 'O email é inválido',
@@ -42,8 +48,16 @@ class RegisterAdmin extends Controller
 
         $request->validate($regras, $feedback);
 
+        if (!LibValidation::validateDateOfBirth($request->data_nascimento, 'd/m/Y')) {
+            return redirect()->back()->withErrors(['data_nascimento' => 'A data de nascimento é inválida']);
+        }
+
+        if (!LibValidation::validateCPF($request->cpf)) {
+            return redirect()->back()->withErrors(['cpf' => 'O CPF é inválido']);
+        }
+
         if ($request->password !== $request->password_confirmation) {
-            return redirect()->back()->withErrors(['error' => 'As senhas não conferem']);
+            return redirect()->back()->withErrors(['password' => 'As senhas não conferem']);
         }
 
         try {
@@ -58,6 +72,8 @@ class RegisterAdmin extends Controller
                 Nutricionista::create([
                     'user_id' => $user->id,
                     'nome' => $request->nome,
+                    'sobrenome' => $request->sobrenome,
+                    'data_nascimento' => $request->data_nascimento,
                     'cpf' => $request->cpf,
                     'telefone' => $request->telefone,
                 ]);

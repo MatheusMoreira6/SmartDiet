@@ -1,9 +1,9 @@
 import { Head } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 
-const Home = () => {
+const Home = ({ user }) => {
     return (
-        <AdminLayout>
+        <AdminLayout user={user}>
             <Head title="Tela Inicial" />
         </AdminLayout>
     );

@@ -1,6 +1,6 @@
 import { Link } from "@inertiajs/react";
 
-const Navbar = ({ children }) => {
+const Navbar = ({ user }) => {
     return (
         <nav
             className="navbar navbar-expand-md"
@@ -8,7 +8,7 @@ const Navbar = ({ children }) => {
         >
             <div className="container-fluid">
                 <Link className="navbar-brand" href={route("admin.home")}>
-                    Offcanvas navbar
+                    SmartDiet
                 </Link>
 
                 <button
@@ -48,10 +48,10 @@ const Navbar = ({ children }) => {
                         <ul className="navbar-nav justify-content-around flex-grow-1">
                             <li className="nav-item">
                                 <Link
-                                    className="nav-link active"
+                                    className="nav-link"
                                     href={route("admin.home")}
                                 >
-                                    Home
+                                    Pacientes
                                 </Link>
                             </li>
 
@@ -60,7 +60,25 @@ const Navbar = ({ children }) => {
                                     className="nav-link"
                                     href={route("admin.home")}
                                 >
-                                    Link
+                                    Agendamentos
+                                </Link>
+                            </li>
+
+                            <li className="nav-item">
+                                <Link
+                                    className="nav-link"
+                                    href={route("admin.home")}
+                                >
+                                    Exames
+                                </Link>
+                            </li>
+
+                            <li className="nav-item">
+                                <Link
+                                    className="nav-link"
+                                    href={route("admin.home")}
+                                >
+                                    Questionários
                                 </Link>
                             </li>
 
@@ -72,14 +90,15 @@ const Navbar = ({ children }) => {
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
-                                    <i class="bi bi-person-circle"></i>
+                                    <i className="bi bi-person-circle me-2"></i>
+                                    {user.nome}
                                 </a>
 
                                 <ul className="dropdown-menu">
                                     <li>
                                         <Link
                                             className="dropdown-item"
-                                            href={route("dashboard.profile")}
+                                            href={route("admin.profile")}
                                         >
                                             Perfil
                                         </Link>
@@ -88,7 +107,7 @@ const Navbar = ({ children }) => {
                                     <li>
                                         <Link
                                             className="dropdown-item"
-                                            href={route("dashboard.settings")}
+                                            href={route("admin.settings")}
                                         >
                                             Configurações
                                         </Link>
@@ -101,8 +120,9 @@ const Navbar = ({ children }) => {
                                     <li>
                                         <Link
                                             className="dropdown-item"
-                                            href={route("logout.user")}
+                                            href={route("logout.admin")}
                                         >
+                                            <i class="bi bi-box-arrow-right me-2"></i>
                                             Logout
                                         </Link>
                                     </li>

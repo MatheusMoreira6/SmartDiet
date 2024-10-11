@@ -10,6 +10,7 @@ use App\Http\Middleware\AuthenticateAdmin;
 use App\Http\Middleware\AuthenticateUser;
 use Illuminate\Support\Facades\Route;
 
+// Rotas de autenticação
 Route::middleware([CheckLogout::class])->group(function () {
 
     Route::controller(LoginUser::class)->group(function () {
@@ -28,6 +29,7 @@ Route::middleware([CheckLogout::class])->group(function () {
     });
 });
 
+// Rotas do painel de administração
 Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function () {
 
     Route::get('/', [DashboardAdmin::class, 'index'])->name('admin.home');
@@ -43,6 +45,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
     Route::get('/logout', [LoginAdmin::class, 'logout'])->name('logout.admin');
 });
 
+// Rotas do painel de usuário
 Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () {
 
     Route::get('/', [DashboardUser::class, 'index'])->name('user.home');

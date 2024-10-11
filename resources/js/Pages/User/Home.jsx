@@ -1,5 +1,5 @@
 import { Head } from "@inertiajs/react";
-import AdminLayout from "@/Layouts/AdminLayout";
+import AdminLayout from "@/Layouts/Admin/Layout";
 
 const Home = () => {
     return (

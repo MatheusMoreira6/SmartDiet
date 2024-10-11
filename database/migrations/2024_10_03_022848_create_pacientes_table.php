@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->unique();
             $table->string('nome');
+            $table->string('sobrenome');
+            $table->date('data_nascimento');
             $table->string('cpf', 14)->unique();
             $table->string('telefone', 15);
             $table->timestamps();

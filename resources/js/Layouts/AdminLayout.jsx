@@ -1,10 +1,10 @@
-import Navbar from "./Navbar";
+import Navbar from "./Admin/Navbar";
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = ({ user, children }) => {
     return (
         <>
             <header>
-                <Navbar />
+                <Navbar user={user} />
             </header>
 
             <main>{children}</main>
