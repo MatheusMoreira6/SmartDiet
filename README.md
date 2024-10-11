@@ -18,6 +18,17 @@ O **SmartDiet** é um sistema desenvolvido para otimizar o gerenciamento de paci
 - **Node.js** (>= 20.16.0)
 - **PostgreSQL** (>= 16.4)
 
+### Extensões PHP Necessárias
+
+Para rodar o Laravel corretamente, você deve garantir que as seguintes extensões PHP estejam habilitadas:
+
+- **cURL** (extension=curl)
+- **FileInfo** (extension=fileinfo)
+- **OpenSSL** (extension=openssl)
+- **PDO_PGSQL** (extension=pdo_pgsql)
+- **PGSQL** (extension=pgsql)
+- **Zip** (extension=zip)
+
 ## Instalação
 
 Siga os passos abaixo para configurar e rodar o projeto localmente.
