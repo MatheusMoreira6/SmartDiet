@@ -15,9 +15,7 @@ const FormInput = ({
 }) => {
     return (
         <>
-            <Label htmlFor={name} required={textError ? true : false}>
-                {label}
-            </Label>
+            <Label htmlFor={name}>{label}</Label>
 
             <Input
                 name={name}

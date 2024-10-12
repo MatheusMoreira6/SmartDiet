@@ -1,14 +1,6 @@
-const Label = ({ htmlFor, required, children }) => {
-    let className;
-    
-    if (required) {
-        className = "form-label required";
-    } else {
-        className = "form-label";
-    }
-
+const Label = ({ htmlFor, children }) => {
     return (
-        <label htmlFor={htmlFor} className={className}>
+        <label htmlFor={htmlFor} className="form-label">
             {children}
         </label>
     );
