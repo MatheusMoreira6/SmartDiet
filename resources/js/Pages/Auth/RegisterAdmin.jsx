@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
+import Form from "@/Components/Form";
 import FormInput from "@/Components/FormFields/FormInput";
 
 const Cadastrar = () => {
@@ -40,12 +41,7 @@ const Cadastrar = () => {
                         Cadastre-se
                     </h1>
 
-                    <form
-                        noValidate
-                        ref={formRef}
-                        onSubmit={hendleSubmit}
-                        className="needs-validation"
-                    >
+                    <Form formRef={formRef} hendleSubmit={hendleSubmit}>
                         <div className="mb-3">
                             <FormInput
                                 label={"Nome"}
@@ -176,7 +172,7 @@ const Cadastrar = () => {
                         >
                             {processing ? "Carregando..." : "Cadastrar"}
                         </button>
-                    </form>
+                    </Form>
                 </div>
 
                 <div className="card-footer py-3 border-0">

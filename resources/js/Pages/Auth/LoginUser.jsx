@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
+import Form from "@/Components/Form";
 import FormInput from "@/Components/FormFields/FormInput";
 
 const LoginUser = () => {
@@ -38,12 +39,7 @@ const LoginUser = () => {
                         </span>
                     </h1>
 
-                    <form
-                        noValidate
-                        ref={formRef}
-                        onSubmit={hendleSubmit}
-                        className="needs-validation"
-                    >
+                    <Form formRef={formRef} hendleSubmit={hendleSubmit}>
                         <div className="mb-3">
                             <FormInput
                                 label={"E-mail"}
@@ -86,7 +82,7 @@ const LoginUser = () => {
                         >
                             {processing ? "Carregando..." : "Login"}
                         </button>
-                    </form>
+                    </Form>
                 </div>
 
                 <div className="card-footer py-3 border-0">
