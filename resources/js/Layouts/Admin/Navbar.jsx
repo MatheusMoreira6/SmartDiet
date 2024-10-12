@@ -122,7 +122,7 @@ const Navbar = ({ user }) => {
                                             className="dropdown-item"
                                             href={route("logout.admin")}
                                         >
-                                            <i class="bi bi-box-arrow-right me-2"></i>
+                                            <i className="bi bi-box-arrow-right me-2"></i>
                                             Logout
                                         </Link>
                                     </li>
