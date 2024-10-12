@@ -17,4 +17,9 @@ class Nutricionista extends Model
         'cpf',
         'telefone'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -34,4 +34,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function nutricionista()
+    {
+        return $this->hasOne(Nutricionista::class);
+    }
+
+    public function paciente()
+    {
+        return $this->hasOne(Paciente::class);
+    }
 }
