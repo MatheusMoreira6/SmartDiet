@@ -32,7 +32,13 @@ Route::middleware([CheckLogout::class])->group(function () {
 // Rotas do painel de administração
 Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function () {
 
-    Route::get('/', [DashboardAdmin::class, 'index'])->name('admin.home');
+    Route::controller(DashboardAdmin::class)->group(function () {
+        Route::get('/', 'index')->name('admin.home');
+        Route::get('/pacientes', 'pacientes')->name('admin.pacientes');
+        Route::get('/agendamentos', 'agendamentos')->name('admin.agendamentos');
+        Route::get('/exames', 'exames')->name('admin.exames');
+        Route::get('/questionarios', 'questionarios')->name('admin.questionarios');
+    });
 
     Route::prefix('profile')->group(function () {
         Route::get('/', [DashboardAdmin::class, 'profile'])->name('admin.profile');
@@ -48,7 +54,9 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 // Rotas do painel de usuário
 Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () {
 
-    Route::get('/', [DashboardUser::class, 'index'])->name('user.home');
+    Route::controller(DashboardUser::class)->group(function () {
+        Route::get('/', 'index')->name('user.home');
+    });
 
     Route::prefix('profile')->group(function () {
         Route::get('/', [DashboardUser::class, 'profile'])->name('user.profile');

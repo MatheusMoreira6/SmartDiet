@@ -1,6 +1,10 @@
 import { Link } from "@inertiajs/react";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, currentRoute }) => {
+    function classLink(route) {
+        return currentRoute == route ? "nav-link active" : "nav-link";
+    }
+
     return (
         <nav
             className="navbar navbar-expand-md"
@@ -48,8 +52,8 @@ const Navbar = ({ user }) => {
                         <ul className="navbar-nav justify-content-around flex-grow-1">
                             <li className="nav-item">
                                 <Link
-                                    className="nav-link"
-                                    href={route("admin.home")}
+                                    className={classLink("admin.pacientes")}
+                                    href={route("admin.pacientes")}
                                 >
                                     Pacientes
                                 </Link>
@@ -57,8 +61,8 @@ const Navbar = ({ user }) => {
 
                             <li className="nav-item">
                                 <Link
-                                    className="nav-link"
-                                    href={route("admin.home")}
+                                    className={classLink("admin.agendamentos")}
+                                    href={route("admin.agendamentos")}
                                 >
                                     Agendamentos
                                 </Link>
@@ -66,8 +70,8 @@ const Navbar = ({ user }) => {
 
                             <li className="nav-item">
                                 <Link
-                                    className="nav-link"
-                                    href={route("admin.home")}
+                                    className={classLink("admin.exames")}
+                                    href={route("admin.exames")}
                                 >
                                     Exames
                                 </Link>
@@ -75,8 +79,8 @@ const Navbar = ({ user }) => {
 
                             <li className="nav-item">
                                 <Link
-                                    className="nav-link"
-                                    href={route("admin.home")}
+                                    className={classLink("admin.questionarios")}
+                                    href={route("admin.questionarios")}
                                 >
                                     Questionários
                                 </Link>

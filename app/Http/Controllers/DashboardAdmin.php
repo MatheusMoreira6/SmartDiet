@@ -2,16 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class DashboardAdmin extends Controller
 {
     public function index()
     {
-        return Inertia::render('Admin/Home', [
-            'user' => Auth::user(),
-        ]);
+        return $this->render('Admin/Home');
+    }
+
+    public function pacientes()
+    {
+        return $this->render('Admin/Pacientes');
+    }
+
+    public function agendamentos()
+    {
+        return $this->render('Admin/Agendamentos');
+    }
+
+    public function exames()
+    {
+        return $this->render('Admin/Exames');
+    }
+
+    public function questionarios()
+    {
+        return $this->render('Admin/Questionarios');
     }
 }

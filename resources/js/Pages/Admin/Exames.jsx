@@ -1,12 +1,12 @@
 import { Head } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 
-const Home = ({ user, currentRoute }) => {
+const Exames = ({ user, currentRoute }) => {
     return (
         <AdminLayout user={user} currentRoute={currentRoute}>
-            <Head title="Tela Inicial" />
+            <Head title="Exames" />
         </AdminLayout>
     );
 };
 
-export default Home;
+export default Exames;
