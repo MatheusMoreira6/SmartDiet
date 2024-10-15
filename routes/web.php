@@ -1,13 +1,30 @@
 <?php
 
-use App\Http\Controllers\DashboardAdmin;
-use App\Http\Controllers\DashboardUser;
-use App\Http\Controllers\LoginAdmin;
-use App\Http\Controllers\LoginUser;
-use App\Http\Controllers\RegisterAdmin;
+// Controllers Admin
+use App\Http\Controllers\Admin\Dashboard as DashboardAdmin;
+use App\Http\Controllers\Admin\Agendamentos as AgendamentosAdmin;
+use App\Http\Controllers\Admin\Exames as ExamesAdmin;
+use App\Http\Controllers\Admin\Pacientes as PacientesAdmin;
+use App\Http\Controllers\Admin\Questionarios as QuestionariosAdmin;
+use App\Http\Controllers\Admin\Perfil as PerfilAdmin;
+use App\Http\Controllers\Admin\Configuracoes as ConfiguracoesAdmin;
+
+// Controllers Auth
+use App\Http\Controllers\Auth\CadastroAdmin as CadastroAdmin;
+use App\Http\Controllers\Auth\LoginAdmin as LoginAdmin;
+use App\Http\Controllers\Auth\LoginUser as LoginUser;
+
+// Controllers User
+use App\Http\Controllers\User\Dashboard as DashboardUser;
+use App\Http\Controllers\User\Perfil as PerfilUser;
+use App\Http\Controllers\User\Configuracoes as ConfiguracoesUser;
+
+// Middlewares
 use App\Http\Middleware\CheckLogout;
 use App\Http\Middleware\AuthenticateAdmin;
 use App\Http\Middleware\AuthenticateUser;
+
+// Facades
 use Illuminate\Support\Facades\Route;
 
 // Rotas de autenticação
@@ -23,7 +40,7 @@ Route::middleware([CheckLogout::class])->group(function () {
         Route::post('/admin/login', 'login')->name('login.admin');
     });
 
-    Route::controller(RegisterAdmin::class)->group(function () {
+    Route::controller(CadastroAdmin::class)->group(function () {
         Route::get('/admin/register', 'index')->name('register.admin');
         Route::post('/admin/register', 'cadastrar')->name('register.admin');
     });
@@ -32,20 +49,18 @@ Route::middleware([CheckLogout::class])->group(function () {
 // Rotas do painel de administração
 Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function () {
 
-    Route::controller(DashboardAdmin::class)->group(function () {
-        Route::get('/', 'index')->name('admin.home');
-        Route::get('/pacientes', 'pacientes')->name('admin.pacientes');
-        Route::get('/agendamentos', 'agendamentos')->name('admin.agendamentos');
-        Route::get('/exames', 'exames')->name('admin.exames');
-        Route::get('/questionarios', 'questionarios')->name('admin.questionarios');
+    Route::get('/', [DashboardAdmin::class, 'index'])->name('admin.home');
+    Route::get('/pacientes', [PacientesAdmin::class, 'index'])->name('admin.pacientes');
+    Route::get('/agendamentos', [AgendamentosAdmin::class, 'index'])->name('admin.agendamentos');
+    Route::get('/exames', [ExamesAdmin::class, 'index'])->name('admin.exames');
+    Route::get('/questionarios', [QuestionariosAdmin::class, 'index'])->name('admin.questionarios');
+
+    Route::controller(PerfilAdmin::class)->prefix('perfil')->group(function () {
+        Route::get('/', 'index')->name('admin.perfil');
     });
 
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [DashboardAdmin::class, 'profile'])->name('admin.profile');
-    });
-
-    Route::prefix('settings')->group(function () {
-        Route::get('/', [DashboardAdmin::class, 'settings'])->name('admin.settings');
+    Route::controller(ConfiguracoesAdmin::class)->prefix('configuracoes')->group(function () {
+        Route::get('/', 'index')->name('admin.configuracoes');
     });
 
     Route::get('/logout', [LoginAdmin::class, 'logout'])->name('logout.admin');
@@ -54,16 +69,14 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 // Rotas do painel de usuário
 Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () {
 
-    Route::controller(DashboardUser::class)->group(function () {
-        Route::get('/', 'index')->name('user.home');
+    Route::get('/', [DashboardUser::class, 'index'])->name('user.home');
+
+    Route::controller(PerfilUser::class)->prefix('perfil')->group(function () {
+        Route::get('/', 'index')->name('user.perfil');
     });
 
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [DashboardUser::class, 'profile'])->name('user.profile');
-    });
-
-    Route::prefix('settings')->group(function () {
-        Route::get('/', [DashboardUser::class, 'settings'])->name('user.settings');
+    Route::controller(ConfiguracoesUser::class)->prefix('configuracoes')->group(function () {
+        Route::get('/', 'index')->name('user.configuracoes');
     });
 
     Route::get('/logout', [LoginUser::class, 'logout'])->name('logout.user');

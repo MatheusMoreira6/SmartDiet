@@ -3,7 +3,7 @@ import { Head, useForm, Link } from "@inertiajs/react";
 import Form from "@/Components/Form";
 import FormInput from "@/Components/FormFields/FormInput";
 
-const Cadastrar = () => {
+const CadastroAdmin = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         nome: "",
         sobrenome: "",
@@ -188,4 +188,4 @@ const Cadastrar = () => {
     );
 };
 
-export default Cadastrar;
+export default CadastroAdmin;

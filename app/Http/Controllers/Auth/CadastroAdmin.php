@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\Nutricionista;
 use App\Models\User;
 use Exception;
@@ -9,14 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Inertia\Inertia;
 use App\Libraries\LibValidation;
 
-class RegisterAdmin extends Controller
+class CadastroAdmin extends Controller
 {
     public function index()
     {
-        return Inertia::render('Auth/RegisterAdmin');
+        return $this->render('Auth/CadastroAdmin');
     }
 
     public function cadastrar(Request $request)

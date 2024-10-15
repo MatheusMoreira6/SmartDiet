@@ -102,7 +102,7 @@ const Navbar = ({ user, currentRoute }) => {
                                     <li>
                                         <Link
                                             className="dropdown-item"
-                                            href={route("admin.profile")}
+                                            href={route("admin.perfil")}
                                         >
                                             Perfil
                                         </Link>
@@ -111,7 +111,7 @@ const Navbar = ({ user, currentRoute }) => {
                                     <li>
                                         <Link
                                             className="dropdown-item"
-                                            href={route("admin.settings")}
+                                            href={route("admin.configuracoes")}
                                         >
                                             Configurações
                                         </Link>

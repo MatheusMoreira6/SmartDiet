@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 
 class LoginAdmin extends Controller
 {
     public function index()
     {
-        return Inertia::render('Auth/LoginAdmin');
+        return $this->render('Auth/LoginAdmin');
     }
 
     public function login(Request $request)
