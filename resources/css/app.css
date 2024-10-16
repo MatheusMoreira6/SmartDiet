@@ -1,6 +1,8 @@
-button.btn:not(:last-child),
-a.btn:not(:last-child) {
-    margin-right: 0.5rem;
+@media (min-width: 768px) {
+    button.btn:not(:last-child),
+    a.btn:not(:last-child) {
+        margin-right: 0.5rem;
+    }
 }
 
 button > i,
