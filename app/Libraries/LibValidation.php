@@ -9,9 +9,11 @@ class LibValidation
         // Cria um objeto DateTime a partir do formato e data fornecidos
         $d = \DateTime::createFromFormat($format, $date);
 
-        // Verifica se o objeto DateTime foi criado com sucesso, se a data formatada corresponde à data fornecida
-        // e se a data fornecida é anterior à data atual
-        return $d && $d->format($format) === $date && $d < new \DateTime();
+        $maxDate = new \DateTime();
+        $minDate = (new \DateTime())->modify('-120 years');
+
+        // Verifica se a data é válida e está no intervalo permitido
+        return $d && $d->format($format) === $date && $d > $minDate && $d < $maxDate;
     }
 
     public static function validateCPF($cpf)
