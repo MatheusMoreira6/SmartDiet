@@ -1,4 +1,6 @@
 const Select = ({ name, options, value, onChange, autoFocus }) => {
+    const selectOptions = [{ id: "", descricao: "Selecione..." }, ...options];
+
     return (
         <select
             id={name}
@@ -8,9 +10,13 @@ const Select = ({ name, options, value, onChange, autoFocus }) => {
             autoFocus={autoFocus}
             className="form-select"
         >
-            {options.map((option, index) => (
-                <option key={index} value={option.value}>
-                    {option.label}
+            {selectOptions.map((option, index) => (
+                <option
+                    key={index}
+                    value={option.id}
+                    disabled={option.id === ""}
+                >
+                    {option.descricao}
                 </option>
             ))}
         </select>
