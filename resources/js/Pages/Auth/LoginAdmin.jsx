@@ -71,7 +71,10 @@ const LoginAdmin = () => {
 
                         <div className="mb-4 text-center fw-semibold text-danger">
                             {Object.keys(errors).map((key) => (
-                                <span key={key}>{errors[key]}</span>
+                                <>
+                                    <span key={key}>{errors[key]}</span>
+                                    <br />
+                                </>
                             ))}
                         </div>
 
