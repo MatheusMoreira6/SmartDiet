@@ -1,5 +1,5 @@
-button.btn,
-a.btn {
+button.btn:not(:last-child),
+a.btn:not(:last-child) {
     margin-right: 0.5rem;
 }
 
