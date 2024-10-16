@@ -14,6 +14,7 @@ class Paciente extends Model
         'nome',
         'sobrenome',
         'data_nascimento',
+        'genero_id',
         'cpf',
         'telefone'
     ];
@@ -26,5 +27,10 @@ class Paciente extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function genero()
+    {
+        return $this->belongsTo(Genero::class);
     }
 }

@@ -17,11 +17,15 @@ return new class extends Migration
             $table->string('nome');
             $table->string('sobrenome');
             $table->date('data_nascimento');
+            $table->unsignedBigInteger('genero_id')->nullable();
             $table->string('cpf', 14)->unique();
+            $table->string('crn', 9)->unique()->nullable();
             $table->string('telefone', 15);
+            $table->string('telefone_fixo', 9)->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('genero_id')->references('id')->on('generos');
         });
     }
 
