@@ -9,6 +9,8 @@ use Illuminate\Validation\Validator;
 
 class CadastroAdminRequest extends FormRequest
 {
+    protected $stopOnFirstFailure = true;
+
     public function authorize(): bool
     {
         return !Auth::check();
