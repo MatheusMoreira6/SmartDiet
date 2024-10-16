@@ -12,13 +12,15 @@
         "@vitejs/plugin-react": "^4.2.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
+        "bootstrap": "^5.3.3",
+        "bootstrap-icons": "1.11.3",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.31",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "bootstrap": "^5.3.3",
-        "bootstrap-icons": "1.11.3",
         "react-input-mask": "^2.0.4",
+        "sweetalert2": "^11.14.3",
+        "sweetalert2-react-content": "^5.0.7",
         "vite": "^5.0"
     }
 }
