@@ -20,7 +20,7 @@ class CadastroAdmin extends Controller
 
     public function cadastrar(CadastroAdminRequest $request)
     {
-        $request->validate();
+        $request->validated();
 
         try {
             DB::transaction(function () use ($request) {
