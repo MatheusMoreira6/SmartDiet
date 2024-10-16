@@ -161,10 +161,9 @@ const CadastroAdmin = () => {
 
                         <div className="mb-4 text-center fw-semibold text-danger">
                             {Object.keys(errors).map((key) => (
-                                <>
-                                    <span key={key}>{errors[key]}</span>
-                                    <br />
-                                </>
+                                <p key={key} className="m-0">
+                                    {errors[key]}
+                                </p>
                             ))}
                         </div>
 
