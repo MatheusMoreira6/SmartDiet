@@ -5,17 +5,11 @@ namespace App\Http\Requests;
 use App\Libraries\LibConversion;
 use App\Libraries\LibValidation;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
 
 class FormDataAdminRequest extends FormRequest
 {
     public $stopOnFirstFailure = true;
-
-    public function authorize(): bool
-    {
-        return !Auth::check();
-    }
 
     public function prepareForValidation(): void
     {
