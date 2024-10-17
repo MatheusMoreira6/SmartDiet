@@ -57,6 +57,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 
     Route::controller(PerfilAdmin::class)->prefix('perfil')->group(function () {
         Route::get('/', 'index')->name('admin.perfil');
+        Route::put('/', 'salvar')->name('admin.perfil');
     });
 
     Route::controller(ConfiguracoesAdmin::class)->prefix('configuracoes')->group(function () {

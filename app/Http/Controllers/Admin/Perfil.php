@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FormDataAdminRequest;
 use App\Libraries\LibConversion;
-use Illuminate\Http\Request;
+use App\Models\Genero;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class Perfil extends Controller
@@ -17,6 +19,30 @@ class Perfil extends Controller
 
         return $this->render('Admin/Perfil', [
             'dados' => $nutricionista->toArray(),
+            'generos' => Genero::all()->toArray()
         ]);
+    }
+
+    public function salvar(FormDataAdminRequest $request)
+    {
+        $request->validated();
+
+        $nutricionista = Auth::user()->nutricionista;
+        $user = $nutricionista->user;
+
+        try {
+            $update = [
+                $nutricionista->update($request->all()),
+                $user->update(['nome' => $request->nome]),
+            ];
+
+            if (!in_array(false, $update)) {
+                return response()->json(['success' => 'Cadastro atualizado com sucesso']);
+            } else {
+                return response()->json(['error' => 'Falha ao atualizar o cadastro'], 400);
+            }
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Falha ao atualizar o cadastro'], 500);
+        }
     }
 }
