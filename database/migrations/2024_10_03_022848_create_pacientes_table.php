@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nome');
             $table->string('sobrenome');
             $table->date('data_nascimento');
-            $table->unsignedBigInteger('genero_id')->nullable();
+            $table->unsignedBigInteger('genero_id');
             $table->string('cpf', 14)->unique();
             $table->string('telefone', 15);
             $table->timestamps();

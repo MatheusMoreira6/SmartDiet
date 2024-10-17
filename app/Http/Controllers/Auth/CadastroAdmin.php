@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CadastroAdminRequest;
+use App\Http\Requests\FormDataAdminRequest;
+use App\Models\Genero;
 use App\Models\Nutricionista;
 use App\Models\User;
 use Exception;
@@ -15,10 +16,12 @@ class CadastroAdmin extends Controller
 {
     public function index()
     {
-        return $this->render('Auth/CadastroAdmin');
+        return $this->render('Auth/CadastroAdmin', [
+            'generos' => Genero::all()->toArray()
+        ]);
     }
 
-    public function cadastrar(CadastroAdminRequest $request)
+    public function cadastrar(FormDataAdminRequest $request)
     {
         $request->validated();
 
@@ -36,8 +39,11 @@ class CadastroAdmin extends Controller
                     'nome' => $request->nome,
                     'sobrenome' => $request->sobrenome,
                     'data_nascimento' => $request->data_nascimento,
+                    'genero_id' => $request->genero_id,
                     'cpf' => $request->cpf,
+                    'crn' => $request->crn,
                     'telefone' => $request->telefone,
+                    'telefone_fixo' => $request->telefone_fixo,
                 ]);
             });
         } catch (Exception $e) {

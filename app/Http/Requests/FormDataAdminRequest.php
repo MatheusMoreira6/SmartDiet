@@ -2,18 +2,30 @@
 
 namespace App\Http\Requests;
 
+use App\Libraries\LibConversion;
 use App\Libraries\LibValidation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
 
-class CadastroAdminRequest extends FormRequest
+class FormDataAdminRequest extends FormRequest
 {
-    protected $stopOnFirstFailure = true;
+    public $stopOnFirstFailure = true;
 
     public function authorize(): bool
     {
         return !Auth::check();
+    }
+
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'nome' => trim($this->nome),
+            'sobrenome' => trim($this->sobrenome),
+            'data_nascimento' => LibConversion::convertBrToIso($this->data_nascimento),
+            'email' => trim($this->email),
+            'password' => trim($this->password),
+        ]);
     }
 
     public function rules(): array
@@ -22,8 +34,11 @@ class CadastroAdminRequest extends FormRequest
             'nome' => 'required|min:3|max:100',
             'sobrenome' => 'required|min:3|max:100',
             'data_nascimento' => 'required',
+            'genero_id' => 'required|exists:generos,id',
             'cpf' => 'required|size:14|unique:nutricionistas,cpf',
+            'crn' => 'required|size:9|unique:nutricionistas,crn',
             'telefone' => 'required|size:15',
+            'telefone_fixo' => 'nullable|size:9',
             'email' => 'email|unique:users,email',
             'password' => 'required|min:6|confirmed',
         ];
@@ -38,9 +53,14 @@ class CadastroAdminRequest extends FormRequest
             'sobrenome.min' => 'O campo sobrenome precisa ter no mínimo 3 caracteres',
             'sobrenome.max' => 'O campo sobrenome deve ter no máximo 100 caracteres',
             'data_nascimento' => 'A data de nascimento é obrigatória',
+            'genero_id.required' => 'O gênero é obrigatório',
+            'genero_id.exists' => 'O gênero é inválido',
             'cpf.size' => 'O CPF deve ter 14 caracteres',
             'cpf.unique' => 'O CPF já está em uso',
-            'telefone.size' => 'O telefone deve ter 15 caracteres',
+            'crn.size' => 'O CRN deve ter 9 caracteres',
+            'crn.unique' => 'O CRN já está em uso',
+            'telefone.size' => 'O telefone deve ter 11 números',
+            'telefone_fixo.size' => 'O telefone fixo deve ter 8 números',
             'email' => 'O email é inválido',
             'email.unique' => 'O email já está em uso',
             'password.required' => 'A senha é obrigatória',
@@ -53,7 +73,7 @@ class CadastroAdminRequest extends FormRequest
     {
         return [
             function (Validator $validator) {
-                if ($this->data_nascimento && !LibValidation::validateDateOfBirth($this->data_nascimento, 'd/m/Y')) {
+                if ($this->data_nascimento && !LibValidation::validateDateOfBirth($this->data_nascimento)) {
                     $validator->errors()->add('data_nascimento', 'A data de nascimento é inválida.');
                 }
 
