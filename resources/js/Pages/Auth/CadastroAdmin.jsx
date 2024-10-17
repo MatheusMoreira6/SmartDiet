@@ -105,6 +105,7 @@ const CadastroAdmin = ({ generos }) => {
                                         name={"sexo"}
                                         options={generos}
                                         value={data.genero_id}
+                                        textError={"Informe seu sexo"}
                                         onChange={(e) =>
                                             setData("genero_id", e.target.value)
                                         }

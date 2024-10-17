@@ -1,7 +1,16 @@
 import Label from "../Label";
 import Select from "../Select";
+import InvalidFeedback from "../InvalidFeedback";
 
-const FormSelect = ({ name, label, options, value, onChange, autoFocus }) => {
+const FormSelect = ({
+    name,
+    label,
+    options,
+    value,
+    onChange,
+    autoFocus,
+    textError,
+}) => {
     return (
         <>
             <Label htmlFor={name}>{label}</Label>
@@ -12,7 +21,10 @@ const FormSelect = ({ name, label, options, value, onChange, autoFocus }) => {
                 value={value}
                 onChange={onChange}
                 autoFocus={autoFocus}
+                required={textError ? true : false}
             />
+
+            {textError ? <InvalidFeedback>{textError}</InvalidFeedback> : null}
         </>
     );
 };

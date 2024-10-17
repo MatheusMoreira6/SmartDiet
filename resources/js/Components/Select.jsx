@@ -1,4 +1,4 @@
-const Select = ({ name, options, value, onChange, autoFocus }) => {
+const Select = ({ name, options, value, onChange, required, autoFocus }) => {
     const selectOptions = [{ id: "", descricao: "Selecione..." }, ...options];
 
     return (
@@ -7,6 +7,7 @@ const Select = ({ name, options, value, onChange, autoFocus }) => {
             name={name}
             value={value}
             onChange={onChange}
+            required={required}
             autoFocus={autoFocus}
             className="form-select"
         >
