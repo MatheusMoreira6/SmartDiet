@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Libraries\LibConversion;
 use App\Libraries\LibValidation;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
 
 class FormDataAdminRequest extends FormRequest
@@ -24,7 +25,7 @@ class FormDataAdminRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'user_id' => 'prohibited',
             'nome' => 'required|min:3|max:100',
             'sobrenome' => 'required|min:3|max:100',
@@ -37,6 +38,19 @@ class FormDataAdminRequest extends FormRequest
             'email' => 'email|unique:users,email',
             'password' => 'required|min:6|confirmed',
         ];
+
+        if ($this->isMethod('put')) {
+            $user = Auth::user();
+            $nutricionista = $user->nutricionista;
+
+            $rules['cpf'] .= ',' . $nutricionista->id . ',id';
+            $rules['crn'] .= ',' . $nutricionista->id . ',id';
+            $rules['email'] .= ',' . $user->id . ',id';
+
+            $rules['password'] = 'nullable|min:6|confirmed';
+        }
+
+        return $rules;
     }
 
     public function messages(): array
