@@ -73,11 +73,11 @@ class FormDataAdminRequest extends FormRequest
     {
         return [
             function (Validator $validator) {
-                if ($this->data_nascimento && !LibValidation::validateDateOfBirth($this->data_nascimento)) {
+                if ($validator->errors()->isEmpty() && $this->data_nascimento && !LibValidation::validateDateOfBirth($this->data_nascimento)) {
                     $validator->errors()->add('data_nascimento', 'A data de nascimento é inválida.');
                 }
 
-                if ($this->cpf && !LibValidation::validateCPF($this->cpf)) {
+                if ($validator->errors()->isEmpty() && $this->cpf && !LibValidation::validateCPF($this->cpf)) {
                     $validator->errors()->add('cpf', 'O CPF é inválido.');
                 }
             }
