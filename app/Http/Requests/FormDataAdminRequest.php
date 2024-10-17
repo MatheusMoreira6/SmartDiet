@@ -31,6 +31,7 @@ class FormDataAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_id' => 'prohibited',
             'nome' => 'required|min:3|max:100',
             'sobrenome' => 'required|min:3|max:100',
             'data_nascimento' => 'required',
@@ -48,6 +49,7 @@ class FormDataAdminRequest extends FormRequest
     {
         return [
             'required' => 'O campo :attribute precisa ser preenchido',
+            'user_id.prohibited' => 'O campo user_id é inválido',
             'nome.min' => 'O campo nome precisa ter no mínimo 3 caracteres',
             'nome.max' => 'O campo nome deve ter no máximo 100 caracteres',
             'sobrenome.min' => 'O campo sobrenome precisa ter no mínimo 3 caracteres',
