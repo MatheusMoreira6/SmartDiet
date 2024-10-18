@@ -71,6 +71,11 @@ cd SmartDiet
    php artisan migrate
    ```
 
+4. Execute as seeds do banco de dados:
+   ```bash
+   php artisan db:seed
+   ```
+
 ### Passo 4: Executar o Projeto
 
 Inicie o servidor do Laravel:
