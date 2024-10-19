@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import ContainerFluid from "./ContainerFluid";
 import ButtonPrimary from "./ButtonPrimary";
 
-const Modal = ({
+const FormModal = ({
     title,
     children,
     modalRef,
@@ -108,4 +108,4 @@ const Modal = ({
     );
 };
 
-export default Modal;
+export default FormModal;
