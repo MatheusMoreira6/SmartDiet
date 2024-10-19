@@ -15,6 +15,7 @@ class User extends Authenticatable
         'nome',
         'email',
         'password',
+        'password_temp',
         'administrador',
     ];
 

@@ -43,14 +43,17 @@ const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
                 url: route("admin.pacientes"),
             })
                 .then(function (response) {
-                    let succesMessage = "Paciente cadastrado com sucesso!";
+                    let successMessage = "Paciente cadastrado com sucesso!";
+                    let textMessage = "";
 
                     if (response.data.success) {
-                        succesMessage = response.data.success;
+                        successMessage = response.data.success;
+                        textMessage = response.data.text;
                     }
 
                     SweetAlert.fire({
-                        title: succesMessage,
+                        title: successMessage,
+                        text: textMessage,
                         icon: "success",
                     }).then(() => {
                         if (modalRef.current) {

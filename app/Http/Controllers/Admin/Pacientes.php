@@ -38,6 +38,7 @@ class Pacientes extends Controller
                     'nome' => $request->nome,
                     'email' => $request->email,
                     'password' => Hash::make($password),
+                    'password_temp' => $password,
                     'administrador' => false,
                 ]);
 
@@ -53,7 +54,10 @@ class Pacientes extends Controller
                 ]);
             });
 
-            return response()->json(['success' => 'Paciente cadastrado com sucesso!'], 201);
+            return response()->json([
+                'success' => 'Paciente cadastrado com sucesso!',
+                'text' => 'Senha temporária: ' . $password
+            ], 201);
         } catch (Exception $e) {
             return response()->json(['errors' => ['error' => 'Falha ao cadastrar o paciente!']], 500);
         }
