@@ -1,4 +1,4 @@
-const Card = ({ title, children, footer, onClick }) => {
+const Card = ({ title, children, footer, onClick, disabled }) => {
     const renderHeader = () => {
         if (!title) return null;
 
@@ -28,6 +28,7 @@ const Card = ({ title, children, footer, onClick }) => {
     return (
         <div
             onClick={onClick}
+            disabled={disabled}
             className="card m-auto"
             style={{ width: "280px", height: "350px" }}
         >
