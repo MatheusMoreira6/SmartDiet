@@ -35,4 +35,9 @@ class Nutricionista extends Model
     {
         return $this->belongsTo(Genero::class);
     }
+
+    public function pacientes()
+    {
+        return $this->hasMany(Paciente::class);
+    }
 }

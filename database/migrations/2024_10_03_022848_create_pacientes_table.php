@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->unique();
+            $table->unsignedBigInteger('nutricionista_id');
             $table->string('nome');
             $table->string('sobrenome');
             $table->date('data_nascimento');
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('nutricionista_id')->references('id')->on('nutricionistas');
             $table->foreign('genero_id')->references('id')->on('generos');
         });
     }

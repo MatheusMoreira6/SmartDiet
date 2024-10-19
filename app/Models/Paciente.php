@@ -11,6 +11,7 @@ class Paciente extends Model
 
     protected $fillable = [
         'user_id',
+        'nutricionista_id',
         'nome',
         'sobrenome',
         'data_nascimento',
@@ -32,5 +33,10 @@ class Paciente extends Model
     public function genero()
     {
         return $this->belongsTo(Genero::class);
+    }
+
+    public function nutricionista()
+    {
+        return $this->belongsTo(Nutricionista::class);
     }
 }
