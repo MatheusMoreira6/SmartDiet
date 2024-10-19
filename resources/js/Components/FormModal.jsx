@@ -17,24 +17,20 @@ const FormModal = ({
             const form = formRef.current;
 
             if (form) {
-                formRef.current.reset();
-                formRef.current.classList.remove("was-validated");
+                form.reset();
+                form.classList.remove("was-validated");
             }
         };
 
         const modal = modalRef.current;
 
         if (modal) {
-            ["shown.bs.modal", "hidden.bs.modal"].forEach((event) =>
-                modal.addEventListener(event, handleHide)
-            );
+            modal.addEventListener("hidden.bs.modal", handleHide);
         }
 
         return () => {
             if (modal) {
-                ["shown.bs.modal", "hidden.bs.modal"].forEach((event) =>
-                    modal.removeEventListener(event, handleHide)
-                );
+                modal.addEventListener("hidden.bs.modal", handleHide);
             }
         };
     }, [modalRef]);
