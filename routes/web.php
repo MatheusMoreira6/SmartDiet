@@ -50,7 +50,12 @@ Route::middleware([CheckLogout::class])->group(function () {
 Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function () {
 
     Route::get('/', [DashboardAdmin::class, 'index'])->name('admin.home');
-    Route::get('/pacientes', [PacientesAdmin::class, 'index'])->name('admin.pacientes');
+
+    Route::controller(PacientesAdmin::class)->group(function () {
+        Route::get('/pacientes', 'index')->name('admin.pacientes');
+        Route::post('/pacientes', 'cadastrar')->name('admin.pacientes');
+    });
+
     Route::get('/agendamentos', [AgendamentosAdmin::class, 'index'])->name('admin.agendamentos');
     Route::get('/exames', [ExamesAdmin::class, 'index'])->name('admin.exames');
     Route::get('/questionarios', [QuestionariosAdmin::class, 'index'])->name('admin.questionarios');
