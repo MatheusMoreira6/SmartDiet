@@ -68,6 +68,16 @@ const FormModal = ({
         modalSize = "modal-xl";
     }
 
+    const performSubmit = () => {
+        const form = formRef.current;
+
+        if (form) {
+            formRef.current.dispatchEvent(
+                new Event("submit", { bubbles: true, cancelable: true })
+            );
+        }
+    };
+
     return (
         <div
             tabIndex="-1"
@@ -80,24 +90,27 @@ const FormModal = ({
                 className={`modal-dialog modal-dialog-scrollable ${modalSize}`}
             >
                 <div className="modal-content">
-                    <Form formRef={formRef} handleSubmit={handleSubmit}>
-                        <div className="modal-header">
-                            <h5 className="modal-title">{title}</h5>
-                            <ModalClose />
-                        </div>
+                    <div className="modal-header">
+                        <h5 className="modal-title">{title}</h5>
+                        <ModalClose />
+                    </div>
 
-                        <div className="modal-body">
+                    <div className="modal-body">
+                        <Form formRef={formRef} handleSubmit={handleSubmit}>
                             <ContainerFluid>{children}</ContainerFluid>
-                        </div>
+                        </Form>
+                    </div>
 
-                        <div className="modal-footer">
-                            <ButtonClose />
+                    <div className="modal-footer">
+                        <ButtonClose />
 
-                            <ButtonPrimary disabled={processing}>
-                                {processing ? "Salvando..." : "Salvar"}
-                            </ButtonPrimary>
-                        </div>
-                    </Form>
+                        <ButtonPrimary
+                            disabled={processing}
+                            onClick={performSubmit}
+                        >
+                            {processing ? "Salvando..." : "Salvar"}
+                        </ButtonPrimary>
+                    </div>
                 </div>
             </div>
         </div>
