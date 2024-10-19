@@ -1,16 +1,67 @@
 import Form from "./Form";
-import ButtonDanger from "./ButtonDanger";
-import ButtonPrimary from "./ButtonPrimary";
+import { useEffect } from "react";
 import ContainerFluid from "./ContainerFluid";
+import ButtonPrimary from "./ButtonPrimary";
 
 const Modal = ({
     title,
     children,
+    modalRef,
     formRef,
-    hendleSubmit,
     processing,
+    handleSubmit,
     size = "lg",
 }) => {
+    useEffect(() => {
+        const handleHide = () => {
+            const form = formRef.current;
+
+            if (form) {
+                formRef.current.reset();
+                formRef.current.classList.remove("was-validated");
+            }
+        };
+
+        const modal = modalRef.current;
+
+        if (modal) {
+            ["shown.bs.modal", "hidden.bs.modal"].forEach((event) =>
+                modal.addEventListener(event, handleHide)
+            );
+        }
+
+        return () => {
+            if (modal) {
+                ["shown.bs.modal", "hidden.bs.modal"].forEach((event) =>
+                    modal.removeEventListener(event, handleHide)
+                );
+            }
+        };
+    }, [modalRef]);
+
+    const ModalClose = () => {
+        return (
+            <button
+                type="button"
+                aria-label="Fechar"
+                className="btn-close"
+                data-bs-dismiss="modal"
+            ></button>
+        );
+    };
+
+    const ButtonClose = () => {
+        return (
+            <button
+                type="button"
+                data-bs-dismiss="modal"
+                className="btn btn-danger"
+            >
+                Fechar
+            </button>
+        );
+    };
+
     let modalSize = "";
 
     if (size === "sm") {
@@ -23,41 +74,34 @@ const Modal = ({
 
     return (
         <div
-            tabindex="-1"
+            tabIndex="-1"
+            ref={modalRef}
             className="modal fade"
             data-bs-backdrop="static"
             data-bs-keyboard="false"
         >
-            <div className={`modal-dialog modal-dialog-scrollable ${size}`}>
+            <div
+                className={`modal-dialog modal-dialog-scrollable ${modalSize}`}
+            >
                 <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">{title}</h5>
+                    <Form formRef={formRef} handleSubmit={handleSubmit}>
+                        <div className="modal-header">
+                            <h5 className="modal-title">{title}</h5>
+                            <ModalClose />
+                        </div>
 
-                        <button
-                            type="button"
-                            className="btn-close"
-                            aria-label="Fechar"
-                            data-bs-dismiss="modal"
-                        ></button>
-                    </div>
+                        <div className="modal-body">
+                            <ContainerFluid>{children}</ContainerFluid>
+                        </div>
 
-                    <div className="modal-body">
-                        <ContainerFluid>
-                            <Form formRef={formRef} hendleSubmit={hendleSubmit}>
-                                {children}
-                            </Form>
-                        </ContainerFluid>
-                    </div>
+                        <div className="modal-footer">
+                            <ButtonClose />
 
-                    <div className="modal-footer">
-                        <ButtonDanger type="reset" formRef={formRef}>
-                            Fechar
-                        </ButtonDanger>
-
-                        <ButtonPrimary formRef={formRef} disabled={processing}>
-                            {processing ? "Salvando..." : "Salvar"}
-                        </ButtonPrimary>
-                    </div>
+                            <ButtonPrimary disabled={processing}>
+                                {processing ? "Salvando..." : "Salvar"}
+                            </ButtonPrimary>
+                        </div>
+                    </Form>
                 </div>
             </div>
         </div>
