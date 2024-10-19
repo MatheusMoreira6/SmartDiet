@@ -23,7 +23,7 @@ const CadastroAdmin = ({ generos }) => {
 
     const formRef = useRef(null);
 
-    const hendleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         if (formRef.current.checkValidity()) {
@@ -48,7 +48,7 @@ const CadastroAdmin = ({ generos }) => {
                             Cadastre-se
                         </h1>
 
-                        <Form formRef={formRef} hendleSubmit={hendleSubmit}>
+                        <Form formRef={formRef} handleSubmit={handleSubmit}>
                             <div className="row g-3">
                                 <div className="col-12 col-md-4">
                                     <FormInput

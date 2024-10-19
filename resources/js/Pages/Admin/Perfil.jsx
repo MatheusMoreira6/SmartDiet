@@ -30,7 +30,7 @@ const Perfil = ({ user, dados, generos }) => {
 
     const formRef = useRef(null);
 
-    const hendleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         if (formRef.current.checkValidity()) {
@@ -77,7 +77,7 @@ const Perfil = ({ user, dados, generos }) => {
             <Head title="Perfil" />
 
             <Container>
-                <Form formRef={formRef} hendleSubmit={hendleSubmit}>
+                <Form formRef={formRef} handleSubmit={handleSubmit}>
                     <PageTopic>
                         <i className="bi bi-person-lines-fill"></i>
                         Perfil

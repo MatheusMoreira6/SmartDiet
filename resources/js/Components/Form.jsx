@@ -1,9 +1,9 @@
-const Form = ({ formRef, hendleSubmit, children }) => {
+const Form = ({ formRef, handleSubmit, children }) => {
     return (
         <form
             noValidate
             ref={formRef}
-            onSubmit={hendleSubmit}
+            onSubmit={handleSubmit}
             className="needs-validation"
         >
             {children}

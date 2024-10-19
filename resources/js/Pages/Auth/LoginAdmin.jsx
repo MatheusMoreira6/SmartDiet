@@ -11,7 +11,7 @@ const LoginAdmin = () => {
 
     const formRef = useRef(null);
 
-    const hendleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         if (formRef.current.checkValidity()) {
@@ -39,7 +39,7 @@ const LoginAdmin = () => {
                         </span>
                     </h1>
 
-                    <Form formRef={formRef} hendleSubmit={hendleSubmit}>
+                    <Form formRef={formRef} handleSubmit={handleSubmit}>
                         <div className="mb-3">
                             <FormInput
                                 label={"E-mail"}
