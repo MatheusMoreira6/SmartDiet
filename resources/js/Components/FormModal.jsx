@@ -17,8 +17,8 @@ const FormModal = ({
             const form = formRef.current;
 
             if (form) {
-                form.reset();
-                form.classList.remove("was-validated");
+                formRef.current.reset();
+                formRef.current.classList.remove("was-validated");
             }
         };
 
