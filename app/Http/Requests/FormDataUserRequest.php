@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Libraries\LibConversion;
 use App\Libraries\LibValidation;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
 
 class FormDataUserRequest extends FormRequest
@@ -39,9 +40,11 @@ class FormDataUserRequest extends FormRequest
         ];
 
         if ($this->isMethod('put')) {
-            $rules['id'] = 'required|exists:pacientes,id';
-            $rules['cpf'] .= ',' . $this->id . ',id';
-            $rules['email'] .= ',' . $this->id . ',id';
+            $user = Auth::user();
+            $paciente = $user->paciente;
+
+            $rules['cpf'] .= ',' . $paciente->id . ',id';
+            $rules['email'] .= ',' . $paciente->id . ',id';
         }
 
         return $rules;

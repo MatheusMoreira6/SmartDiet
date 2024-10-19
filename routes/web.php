@@ -16,6 +16,10 @@ use App\Http\Controllers\Auth\LoginUser as LoginUser;
 
 // Controllers User
 use App\Http\Controllers\User\Dashboard as DashboardUser;
+use App\Http\Controllers\User\Dietas as DietasUser;
+use App\Http\Controllers\User\Agendamentos as AgendamentosUser;
+use App\Http\Controllers\User\Exames as ExamesUser;
+use App\Http\Controllers\User\Questionarios as QuestionariosUser;
 use App\Http\Controllers\User\Perfil as PerfilUser;
 use App\Http\Controllers\User\Configuracoes as ConfiguracoesUser;
 
@@ -76,9 +80,14 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () {
 
     Route::get('/', [DashboardUser::class, 'index'])->name('user.home');
+    Route::get('/dietas', [DietasUser::class, 'index'])->name('user.dietas');
+    Route::get('/agendamentos', [AgendamentosUser::class, 'index'])->name('user.agendamentos');
+    Route::get('/exames', [ExamesUser::class, 'index'])->name('user.exames');
+    Route::get('/questionarios', [QuestionariosUser::class, 'index'])->name('user.questionarios');
 
     Route::controller(PerfilUser::class)->prefix('perfil')->group(function () {
         Route::get('/', 'index')->name('user.perfil');
+        Route::put('/', 'salvar')->name('user.perfil');
     });
 
     Route::controller(ConfiguracoesUser::class)->prefix('configuracoes')->group(function () {

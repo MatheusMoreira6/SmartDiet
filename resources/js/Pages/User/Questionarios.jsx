@@ -1,12 +1,12 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
 
-const Home = ({ user, currentRoute }) => {
+const Questionarios = ({ user, currentRoute }) => {
     return (
         <UserLayout user={user} currentRoute={currentRoute}>
-            <Head title="Tela Inicial" />
+            <Head title="Questionários" />
         </UserLayout>
     );
 };
 
-export default Home;
+export default Questionarios;
