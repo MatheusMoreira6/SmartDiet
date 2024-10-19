@@ -15,22 +15,22 @@ const FormModal = ({
     useEffect(() => {
         const handleHide = () => {
             const form = formRef.current;
-
+    
             if (form) {
                 formRef.current.reset();
                 formRef.current.classList.remove("was-validated");
             }
         };
-
+    
         const modal = modalRef.current;
-
+    
         if (modal) {
             modal.addEventListener("hidden.bs.modal", handleHide);
         }
-
+    
         return () => {
             if (modal) {
-                modal.addEventListener("hidden.bs.modal", handleHide);
+                modal.removeEventListener("hidden.bs.modal", handleHide);
             }
         };
     }, [modalRef]);
