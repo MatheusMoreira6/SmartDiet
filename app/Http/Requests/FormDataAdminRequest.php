@@ -26,6 +26,7 @@ class FormDataAdminRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
+            'id' => 'prohibited',
             'user_id' => 'prohibited',
             'nome' => 'required|min:3|max:100',
             'sobrenome' => 'required|min:3|max:100',
