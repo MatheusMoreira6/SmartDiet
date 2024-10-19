@@ -1,16 +1,9 @@
-const ButtonWarning = ({
-    type = "submit",
-    onClick,
-    children,
-    disabled,
-    formRef,
-}) => {
+const ButtonWarning = ({ type = "submit", onClick, children, disabled }) => {
     return (
         <button
             type={type}
             onClick={onClick}
             disabled={disabled}
-            form={formRef}
             className="btn btn-warning"
         >
             {children}
