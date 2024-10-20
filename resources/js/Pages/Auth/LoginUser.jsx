@@ -1,7 +1,17 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
-import Form from "@/Components/Form";
-import FormInput from "@/Components/FormFields/FormInput";
+import FormInput from "@/Components/FormInput";
+import {
+    Button,
+    Card,
+    CardBody,
+    CardFooter,
+    CardTitle,
+    Col,
+    Container,
+    Form,
+    Row,
+} from "react-bootstrap";
 
 const LoginUser = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -9,93 +19,108 @@ const LoginUser = () => {
         password: "",
     });
 
-    const formRef = useRef(null);
+    const [validated, setValidated] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formRef.current.checkValidity()) {
-            formRef.current.classList.remove("was-validated");
+        const form = e.currentTarget;
 
+        if (form.checkValidity()) {
             post(route("login.user"), {
-                onFinish: () => reset("password"),
+                onError: () => errors.password && reset("password"),
             });
         } else {
-            formRef.current.classList.add("was-validated");
+            e.stopPropagation();
         }
+
+        setValidated(true);
     };
 
     return (
-        <div className="d-flex vh-100 vw-100 py-3 px-1 overflow-auto">
+        <div className="d-flex vh-100 vw-100 overflow-auto">
             <Head title="Login Paciente" />
 
-            <div className="card m-auto shadow-lg" style={{ width: "400px" }}>
-                <div className="card-body p-4">
-                    <h1 className="fs-4 card-title fw-bold mb-4">
-                        Login
-                        <span className="fs-5 fw-normal text-muted">
-                            {" "}
-                            - Paciente
-                        </span>
-                    </h1>
+            <Card className="m-auto shadow-lg" style={{ width: "400px" }}>
+                <CardBody className="py-4 px-md-4">
+                    <Container fluid>
+                        <CardTitle className="fw-bold fs-4 mb-4">
+                            Login
+                            <span className="fw-normal fs-5 text-muted">
+                                {" - Paciente"}
+                            </span>
+                        </CardTitle>
 
-                    <Form formRef={formRef} handleSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <FormInput
-                                label={"E-mail"}
-                                name={"email"}
-                                type={"email"}
-                                value={data.email}
-                                autoFocus={true}
-                                placeHolder={"Digite seu e-mail"}
-                                textError={"Insira um e-mail válido"}
-                                onChange={(e) =>
-                                    setData("email", e.target.value)
-                                }
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <FormInput
-                                label={"Senha"}
-                                name={"password"}
-                                type={"password"}
-                                value={data.password}
-                                placeHolder={"Digite sua senha"}
-                                textError={"Insira sua senha"}
-                                onChange={(e) =>
-                                    setData("password", e.target.value)
-                                }
-                            />
-                        </div>
-
-                        <div className="mb-4 text-center fw-semibold text-danger">
-                            {Object.keys(errors).map((key) => (
-                                <p key={key} className="m-0">
-                                    {errors[key]}
-                                </p>
-                            ))}
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={processing}
-                            className="btn btn-primary w-100"
+                        <Form
+                            noValidate
+                            validated={validated}
+                            onSubmit={handleSubmit}
                         >
-                            {processing ? "Carregando..." : "Login"}
-                        </button>
-                    </Form>
-                </div>
+                            <Row className="g-3 mb-4">
+                                <Col xs={12}>
+                                    <FormInput
+                                        id={"email"}
+                                        label={"E-mail"}
+                                        type={"email"}
+                                        value={data.email}
+                                        autoFocus={true}
+                                        placeHolder={"Digite seu e-mail"}
+                                        isInvalid={errors.email}
+                                        onChange={(e) =>
+                                            setData("email", e.target.value)
+                                        }
+                                        textError={
+                                            errors.email ?? "Informe seu e-mail"
+                                        }
+                                    />
+                                </Col>
 
-                <div className="card-footer py-3 border-0">
-                    <p className="text-center fw-semibold mb-0">
-                        Nutricionista?{" "}
+                                <Col xs={12}>
+                                    <FormInput
+                                        id={"password"}
+                                        label={"Senha"}
+                                        type={"password"}
+                                        value={data.password}
+                                        placeHolder={"Digite sua senha"}
+                                        isInvalid={errors.password}
+                                        onChange={(e) =>
+                                            setData("password", e.target.value)
+                                        }
+                                        textError={
+                                            errors.password ??
+                                            "Informe sua senha"
+                                        }
+                                    />
+                                </Col>
+                            </Row>
+
+                            <div className="mb-4 fw-semibold text-center text-danger">
+                                {errors.error && (
+                                    <p className="m-0">{errors.error}</p>
+                                )}
+                            </div>
+
+                            <Button
+                                variant="primary"
+                                type="submit"
+                                className="w-100"
+                                disabled={processing}
+                            >
+                                {processing ? "Carregando..." : "Login"}
+                            </Button>
+                        </Form>
+                    </Container>
+                </CardBody>
+
+                <CardFooter className="py-3">
+                    <p className="mb-0 fw-semibold text-center">
+                        {"Nutricionista? "}
                         <Link className="fw-normal" href={route("login.admin")}>
                             Clique aqui para logar
                         </Link>
                     </p>
-                </div>
-            </div>
+                </CardFooter>
+            </Card>
         </div>
     );
 };

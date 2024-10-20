@@ -17,12 +17,14 @@ class LoginUser extends Controller
     {
         $regras = [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|min:6',
         ];
 
         $feedback = [
-            'required' => 'O campo :attribute precisa ser preenchido',
-            'email' => 'O email é inválido',
+            'email.required' => 'O email é obrigatório',
+            'email.email' => 'O email precisa ser válido',
+            'password.required' => 'A senha é obrigatória',
+            'password.min' => 'A senha precisa ter no mínimo 6 caracteres',
         ];
 
         $request->validate($regras, $feedback);
@@ -32,16 +34,16 @@ class LoginUser extends Controller
         if (!Auth::attempt($credentials) || Auth::user()->administrador) {
             Auth::logout();
 
-            return redirect()->back()->withErrors(['error' => 'Email ou senha inválidos']);
+            return $this->responseErrors(['error' => 'Email ou senha inválidos']);
         }
 
-        return redirect()->route('user.home');
+        return to_route('user.home');
     }
 
     public function logout()
     {
         Auth::logout();
 
-        return redirect()->route('login.user');
+        return to_route('login.user');
     }
 }
