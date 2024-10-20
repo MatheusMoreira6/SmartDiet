@@ -43,7 +43,7 @@ const LoginAdmin = () => {
 
             <Card className="m-auto shadow-lg" style={{ width: "400px" }}>
                 <CardBody className="py-4 px-md-4">
-                    <Container fluid>
+                    <Container fluid className="px-0">
                         <CardTitle className="fw-bold fs-4 mb-4">
                             Login
                             <span className="fw-normal fs-5 text-muted">
