@@ -34,16 +34,16 @@ class LoginAdmin extends Controller
         if (!Auth::attempt($credentials) || !Auth::user()->administrador) {
             Auth::logout();
 
-            return redirect()->back()->withErrors(['error' => 'Email ou senha inválidos']);
+            return $this->responseErrors(['error' => 'Email ou senha inválidos']);
         }
 
-        return redirect()->route('admin.home');
+        return to_route('admin.home');
     }
 
     public function logout()
     {
         Auth::logout();
 
-        return redirect()->route('login.admin');
+        return to_route('login.admin');
     }
 }
