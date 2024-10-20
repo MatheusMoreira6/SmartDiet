@@ -1,7 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
 import '../scss/styles.scss';
-import 'bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
 import { createRoot } from 'react-dom/client';
