@@ -9,6 +9,7 @@ const FormInput = ({
     value,
     autoFocus,
     placeHolder,
+    required,
     isInvalid,
     onChange,
     textError,
@@ -24,9 +25,9 @@ const FormInput = ({
                 value={value}
                 autoFocus={autoFocus}
                 placeholder={placeHolder}
+                required={required}
                 isInvalid={isInvalid}
                 onChange={onChange}
-                required={textError ? true : false}
             />
 
             {textError ? (
