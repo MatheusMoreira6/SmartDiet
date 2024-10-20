@@ -56,7 +56,7 @@ const LoginUser = () => {
                             validated={validated}
                             onSubmit={handleSubmit}
                         >
-                            <Row className="g-3 mb-4">
+                            <Row className="g-3">
                                 <Col xs={12}>
                                     <FormInput
                                         id={"email"}
@@ -100,16 +100,21 @@ const LoginUser = () => {
                                         </p>
                                     </Col>
                                 )}
-                            </Row>
 
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                className="w-100"
-                                disabled={processing}
-                            >
-                                {processing ? "Carregando..." : "Login"}
-                            </Button>
+                                <Col xs={12} className="mt-4">
+                                    <div className="d-grid gap-2">
+                                        <Button
+                                            variant="primary"
+                                            type="submit"
+                                            disabled={processing}
+                                        >
+                                            {processing
+                                                ? "Carregando..."
+                                                : "Login"}
+                                        </Button>
+                                    </div>
+                                </Col>
+                            </Row>
                         </Form>
                     </Container>
                 </CardBody>
