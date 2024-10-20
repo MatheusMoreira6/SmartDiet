@@ -14,29 +14,27 @@ const FormInput = ({
     textError,
 }) => {
     return (
-        <>
-            <Form.Group controlId={id}>
-                <Form.Label>{label}</Form.Label>
+        <Form.Group controlId={id}>
+            <Form.Label>{label}</Form.Label>
 
-                <Form.Control
-                    as={InputMask}
-                    type={type}
-                    mask={mask}
-                    value={value}
-                    autoFocus={autoFocus}
-                    placeholder={placeHolder}
-                    isInvalid={isInvalid}
-                    onChange={onChange}
-                    required={textError ? true : false}
-                />
+            <Form.Control
+                as={InputMask}
+                type={type}
+                mask={mask}
+                value={value}
+                autoFocus={autoFocus}
+                placeholder={placeHolder}
+                isInvalid={isInvalid}
+                onChange={onChange}
+                required={textError ? true : false}
+            />
 
-                {textError ? (
-                    <Form.Control.Feedback type="invalid">
-                        {textError}
-                    </Form.Control.Feedback>
-                ) : null}
-            </Form.Group>
-        </>
+            {textError ? (
+                <Form.Control.Feedback type="invalid">
+                    {textError}
+                </Form.Control.Feedback>
+            ) : null}
+        </Form.Group>
     );
 };
 
