@@ -122,6 +122,7 @@ const LoginUser = () => {
                 <CardFooter className="py-3">
                     <p className="mb-0 fw-semibold text-center">
                         {"Nutricionista? "}
+
                         <Link className="fw-normal" href={route("login.admin")}>
                             Clique aqui para logar
                         </Link>
