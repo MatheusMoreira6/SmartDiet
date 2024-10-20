@@ -1,6 +1,5 @@
-import { Modal } from "bootstrap";
 import { useRef, useState } from "react";
-import { Head, useForm, usePage } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import ContainerFluid from "@/Components/ContainerFluid";
 import Card from "@/Components/Card";
@@ -10,15 +9,12 @@ import FormInput from "@/Components/FormFields/FormInput";
 import FormSelect from "@/Components/FormFields/FormSelect";
 
 const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
-    const props = usePage().props;
-
     const modalRef = useRef(null);
     const formRef = useRef(null);
 
-    const [processing, setProcessing] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
-    const { data, setData } = useForm({
-        _token: props.csrf_token,
+    const { data, setData, post, processing, reset } = useForm({
         nome: "",
         sobrenome: "",
         data_nascimento: "",
@@ -34,63 +30,32 @@ const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
         if (formRef.current.checkValidity()) {
             formRef.current.classList.remove("was-validated");
 
-            setProcessing(true);
+            post(route("admin.pacientes"), {
+                onSuccess: (page) => {
+                    let title = page.props.title;
+                    let text = page.props.text;
 
-            axios({
-                data: data,
-                method: "post",
-                responseType: "json",
-                url: route("admin.pacientes"),
-            })
-                .then(function (response) {
-                    let successMessage = "Paciente cadastrado com sucesso!";
-                    let textMessage = "";
-
-                    if (response.data.success) {
-                        successMessage = response.data.success;
-                        textMessage = response.data.text;
-                    }
-
-                    SweetAlert.fire({
-                        title: successMessage,
-                        text: textMessage,
-                        icon: "success",
-                    }).then(() => {
-                        if (modalRef.current) {
-                            const modal = new Modal(modalRef.current);
-                            modal.hide();
-
-                            window.location.reload();
-                        }
+                    SweetAlert.success(title, text).then(() => {
+                        setModalOpen(false);
                     });
-                })
-                .catch(function (error) {
-                    let errorMessage = "Erro ao cadastrar paciente!";
 
-                    if (error.response && error.response.data.errors) {
-                        errorMessage = Object.values(
-                            error.response.data.errors
-                        ).join("\n");
-                    }
-
-                    SweetAlert.fire({
-                        title: errorMessage,
-                        icon: "error",
-                    });
-                })
-                .finally(() => {
-                    setProcessing(false);
-                });
+                    reset();
+                },
+                onError: (errors) => {
+                    SweetAlert.error(Object.values(errors).flat());
+                },
+            });
         } else {
             formRef.current.classList.add("was-validated");
         }
     };
 
     const modalShow = () => {
-        if (modalRef.current) {
-            const modal = new Modal(modalRef.current);
-            modal.show();
-        }
+        setModalOpen(true);
+    };
+
+    const modalClose = () => {
+        setModalOpen(false);
     };
 
     const renderPacientes = (pacientes) => {
@@ -127,9 +92,11 @@ const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
             <FormModal
                 title={"Cadastrar Paciente"}
                 modalRef={modalRef}
+                modalOpen={modalOpen}
                 formRef={formRef}
                 processing={processing}
                 handleSubmit={handleSubmit}
+                performClose={modalClose}
             >
                 <div className="row g-3">
                     <div className="col-12 col-lg-4">

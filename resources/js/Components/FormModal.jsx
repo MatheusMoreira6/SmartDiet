@@ -1,63 +1,22 @@
 import Form from "./Form";
+import { Modal } from "bootstrap";
 import { useEffect } from "react";
 import ContainerFluid from "./ContainerFluid";
 import ButtonPrimary from "./ButtonPrimary";
+import ButtonDanger from "./ButtonDanger";
 
-const FormModal = ({
-    title,
-    children,
-    modalRef,
-    formRef,
-    processing,
-    handleSubmit,
-    size = "lg",
-}) => {
-    useEffect(() => {
-        const handleHide = () => {
-            const form = formRef.current;
-    
-            if (form) {
-                formRef.current.reset();
-                formRef.current.classList.remove("was-validated");
-            }
-        };
-    
-        const modal = modalRef.current;
-    
-        if (modal) {
-            modal.addEventListener("hidden.bs.modal", handleHide);
-        }
-    
-        return () => {
-            if (modal) {
-                modal.removeEventListener("hidden.bs.modal", handleHide);
-            }
-        };
-    }, [modalRef]);
+const ModalClose = ({ performClose }) => {
+    return (
+        <button
+            type="button"
+            aria-label="Fechar"
+            className="btn-close"
+            onClick={performClose}
+        ></button>
+    );
+};
 
-    const ModalClose = () => {
-        return (
-            <button
-                type="button"
-                aria-label="Fechar"
-                className="btn-close"
-                data-bs-dismiss="modal"
-            ></button>
-        );
-    };
-
-    const ButtonClose = () => {
-        return (
-            <button
-                type="button"
-                data-bs-dismiss="modal"
-                className="btn btn-danger"
-            >
-                Fechar
-            </button>
-        );
-    };
-
+const ModalSize = ({ size }) => {
     let modalSize = "";
 
     if (size === "sm") {
@@ -67,6 +26,47 @@ const FormModal = ({
     } else if (size === "xl") {
         modalSize = "modal-xl";
     }
+
+    return modalSize;
+};
+
+const FormModal = ({
+    title,
+    children,
+    modalRef,
+    modalOpen,
+    formRef,
+    processing,
+    handleSubmit,
+    performClose,
+    size = "lg",
+}) => {
+    const modalSize = ModalSize({ size });
+
+    useEffect(() => {
+        const modal = modalRef.current;
+
+        if (modal) {
+            const modalInstance = Modal.getOrCreateInstance(modalRef.current);
+
+            if (modalOpen) {
+                modalInstance.show();
+            } else {
+                modalInstance.hide();
+
+                const form = formRef.current;
+
+                if (form) {
+                    formRef.current.reset();
+                    formRef.current.classList.remove("was-validated");
+                }
+            }
+
+            return () => {
+                modalInstance.dispose();
+            };
+        }
+    }, [modalOpen, modalRef]);
 
     const performSubmit = () => {
         const form = formRef.current;
@@ -92,7 +92,7 @@ const FormModal = ({
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">{title}</h5>
-                        <ModalClose />
+                        <ModalClose performClose={performClose} />
                     </div>
 
                     <div className="modal-body">
@@ -102,7 +102,9 @@ const FormModal = ({
                     </div>
 
                     <div className="modal-footer">
-                        <ButtonClose />
+                        <ButtonDanger onClick={performClose}>
+                            Cancelar
+                        </ButtonDanger>
 
                         <ButtonPrimary
                             disabled={processing}

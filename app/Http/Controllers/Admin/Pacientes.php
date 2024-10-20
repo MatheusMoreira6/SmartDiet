@@ -54,12 +54,14 @@ class Pacientes extends Controller
                 ]);
             });
 
-            return response()->json([
-                'success' => 'Paciente cadastrado com sucesso!',
-                'text' => 'Senha temporária: ' . $password
-            ], 201);
+            return $this->response('admin.pacientes', [
+                'title' => 'Cadastro realizado com sucesso!',
+                'text' => 'Senha temporária: ' . $password,
+            ]);
         } catch (Exception $e) {
-            return response()->json(['errors' => ['error' => 'Falha ao cadastrar o paciente!']], 500);
+            return $this->responseErrors([
+                'error' => 'Falha ao cadastrar o paciente!',
+            ]);
         }
     }
 }
