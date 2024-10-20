@@ -65,6 +65,7 @@ const LoginUser = () => {
                                         value={data.email}
                                         autoFocus={true}
                                         placeHolder={"Digite seu e-mail"}
+                                        required={true}
                                         isInvalid={errors.email}
                                         onChange={(e) =>
                                             setData("email", e.target.value)
@@ -82,6 +83,7 @@ const LoginUser = () => {
                                         type={"password"}
                                         value={data.password}
                                         placeHolder={"Digite sua senha"}
+                                        required={true}
                                         isInvalid={errors.password}
                                         onChange={(e) =>
                                             setData("password", e.target.value)
