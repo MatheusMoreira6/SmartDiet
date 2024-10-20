@@ -92,13 +92,15 @@ const LoginAdmin = () => {
                                         }
                                     />
                                 </Col>
-                            </Row>
 
-                            <div className="mb-4 fw-semibold text-center text-danger">
                                 {errors.error && (
-                                    <p className="m-0">{errors.error}</p>
+                                    <Col xs={12} className="mt-4">
+                                        <p className="fw-semibold text-center text-danger m-0">
+                                            {errors.error}
+                                        </p>
+                                    </Col>
                                 )}
-                            </div>
+                            </Row>
 
                             <Button
                                 variant="primary"
