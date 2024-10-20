@@ -5,7 +5,7 @@ import ContainerFluid from "@/Components/ContainerFluid";
 import Card from "@/Components/Card";
 import FormModal from "@/Components/FormModal";
 import SweetAlert from "@/Components/SweetAlert";
-import FormInput from "@/Components/FormFields/FormInput";
+import FormInput from "@/Components/FormInput";
 import FormSelect from "@/Components/FormFields/FormSelect";
 
 const Pacientes = ({ user, currentRoute, generos, pacientes }) => {

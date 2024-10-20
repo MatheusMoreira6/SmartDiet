@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
-import Form from "@/Components/Form";
-import FormInput from "@/Components/FormFields/FormInput";
+import Form from "@/Components/FormReact";
+import FormInput from "@/Components/FormInput";
 import FormSelect from "@/Components/FormFields/FormSelect";
 import ContainerFluid from "@/Components/ContainerFluid";
 import ButtonPrimary from "@/Components/ButtonPrimary";
