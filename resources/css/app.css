@@ -11,6 +11,6 @@ a > i {
     margin-right: 0.5rem !important;
 }
 
-.card:not([disabled]) {
+.card-pointer {
     cursor: pointer;
 }
