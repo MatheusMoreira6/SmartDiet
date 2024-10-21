@@ -1,10 +1,10 @@
-import Navbar from "./Admin/Navbar";
+import NavbarAdmin from "./Admin/Navbar";
 
 const AdminLayout = ({ user, currentRoute, children }) => {
     return (
         <>
             <header>
-                <Navbar user={user} currentRoute={currentRoute} />
+                <NavbarAdmin user={user} currentRoute={currentRoute} />
             </header>
 
             <main>{children}</main>
