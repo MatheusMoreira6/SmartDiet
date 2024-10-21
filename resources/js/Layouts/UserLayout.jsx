@@ -1,10 +1,10 @@
-import Navbar from "./User/Navbar";
+import NavbarUser from "./User/Navbar";
 
 const UserLayout = ({ user, currentRoute, children }) => {
     return (
         <>
             <header>
-                <Navbar user={user} currentRoute={currentRoute} />
+                <NavbarUser user={user} currentRoute={currentRoute} />
             </header>
 
             <main>{children}</main>
