@@ -20,6 +20,7 @@ const FormInput = ({
 
             <Form.Control
                 as={InputMask}
+                maskChar={" "}
                 type={type}
                 mask={mask}
                 value={value}
