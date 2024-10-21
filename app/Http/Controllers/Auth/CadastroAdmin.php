@@ -47,11 +47,11 @@ class CadastroAdmin extends Controller
                 ]);
             });
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Falha ao cadastrar o usuário']);
+            return $this->responseErrors(['error' => 'Falha ao cadastrar o usuário']);
         }
 
         Auth::attempt($request->only('email', 'password'));
 
-        return redirect()->route('admin.home');
+        to_route('admin.home');
     }
 }

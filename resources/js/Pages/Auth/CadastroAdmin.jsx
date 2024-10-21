@@ -1,10 +1,18 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
-import Form from "@/Components/FormReact";
 import FormInput from "@/Components/FormInput";
-import FormSelect from "@/Components/FormFields/FormSelect";
-import ContainerFluid from "@/Components/ContainerFluid";
-import ButtonPrimary from "@/Components/ButtonPrimary";
+import FormSelect from "@/Components/FormSelect";
+import {
+    Button,
+    Card,
+    CardBody,
+    CardFooter,
+    CardTitle,
+    Col,
+    Container,
+    Form,
+    Row,
+} from "react-bootstrap";
 
 const CadastroAdmin = ({ generos }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -21,244 +29,307 @@ const CadastroAdmin = ({ generos }) => {
         password_confirmation: "",
     });
 
-    const formRef = useRef(null);
+    const [validated, setValidated] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formRef.current.checkValidity()) {
-            formRef.current.classList.remove("was-validated");
+        const form = e.currentTarget;
 
+        if (form.checkValidity()) {
             post(route("register.admin"), {
-                onFinish: () => reset("password", "password_confirmation"),
+                onError: () =>
+                    errors.password &&
+                    reset("password", "password_confirmation"),
             });
         } else {
-            formRef.current.classList.add("was-validated");
+            e.stopPropagation();
         }
+
+        setValidated(true);
     };
 
     return (
-        <div className="d-flex vh-100 vw-100 py-lg-3 px-lg-1 overflow-auto">
+        <div className="d-flex vh-100 vw-100 overflow-auto">
             <Head title="Cadastro Nutricionista" />
 
-            <div className="card m-auto shadow-lg" style={{ width: "768px" }}>
-                <div className="card-body py-4">
-                    <ContainerFluid>
-                        <h1 className="fs-4 card-title fw-bold mb-4">
-                            Cadastre-se
-                        </h1>
+            <Card className="m-auto shadow-lg" style={{ width: "768px" }}>
+                <CardBody className="py-4 px-md-4">
+                    <Container fluid className="px-0">
+                        <CardTitle className="fw-bold fs-4 mb-4">
+                            Cadastro
+                            <span className="fw-normal fs-5 text-muted">
+                                {" - Nutricionista"}
+                            </span>
+                        </CardTitle>
 
-                        <Form formRef={formRef} handleSubmit={handleSubmit}>
-                            <div className="row g-3">
-                                <div className="col-12 col-md-4">
+                        <Form
+                            noValidate
+                            validated={validated}
+                            onSubmit={handleSubmit}
+                        >
+                            <Row className="g-3">
+                                <Col xs={12} md={4}>
                                     <FormInput
+                                        id={"nome"}
                                         label={"Nome"}
-                                        name={"nome"}
                                         type={"text"}
                                         value={data.nome}
                                         autoFocus={true}
                                         placeHolder={"Digite seu nome"}
-                                        textError={"Informe seu nome"}
+                                        required={true}
+                                        isInvalid={errors.nome}
                                         onChange={(e) =>
                                             setData("nome", e.target.value)
                                         }
+                                        textError={
+                                            errors.nome ?? "Informe seu nome"
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 col-md-4">
+                                <Col xs={12} md={4}>
                                     <FormInput
+                                        id={"sobrenome"}
                                         label={"Sobrenome"}
-                                        name={"sobrenome"}
                                         type={"text"}
                                         value={data.sobrenome}
                                         placeHolder={"Digite seu sobrenome"}
-                                        textError={"Informe seu sobrenome"}
+                                        required={true}
+                                        isInvalid={errors.sobrenome}
                                         onChange={(e) =>
                                             setData("sobrenome", e.target.value)
                                         }
-                                    />
-                                </div>
-
-                                <div className="col-12 col-md-4">
-                                    <FormInput
-                                        label={"Data de Nascimento"}
-                                        name={"data_nascimento"}
-                                        type={"text"}
-                                        value={data.data_nascimento}
-                                        mask={"99/99/9999"}
-                                        placeHolder={"__/__/____"}
                                         textError={
-                                            "Informe sua data de nascimento"
+                                            errors.sobrenome ??
+                                            "Informe seu sobrenome"
                                         }
+                                    />
+                                </Col>
+
+                                <Col xs={12} md={4}>
+                                    <FormInput
+                                        id={"data_nascimento"}
+                                        label={"Data de Nascimento"}
+                                        type={"text"}
+                                        mask={"99/99/9999"}
+                                        value={data.data_nascimento}
+                                        placeHolder={"__/__/____"}
+                                        required={true}
+                                        isInvalid={errors.data_nascimento}
                                         onChange={(e) =>
                                             setData(
                                                 "data_nascimento",
                                                 e.target.value
                                             )
                                         }
+                                        textError={
+                                            errors.data_nascimento ??
+                                            "Informe sua data de nascimento"
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 col-md-4">
+                                <Col xs={12} md={4}>
                                     <FormSelect
+                                        id={"sexo"}
                                         label={"Sexo"}
-                                        name={"sexo"}
                                         options={generos}
                                         value={data.genero_id}
-                                        textError={"Informe seu sexo"}
+                                        required={true}
+                                        isInvalid={errors.genero_id}
                                         onChange={(e) =>
                                             setData("genero_id", e.target.value)
                                         }
+                                        textError={
+                                            errors.genero_id ??
+                                            "Informe seu sexo"
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 col-md-4">
+                                <Col xs={12} md={4}>
                                     <FormInput
+                                        id={"cpf"}
                                         label={"CPF"}
-                                        name={"cpf"}
                                         type={"text"}
-                                        value={data.cpf}
                                         mask={"999.999.999-99"}
+                                        value={data.cpf}
                                         placeHolder={"Digite seu CPF"}
-                                        textError={"Informe seu CPF"}
+                                        required={true}
+                                        isInvalid={errors.cpf}
                                         onChange={(e) =>
                                             setData("cpf", e.target.value)
                                         }
+                                        textError={
+                                            errors.cpf ?? "Informe seu CPF"
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 col-md-4">
+                                <Col xs={12} md={4}>
                                     <FormInput
+                                        id={"crn"}
                                         label={"CRN"}
-                                        name={"crn"}
                                         type={"text"}
-                                        value={data.crn}
                                         mask={"9/99999/a"}
+                                        value={data.crn}
                                         placeHolder={"Digite seu CRN"}
-                                        textError={"Informe seu CRN"}
+                                        required={true}
+                                        isInvalid={errors.crn}
                                         onChange={(e) =>
                                             setData(
                                                 "crn",
                                                 e.target.value.toUpperCase()
                                             )
                                         }
+                                        textError={
+                                            errors.crn ?? "Informe seu CRN"
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 col-md-6">
+                                <Col xs={12} md={6}>
                                     <FormInput
+                                        id={"telefone"}
                                         label={"Telefone"}
-                                        name={"telefone"}
                                         type={"text"}
-                                        value={data.telefone}
                                         mask={"(99) 99999-9999"}
+                                        value={data.telefone}
                                         placeHolder={"Digite seu telefone"}
-                                        textError={"Informe seu telefone"}
+                                        required={true}
+                                        isInvalid={errors.telefone}
                                         onChange={(e) =>
                                             setData("telefone", e.target.value)
                                         }
+                                        textError={
+                                            errors.telefone ??
+                                            "Informe seu telefone"
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 col-md-6">
+                                <Col xs={12} md={6}>
                                     <FormInput
+                                        id={"telefone_fixo"}
                                         label={"Telefone Fixo"}
-                                        name={"telefone_fixo"}
                                         type={"text"}
-                                        value={data.telefone_fixo}
                                         mask={"9999-9999"}
+                                        value={data.telefone_fixo}
                                         placeHolder={"Digite seu telefone fixo"}
+                                        required={false}
+                                        isInvalid={errors.telefone_fixo}
                                         onChange={(e) =>
                                             setData(
                                                 "telefone_fixo",
                                                 e.target.value
                                             )
                                         }
+                                        textError={errors.telefone_fixo}
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12">
+                                <Col xs={12}>
                                     <FormInput
+                                        id={"email"}
                                         label={"E-mail"}
-                                        name={"email"}
                                         type={"email"}
                                         value={data.email}
                                         placeHolder={"Digite seu e-mail"}
-                                        textError={"Insira um e-mail válido"}
+                                        required={true}
+                                        isInvalid={errors.email}
                                         onChange={(e) =>
                                             setData(
                                                 "email",
                                                 e.target.value.toLowerCase()
                                             )
                                         }
+                                        textError={
+                                            errors.email ??
+                                            "Insira um e-mail válido"
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 col-md-6">
+                                <Col xs={12} md={6}>
                                     <FormInput
+                                        id={"password"}
                                         label={"Senha"}
-                                        name={"password"}
                                         type={"password"}
                                         value={data.password}
                                         placeHolder={"Digite sua senha"}
-                                        textError={"Insira sua senha"}
+                                        required={true}
+                                        isInvalid={errors.password}
                                         onChange={(e) =>
                                             setData("password", e.target.value)
                                         }
+                                        textError={
+                                            !errors.password
+                                                ? "Insira sua senha"
+                                                : ""
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 col-md-6">
+                                <Col xs={12} md={6}>
                                     <FormInput
+                                        id={"password_confirmation"}
                                         label={"Confirme sua senha"}
-                                        name={"password_confirmation"}
                                         type={"password"}
                                         value={data.password_confirmation}
                                         placeHolder={"Confirme sua senha"}
-                                        textError={"Insira novamente sua senha"}
+                                        required={true}
+                                        isInvalid={errors.password}
                                         onChange={(e) =>
                                             setData(
                                                 "password_confirmation",
                                                 e.target.value
                                             )
                                         }
+                                        textError={
+                                            !errors.password
+                                                ? "Insira novamente sua senha"
+                                                : ""
+                                        }
                                     />
-                                </div>
+                                </Col>
 
-                                <div className="col-12 text-center">
-                                    {Object.keys(errors).map((key) => (
-                                        <p
-                                            key={key}
-                                            className="fw-semibold text-danger m-0"
-                                        >
-                                            {errors[key]}
+                                {(errors.password || errors.error) && (
+                                    <Col xs={12} className="mt-4">
+                                        <p className="fw-semibold text-center text-danger m-0">
+                                            {errors.password ?? errors.error}
                                         </p>
-                                    ))}
-                                </div>
+                                    </Col>
+                                )}
 
-                                <div className="col-12">
+                                <Col xs={12} className="mt-4">
                                     <div className="d-grid gap-2">
-                                        <ButtonPrimary disabled={processing}>
+                                        <Button
+                                            variant="primary"
+                                            type="submit"
+                                            disabled={processing}
+                                        >
                                             {processing
                                                 ? "Carregando..."
                                                 : "Cadastrar"}
-                                        </ButtonPrimary>
+                                        </Button>
                                     </div>
-                                </div>
-                            </div>
+                                </Col>
+                            </Row>
                         </Form>
-                    </ContainerFluid>
-                </div>
+                    </Container>
+                </CardBody>
 
-                <div className="card-footer py-3 border-0">
-                    <p className="text-center fw-semibold mb-0">
-                        Já tem conta?{" "}
+                <CardFooter className="py-3">
+                    <p className="mb-0 fw-semibold text-center">
+                        {"Já tem conta? "}
+
                         <Link className="fw-normal" href={route("login.admin")}>
                             Clique aqui para logar
                         </Link>
                     </p>
-                </div>
-            </div>
+                </CardFooter>
+            </Card>
         </div>
     );
 };

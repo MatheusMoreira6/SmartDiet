@@ -10,8 +10,6 @@ use Illuminate\Validation\Validator;
 
 class FormDataAdminRequest extends FormRequest
 {
-    public $stopOnFirstFailure = true;
-
     public function prepareForValidation(): void
     {
         $this->merge([
@@ -36,7 +34,7 @@ class FormDataAdminRequest extends FormRequest
             'crn' => 'required|size:9|unique:nutricionistas,crn',
             'telefone' => 'required|size:15',
             'telefone_fixo' => 'nullable|size:9',
-            'email' => 'email|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
         ];
 
@@ -57,23 +55,29 @@ class FormDataAdminRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'required' => 'O campo :attribute precisa ser preenchido',
+            'id.prohibited' => 'O campo id é inválido',
             'user_id.prohibited' => 'O campo user_id é inválido',
+            'nome.required' => 'O campo nome é obrigatório',
             'nome.min' => 'O campo nome precisa ter no mínimo 3 caracteres',
             'nome.max' => 'O campo nome deve ter no máximo 100 caracteres',
+            'sobrenome.required' => 'O campo sobrenome é obrigatório',
             'sobrenome.min' => 'O campo sobrenome precisa ter no mínimo 3 caracteres',
             'sobrenome.max' => 'O campo sobrenome deve ter no máximo 100 caracteres',
-            'data_nascimento' => 'A data de nascimento é obrigatória',
+            'data_nascimento.required' => 'A data de nascimento é obrigatória',
             'genero_id.required' => 'O gênero é obrigatório',
             'genero_id.exists' => 'O gênero é inválido',
-            'cpf.size' => 'O CPF deve ter 14 caracteres',
-            'cpf.unique' => 'O CPF já está em uso',
-            'crn.size' => 'O CRN deve ter 9 caracteres',
-            'crn.unique' => 'O CRN já está em uso',
+            'cpf.required' => 'O campo CPF é obrigatório',
+            'cpf.size' => 'O CPF deve ter 11 caracteres',
+            'cpf.unique' => 'O CPF já está cadastrado',
+            'crn.required' => 'O campo CRN é obrigatório',
+            'crn.size' => 'O CRN deve ter 6 caracteres',
+            'crn.unique' => 'O CRN já está cadastrado',
+            'telefone.required' => 'O campo telefone é obrigatório',
             'telefone.size' => 'O telefone deve ter 11 números',
             'telefone_fixo.size' => 'O telefone fixo deve ter 8 números',
-            'email' => 'O email é inválido',
-            'email.unique' => 'O email já está em uso',
+            'email.required' => 'O email é obrigatório',
+            'email.email' => 'O email é inválido',
+            'email.unique' => 'O email já está cadastrado',
             'password.required' => 'A senha é obrigatória',
             'password.min' => 'A senha deve ter pelo menos 6 caracteres',
             'password.confirmed' => 'As senhas não conferem',
@@ -84,11 +88,11 @@ class FormDataAdminRequest extends FormRequest
     {
         return [
             function (Validator $validator) {
-                if ($validator->errors()->isEmpty() && $this->data_nascimento && !LibValidation::validateDateOfBirth($this->data_nascimento)) {
+                if ($this->data_nascimento && !LibValidation::validateDateOfBirth($this->data_nascimento)) {
                     $validator->errors()->add('data_nascimento', 'A data de nascimento é inválida.');
                 }
 
-                if ($validator->errors()->isEmpty() && $this->cpf && !LibValidation::validateCPF($this->cpf)) {
+                if ($this->cpf && !LibValidation::validateCPF($this->cpf)) {
                     $validator->errors()->add('cpf', 'O CPF é inválido.');
                 }
             }
