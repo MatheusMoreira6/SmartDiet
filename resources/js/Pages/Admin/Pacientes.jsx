@@ -1,20 +1,15 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Head, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import ContainerFluid from "@/Components/ContainerFluid";
 import Card from "@/Components/Card";
-import FormModal from "@/Components/FormModal";
-import SweetAlert from "@/Components/SweetAlert";
 import FormInput from "@/Components/FormInput";
+import FormModal from "@/Components/FormModal";
 import FormSelect from "@/Components/FormSelect";
+import SweetAlert from "@/Components/SweetAlert";
+import { Col, Container, Form, Row } from "react-bootstrap";
 
 const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
-    const modalRef = useRef(null);
-    const formRef = useRef(null);
-
-    const [modalOpen, setModalOpen] = useState(false);
-
-    const { data, setData, post, processing, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
         nome: "",
         sobrenome: "",
         data_nascimento: "",
@@ -24,180 +19,210 @@ const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
         email: "",
     });
 
+    const [validated, setValidated] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleShow = () => setShowModal(true);
+    const handleClose = () => setShowModal(false);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formRef.current.checkValidity()) {
-            formRef.current.classList.remove("was-validated");
+        const form = e.currentTarget;
 
+        if (form.checkValidity()) {
             post(route("admin.pacientes"), {
                 onSuccess: (page) => {
-                    let title = page.props.title;
-                    let text = page.props.text;
+                    const title = page.props.title;
+                    const text = page.props.text;
 
-                    SweetAlert.success(title, text).then(() => {
-                        setModalOpen(false);
-                    });
+                    SweetAlert.success({ title: title, text: text }).then(
+                        () => {
+                            setShowModal(false);
+                        }
+                    );
 
                     reset();
                 },
-                onError: (errors) => {
-                    SweetAlert.error(Object.values(errors).flat());
+                onError: () => {
+                    errors.error && SweetAlert.error({ title: errors.error });
                 },
             });
         } else {
-            formRef.current.classList.add("was-validated");
+            e.stopPropagation();
         }
-    };
 
-    const modalShow = () => {
-        setModalOpen(true);
-    };
-
-    const modalClose = () => {
-        setModalOpen(false);
+        setValidated(true);
     };
 
     const renderPacientes = (pacientes) => {
         return pacientes.map((paciente) => (
-            <div className="col" key={paciente.id}>
+            <Col key={paciente.id}>
                 <Card footer={`${paciente.nome} ${paciente.sobrenome}`}>
                     <img src="..." className="card-img-top" alt="..." />
                 </Card>
-            </div>
+            </Col>
         ));
     };
 
     return (
-        <>
-            <AdminLayout user={user} currentRoute={currentRoute}>
-                <Head title="Pacientes" />
+        <AdminLayout user={user} currentRoute={currentRoute}>
+            <Head title="Pacientes" />
 
-                <ContainerFluid padding="py-4">
-                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-3">
-                        <div className="col">
-                            <Card onClick={modalShow}>
-                                <i
-                                    className="bi bi-person-fill-add m-auto"
-                                    style={{ fontSize: "120px" }}
-                                ></i>
-                            </Card>
-                        </div>
+            <Container fluid className="py-4">
+                <Row xs={1} md={2} lg={3} xl={4} xxl={5} className="g-3">
+                    <Col>
+                        <Card onClick={handleShow}>
+                            <i
+                                className="bi bi-person-fill-add m-auto"
+                                style={{ fontSize: "120px" }}
+                            ></i>
+                        </Card>
+                    </Col>
 
-                        {pacientes.length > 0 && renderPacientes(pacientes)}
-                    </div>
-                </ContainerFluid>
-            </AdminLayout>
+                    {pacientes.length > 0 && renderPacientes(pacientes)}
+                </Row>
+            </Container>
 
             <FormModal
+                show={showModal}
                 title={"Cadastrar Paciente"}
-                modalRef={modalRef}
-                modalOpen={modalOpen}
-                formRef={formRef}
-                processing={processing}
+                handleClose={handleClose}
                 handleSubmit={handleSubmit}
-                performClose={modalClose}
+                processing={processing}
             >
-                <div className="row g-3">
-                    <div className="col-12 col-lg-4">
-                        <FormInput
-                            label={"Nome"}
-                            name={"nome"}
-                            type={"text"}
-                            value={data.nome}
-                            autoFocus={true}
-                            placeHolder={"Digite seu nome"}
-                            textError={"Informe seu nome"}
-                            onChange={(e) => setData("nome", e.target.value)}
-                        />
-                    </div>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                    <Row className="g-3">
+                        <Col xs={12} lg={4}>
+                            <FormInput
+                                id={"nome"}
+                                label={"Nome"}
+                                type={"text"}
+                                value={data.nome}
+                                autoFocus={true}
+                                placeHolder={"Digite seu nome"}
+                                required={true}
+                                isInvalid={errors.nome}
+                                onChange={(e) =>
+                                    setData("nome", e.target.value)
+                                }
+                                textError={errors.nome ?? "Informe seu nome"}
+                            />
+                        </Col>
 
-                    <div className="col-12 col-lg-4">
-                        <FormInput
-                            label={"Sobrenome"}
-                            name={"sobrenome"}
-                            type={"text"}
-                            value={data.sobrenome}
-                            placeHolder={"Digite seu sobrenome"}
-                            textError={"Informe seu sobrenome"}
-                            onChange={(e) =>
-                                setData("sobrenome", e.target.value)
-                            }
-                        />
-                    </div>
+                        <Col xs={12} lg={4}>
+                            <FormInput
+                                id={"sobrenome"}
+                                label={"Sobrenome"}
+                                type={"text"}
+                                value={data.sobrenome}
+                                placeHolder={"Digite seu sobrenome"}
+                                required={true}
+                                isInvalid={errors.sobrenome}
+                                onChange={(e) =>
+                                    setData("sobrenome", e.target.value)
+                                }
+                                textError={
+                                    errors.sobrenome ?? "Informe seu sobrenome"
+                                }
+                            />
+                        </Col>
 
-                    <div className="col-12 col-lg-4">
-                        <FormInput
-                            label={"Data de Nascimento"}
-                            name={"data_nascimento"}
-                            type={"text"}
-                            value={data.data_nascimento}
-                            mask={"99/99/9999"}
-                            placeHolder={"__/__/____"}
-                            textError={"Informe sua data de nascimento"}
-                            onChange={(e) =>
-                                setData("data_nascimento", e.target.value)
-                            }
-                        />
-                    </div>
+                        <Col xs={12} lg={4}>
+                            <FormInput
+                                id={"data_nascimento"}
+                                label={"Data de Nascimento"}
+                                type={"text"}
+                                mask={"99/99/9999"}
+                                value={data.data_nascimento}
+                                placeHolder={"__/__/____"}
+                                required={true}
+                                isInvalid={errors.data_nascimento}
+                                onChange={(e) =>
+                                    setData("data_nascimento", e.target.value)
+                                }
+                                textError={
+                                    errors.data_nascimento ??
+                                    "Informe sua data de nascimento"
+                                }
+                            />
+                        </Col>
 
-                    <div className="col-12 col-lg-4">
-                        <FormSelect
-                            label={"Sexo"}
-                            name={"sexo"}
-                            options={generos}
-                            value={data.genero_id}
-                            textError={"Informe seu sexo"}
-                            onChange={(e) =>
-                                setData("genero_id", e.target.value)
-                            }
-                        />
-                    </div>
+                        <Col xs={12} lg={4}>
+                            <FormSelect
+                                id={"sexo"}
+                                label={"Sexo"}
+                                options={generos}
+                                value={data.genero_id}
+                                required={true}
+                                isInvalid={errors.genero_id}
+                                onChange={(e) =>
+                                    setData("genero_id", e.target.value)
+                                }
+                                textError={
+                                    errors.genero_id ?? "Informe seu sexo"
+                                }
+                            />
+                        </Col>
 
-                    <div className="col-12 col-lg-4">
-                        <FormInput
-                            label={"CPF"}
-                            name={"cpf"}
-                            type={"text"}
-                            value={data.cpf}
-                            mask={"999.999.999-99"}
-                            placeHolder={"Digite seu CPF"}
-                            textError={"Informe seu CPF"}
-                            onChange={(e) => setData("cpf", e.target.value)}
-                        />
-                    </div>
+                        <Col xs={12} lg={4}>
+                            <FormInput
+                                id={"cpf"}
+                                label={"CPF"}
+                                type={"text"}
+                                mask={"999.999.999-99"}
+                                value={data.cpf}
+                                placeHolder={"Digite seu CPF"}
+                                required={true}
+                                isInvalid={errors.cpf}
+                                onChange={(e) => setData("cpf", e.target.value)}
+                                textError={errors.cpf ?? "Informe seu CPF"}
+                            />
+                        </Col>
 
-                    <div className="col-12 col-lg-4">
-                        <FormInput
-                            label={"Telefone"}
-                            name={"telefone"}
-                            type={"text"}
-                            value={data.telefone}
-                            mask={"(99) 99999-9999"}
-                            placeHolder={"Digite seu telefone"}
-                            textError={"Informe seu telefone"}
-                            onChange={(e) =>
-                                setData("telefone", e.target.value)
-                            }
-                        />
-                    </div>
+                        <Col xs={12} lg={4}>
+                            <FormInput
+                                id={"telefone"}
+                                label={"Telefone"}
+                                type={"text"}
+                                mask={"(99) 99999-9999"}
+                                value={data.telefone}
+                                placeHolder={"Digite seu telefone"}
+                                required={true}
+                                isInvalid={errors.telefone}
+                                onChange={(e) =>
+                                    setData("telefone", e.target.value)
+                                }
+                                textError={
+                                    errors.telefone ?? "Informe seu telefone"
+                                }
+                            />
+                        </Col>
 
-                    <div className="col-12">
-                        <FormInput
-                            label={"E-mail"}
-                            name={"email"}
-                            type={"email"}
-                            value={data.email}
-                            placeHolder={"Digite seu e-mail"}
-                            textError={"Insira um e-mail válido"}
-                            onChange={(e) =>
-                                setData("email", e.target.value.toLowerCase())
-                            }
-                        />
-                    </div>
-                </div>
+                        <Col xs={12}>
+                            <FormInput
+                                id={"email"}
+                                label={"E-mail"}
+                                type={"email"}
+                                value={data.email}
+                                placeHolder={"Digite seu e-mail"}
+                                required={true}
+                                isInvalid={errors.email}
+                                onChange={(e) =>
+                                    setData(
+                                        "email",
+                                        e.target.value.toLowerCase()
+                                    )
+                                }
+                                textError={
+                                    errors.email ?? "Insira um e-mail válido"
+                                }
+                            />
+                        </Col>
+                    </Row>
+                </Form>
             </FormModal>
-        </>
+        </AdminLayout>
     );
 };
 
