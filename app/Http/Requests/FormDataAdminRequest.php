@@ -39,14 +39,13 @@ class FormDataAdminRequest extends FormRequest
         ];
 
         if ($this->isMethod('put')) {
-            $user = Auth::user();
-            $nutricionista = $user->nutricionista;
+            $nutricionista = Auth::user()->nutricionista;
 
             $rules['cpf'] .= ',' . $nutricionista->id . ',id';
             $rules['crn'] .= ',' . $nutricionista->id . ',id';
-            $rules['email'] .= ',' . $user->id . ',id';
 
-            $rules['password'] = 'nullable|min:6|confirmed';
+            $rules['email'] = 'prohibited';
+            $rules['password'] = 'prohibited';
         }
 
         return $rules;
