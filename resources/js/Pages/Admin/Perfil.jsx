@@ -8,7 +8,7 @@ import FormInput from "@/Components/FormInput";
 import ButtonPrimary from "@/Components/ButtonPrimary";
 import LinkWarning from "@/Components/LinkWarning";
 import PageTopic from "@/Components/PageTopic";
-import FormSelect from "@/Components/FormFields/FormSelect";
+import FormSelect from "@/Components/FormSelect";
 import SweetAlert from "@/Components/SweetAlert";
 
 const Perfil = ({ user, dados, generos }) => {

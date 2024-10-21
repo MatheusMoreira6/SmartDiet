@@ -6,7 +6,7 @@ import Card from "@/Components/Card";
 import FormModal from "@/Components/FormModal";
 import SweetAlert from "@/Components/SweetAlert";
 import FormInput from "@/Components/FormInput";
-import FormSelect from "@/Components/FormFields/FormSelect";
+import FormSelect from "@/Components/FormSelect";
 
 const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
     const modalRef = useRef(null);
