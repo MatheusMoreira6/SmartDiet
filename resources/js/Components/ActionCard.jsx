@@ -1,42 +1,44 @@
-const Card = ({ title, children, footer, onClick, disabled }) => {
+import { Card } from "react-bootstrap";
+
+const ActionCard = ({ title, children, footer, onClick, disabled }) => {
     const renderHeader = () => {
         if (!title) return null;
 
         return (
-            <div className="card-header">
+            <Card.Header>
                 <h5 className="text-center">{title}</h5>
-            </div>
+            </Card.Header>
         );
     };
 
     const renderBody = () => {
         if (!title && !footer) return children;
 
-        return <div className="card-body">{children}</div>;
+        return <Card.Body>{children}</Card.Body>;
     };
 
     const renderFooter = () => {
         if (!footer) return null;
 
         return (
-            <div className="card-footer">
+            <Card.Footer>
                 <p className="text-center my-2">{footer}</p>
-            </div>
+            </Card.Footer>
         );
     };
 
     return (
-        <div
+        <Card
             onClick={onClick}
             disabled={disabled}
-            className="card m-auto"
+            className="m-auto card-pointer"
             style={{ width: "280px", height: "350px" }}
         >
             {renderHeader()}
             {renderBody()}
             {renderFooter()}
-        </div>
+        </Card>
     );
 };
 
-export default Card;
+export default ActionCard;

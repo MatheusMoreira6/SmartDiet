@@ -25,6 +25,6 @@ a > i {
     box-shadow: 0 0 0 0.25rem rgba(var(--bs-danger-rgb), 0.25) !important;
 }
 
-.card-pointer {
+.card-pointer:not(:disabled) {
     cursor: pointer;
 }
