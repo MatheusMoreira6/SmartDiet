@@ -71,6 +71,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 
     Route::controller(ConfiguracoesAdmin::class)->prefix('configuracoes')->group(function () {
         Route::get('/', 'index')->name('admin.configuracoes');
+        Route::put('/', 'salvar')->name('admin.configuracoes');
     });
 
     Route::get('/logout', [LoginAdmin::class, 'logout'])->name('logout.admin');
