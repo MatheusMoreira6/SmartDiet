@@ -35,7 +35,7 @@ class FormDataUserRequest extends FormRequest
             'genero_id' => 'required|exists:generos,id',
             'cpf' => 'required|size:14|unique:pacientes,cpf',
             'telefone' => 'required|size:15',
-            'email' => 'email|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'nullable|min:6|confirmed',
         ];
 
@@ -53,18 +53,23 @@ class FormDataUserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'required' => 'O campo :attribute precisa ser preenchido',
             'id.prohibited' => 'O campo id é inválido',
             'user_id.prohibited' => 'O campo user_id é inválido',
             'nutricionista_id.prohibited' => 'O campo nutricionista_id é inválido',
+            'nome.required' => 'O campo nome é obrigatório',
             'nome.min' => 'O campo nome precisa ter no mínimo 3 caracteres',
             'nome.max' => 'O campo nome deve ter no máximo 100 caracteres',
+            'sobrenome.required' => 'O campo sobrenome é obrigatório',
             'sobrenome.min' => 'O campo sobrenome precisa ter no mínimo 3 caracteres',
             'sobrenome.max' => 'O campo sobrenome deve ter no máximo 100 caracteres',
+            'data_nascimento.required' => 'O campo data de nascimento é obrigatório',
+            'genero_id.required' => 'O campo gênero é obrigatório',
             'genero_id.exists' => 'O gênero é inválido',
+            'cpf.required' => 'O campo CPF é obrigatório',
             'cpf.size' => 'O CPF deve ter 14 caracteres',
             'cpf.unique' => 'O CPF já está em uso',
-            'telefone.size' => 'O telefone deve ter 15 caracteres',
+            'telefone.size' => 'O telefone deve ter 11 números',
+            'email.required' => 'O campo email é obrigatório',
             'email.email' => 'O email é inválido',
             'email.unique' => 'O email já está em uso',
             'password.min' => 'A senha deve ter pelo menos 6 caracteres',
