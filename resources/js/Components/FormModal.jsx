@@ -1,18 +1,28 @@
-import { Button, Container, Modal } from "react-bootstrap";
+import { useRef } from "react";
+import { Button, Container, Form, Modal } from "react-bootstrap";
 
 const FormModal = ({
     show,
     title,
     children,
+    validated,
+    processing,
     handleClose,
     handleSubmit,
-    processing,
     size = "lg",
 }) => {
+    const formRef = useRef(null);
+
+    const performSubmit = () => {
+        formRef.current.dispatchEvent(
+            new Event("submit", { bubbles: true, cancelable: true })
+        );
+    };
+
     return (
         <Modal
-            size={size}
             show={show}
+            size={size}
             onHide={handleClose}
             backdrop="static"
             keyboard={false}
@@ -23,7 +33,16 @@ const FormModal = ({
             </Modal.Header>
 
             <Modal.Body>
-                <Container fluid>{children}</Container>
+                <Container fluid>
+                    <Form
+                        noValidate
+                        ref={formRef}
+                        validated={validated}
+                        onSubmit={handleSubmit}
+                    >
+                        {children}
+                    </Form>
+                </Container>
             </Modal.Body>
 
             <Modal.Footer>
@@ -31,7 +50,7 @@ const FormModal = ({
                     Cancelar
                 </Button>
 
-                <Button variant="primary" onClick={handleSubmit}>
+                <Button variant="primary" onClick={performSubmit}>
                     {processing ? "Salvando..." : "Salvar"}
                 </Button>
             </Modal.Footer>
