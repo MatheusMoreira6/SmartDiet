@@ -1,21 +1,16 @@
-import axios from "axios";
-import { useRef, useState } from "react";
-import { Head, useForm, usePage } from "@inertiajs/react";
-import UserLayout from "@/Layouts/UserLayout";
+import { useState } from "react";
+import { Head, useForm } from "@inertiajs/react";
+import AdminLayout from "@/Layouts/AdminLayout";
 import Container from "@/Components/Container";
-import Form from "@/Components/FormReact";
 import FormInput from "@/Components/FormInput";
-import ButtonPrimary from "@/Components/ButtonPrimary";
+import FormSelect from "@/Components/FormSelect";
 import LinkWarning from "@/Components/LinkWarning";
 import PageTopic from "@/Components/PageTopic";
-import FormSelect from "@/Components/FormSelect";
 import SweetAlert from "@/Components/SweetAlert";
+import { Button, Col, Form, Row } from "react-bootstrap";
 
 const Perfil = ({ generos, dados }) => {
-    const props = usePage().props;
-
-    const { data, setData } = useForm({
-        _token: props.csrf_token,
+    const { data, setData, put, processing, errors } = useForm({
         nome: dados.nome,
         sobrenome: dados.sobrenome,
         data_nascimento: dados.data_nascimento,
@@ -24,167 +19,177 @@ const Perfil = ({ generos, dados }) => {
         telefone: dados.telefone,
     });
 
-    const [processing, setProcessing] = useState(false);
-
-    const formRef = useRef(null);
+    const [validated, setValidated] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formRef.current.checkValidity()) {
-            formRef.current.classList.remove("was-validated");
+        const form = e.currentTarget;
 
-            setProcessing(true);
-
-            axios({
-                data: data,
-                method: "put",
-                responseType: "json",
-                url: route("user.perfil"),
-            })
-                .then(function (response) {
-                    SweetAlert.fire({
-                        title: "Cadastro atualizado com sucesso!",
-                        icon: "success",
+        if (form.checkValidity()) {
+            put(route("user.perfil"), {
+                onSuccess: (page) => {
+                    SweetAlert.success({
+                        title: page.props.title,
+                        text: page.props.text,
                     });
-                })
-                .catch(function (error) {
-                    let errorMessage = "Erro ao atualizar o perfil!";
-
-                    if (error.response.data.errors) {
-                        errorMessage = Object.values(
-                            error.response.data.errors
-                        ).join("\n");
-                    }
-
-                    SweetAlert.fire({
-                        title: errorMessage,
-                        icon: "error",
-                    });
-                })
-                .finally(() => {
-                    setProcessing(false);
-                });
+                },
+                onError: () => {
+                    errors.error && SweetAlert.error({ title: errors.error });
+                },
+            });
         } else {
-            formRef.current.classList.add("was-validated");
+            e.stopPropagation();
         }
+
+        setValidated(true);
     };
 
     return (
-        <UserLayout>
+        <AdminLayout>
             <Head title="Perfil" />
 
             <Container>
-                <Form formRef={formRef} handleSubmit={handleSubmit}>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <PageTopic>
                         <i className="bi bi-person-lines-fill"></i>
                         Perfil
                     </PageTopic>
 
-                    <div className="row g-3">
-                        <div className="col-12 col-md-6">
+                    <Row className="g-3">
+                        <Col xs={12} md={6}>
                             <FormInput
+                                id={"nome"}
                                 label={"Nome"}
-                                name={"nome"}
                                 type={"text"}
                                 value={data.nome}
                                 placeHolder={dados.nome}
+                                required={true}
+                                isInvalid={errors.nome}
                                 onChange={(e) =>
                                     setData("nome", e.target.value)
                                 }
-                                textError={"O campo nome é obrigatório"}
+                                textError={
+                                    errors.nome ?? "O campo nome é obrigatório"
+                                }
                             />
-                        </div>
+                        </Col>
 
-                        <div className="col-12 col-md-6">
+                        <Col xs={12} md={6}>
                             <FormInput
+                                id={"sobrenome"}
                                 label={"Sobrenome"}
-                                name={"sobrenome"}
                                 type={"text"}
                                 value={data.sobrenome}
                                 placeHolder={dados.sobrenome}
+                                required={true}
+                                isInvalid={errors.sobrenome}
                                 onChange={(e) =>
                                     setData("sobrenome", e.target.value)
                                 }
-                                textError={"O campo sobrenome é obrigatório"}
+                                textError={
+                                    errors.sobrenome ??
+                                    "O campo sobrenome é obrigatório"
+                                }
                             />
-                        </div>
+                        </Col>
 
-                        <div className="col-12 col-md-6 col-xl-3">
+                        <Col xs={12} md={6} xl={3}>
                             <FormInput
+                                id={"data_nascimento"}
                                 label={"Data de Nascimento"}
-                                name={"data_nascimento"}
                                 type={"text"}
                                 mask={"99/99/9999"}
                                 value={data.data_nascimento}
                                 placeHolder={dados.data_nascimento}
+                                required={true}
+                                isInvalid={errors.data_nascimento}
                                 onChange={(e) =>
                                     setData("data_nascimento", e.target.value)
                                 }
                                 textError={
+                                    errors.data_nascimento ??
                                     "O campo data de nascimento é obrigatório"
                                 }
                             />
-                        </div>
+                        </Col>
 
-                        <div className="col-12 col-md-6 col-xl-3">
+                        <Col xs={12} md={6} xl={3}>
                             <FormSelect
+                                id={"sexo"}
                                 label={"Sexo"}
-                                name={"sexo"}
                                 options={generos}
                                 value={data.genero_id}
+                                required={true}
+                                isInvalid={errors.genero_id}
                                 onChange={(e) =>
                                     setData("genero_id", e.target.value)
                                 }
-                                textError={"O campo sexo é obrigatório"}
+                                textError={
+                                    errors.genero_id ??
+                                    "O campo sexo é obrigatório"
+                                }
                             />
-                        </div>
+                        </Col>
 
-                        <div className="col-12 col-md-6 col-xl-3">
+                        <Col xs={12} md={6} xl={3}>
                             <FormInput
+                                id={"cpf"}
                                 label={"CPF"}
-                                name={"cpf"}
                                 type={"text"}
                                 mask={"999.999.999-99"}
                                 value={data.cpf}
                                 placeHolder={dados.cpf}
+                                required={true}
+                                isInvalid={errors.cpf}
                                 onChange={(e) => setData("cpf", e.target.value)}
-                                textError={"O campo cpf é obrigatório"}
+                                textError={
+                                    errors.cpf ?? "O campo cpf é obrigatório"
+                                }
                             />
-                        </div>
+                        </Col>
 
-                        <div className="col-12 col-md-6 col-xl-3">
+                        <Col xs={12} md={6} xl={3}>
                             <FormInput
+                                id={"telefone"}
                                 label={"Telefone"}
-                                name={"telefone"}
                                 type={"text"}
                                 mask={"(99) 99999-9999"}
                                 value={data.telefone}
                                 placeHolder={dados.telefone}
+                                required={true}
+                                isInvalid={errors.telefone}
                                 onChange={(e) =>
                                     setData("telefone", e.target.value)
                                 }
-                                textError={"O campo telefone é obrigatório"}
+                                textError={
+                                    errors.telefone ??
+                                    "O campo telefone é obrigatório"
+                                }
                             />
-                        </div>
+                        </Col>
 
-                        <div className="col-12">
+                        <Col xs={12}>
                             <div className="d-grid gap-2 d-md-block">
-                                <ButtonPrimary disabled={processing}>
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    disabled={processing}
+                                >
                                     <i className="bi bi-floppy"></i>
                                     {processing ? "Salvando..." : "Salvar"}
-                                </ButtonPrimary>
+                                </Button>
 
                                 <LinkWarning href={route("user.home")}>
                                     <i className="bi bi-arrow-return-left"></i>
                                     Cancelar
                                 </LinkWarning>
                             </div>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </Form>
             </Container>
-        </UserLayout>
+        </AdminLayout>
     );
 };
 

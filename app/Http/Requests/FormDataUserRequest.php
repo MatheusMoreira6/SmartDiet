@@ -40,11 +40,13 @@ class FormDataUserRequest extends FormRequest
         ];
 
         if ($this->isMethod('put')) {
-            $user = Auth::user();
-            $paciente = $user->paciente;
+            $paciente = Auth::user()->paciente;
 
             $rules['cpf'] .= ',' . $paciente->id . ',id';
             $rules['email'] .= ',' . $paciente->id . ',id';
+
+            $rules['email'] = 'prohibited';
+            $rules['password'] = 'prohibited';
         }
 
         return $rules;

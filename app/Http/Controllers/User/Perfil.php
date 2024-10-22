@@ -36,13 +36,13 @@ class Perfil extends Controller
                 $user->update(['nome' => $request->nome]),
             ];
 
-            if (!in_array(false, $update)) {
-                return response()->json(['success' => 'Cadastro atualizado com sucesso']);
-            } else {
-                return response()->json(['error' => 'Falha ao atualizar o cadastro'], 400);
+            if (in_array(false, $update)) {
+                $this->responseErrors(['error' => 'Falha ao atualizar o cadastro']);
             }
         } catch (Exception $e) {
-            return response()->json(['error' => 'Falha ao atualizar o cadastro'], 500);
+            $this->responseErrors(['error' => 'Falha ao atualizar o cadastro']);
         }
+
+        $this->response('user.perfil', ['title' => 'Cadastro atualizado com sucesso!']);
     }
 }
