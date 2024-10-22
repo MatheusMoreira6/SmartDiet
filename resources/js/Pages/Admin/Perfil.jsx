@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Head, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import Container from "@/Components/Container";
 import FormInput from "@/Components/FormInput";
 import FormSelect from "@/Components/FormSelect";
 import LinkWarning from "@/Components/LinkWarning";
 import PageTopic from "@/Components/PageTopic";
 import SweetAlert from "@/Components/SweetAlert";
+import WrapperContainer from "@/Components/WrapperContainer";
 import { Button, Col, Form, Row } from "react-bootstrap";
 
 const Perfil = ({ generos, dados }) => {
@@ -51,7 +51,7 @@ const Perfil = ({ generos, dados }) => {
         <AdminLayout>
             <Head title="Perfil" />
 
-            <Container>
+            <WrapperContainer>
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <PageTopic>
                         <i className="bi bi-person-lines-fill"></i>
@@ -226,7 +226,7 @@ const Perfil = ({ generos, dados }) => {
                         </Col>
                     </Row>
                 </Form>
-            </Container>
+            </WrapperContainer>
         </AdminLayout>
     );
 };
