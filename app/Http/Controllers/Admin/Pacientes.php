@@ -59,9 +59,7 @@ class Pacientes extends Controller
                 'text' => 'Senha temporária: ' . $password,
             ]);
         } catch (Exception $e) {
-            return $this->responseErrors([
-                'error' => 'Falha ao cadastrar o paciente!',
-            ]);
+            return $this->responseErrors(['error' => 'Falha ao cadastrar o paciente!']);
         }
     }
 }

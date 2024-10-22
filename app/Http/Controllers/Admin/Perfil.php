@@ -40,9 +40,9 @@ class Perfil extends Controller
                 return $this->responseErrors(['error' => 'Falha ao atualizar o cadastro']);
             }
         } catch (Exception $e) {
-            $this->responseErrors(['error' => 'Falha ao atualizar o cadastro']);
+            return $this->responseErrors(['error' => 'Falha ao atualizar o cadastro']);
         }
 
-        $this->response('admin.perfil', ['title' => 'Cadastro atualizado com sucesso!']);
+        return $this->response('admin.perfil', ['title' => 'Cadastro atualizado com sucesso!']);
     }
 }
