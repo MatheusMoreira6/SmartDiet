@@ -1,6 +1,8 @@
 import './bootstrap';
 import '../css/app.css';
 import '../scss/styles.scss';
+import 'react-calendar/dist/Calendar.css';
+import 'react-date-picker/dist/DatePicker.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
 import { createRoot } from 'react-dom/client';
