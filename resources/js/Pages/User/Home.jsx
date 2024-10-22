@@ -1,9 +1,9 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
 
-const Home = ({ user, currentRoute }) => {
+const Home = () => {
     return (
-        <UserLayout user={user} currentRoute={currentRoute}>
+        <UserLayout>
             <Head title="Tela Inicial" />
         </UserLayout>
     );

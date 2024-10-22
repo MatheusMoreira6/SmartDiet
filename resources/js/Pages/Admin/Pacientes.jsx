@@ -8,7 +8,7 @@ import FormSelect from "@/Components/FormSelect";
 import SweetAlert from "@/Components/SweetAlert";
 import { Col, Container, Form, Row } from "react-bootstrap";
 
-const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
+const Pacientes = ({ generos, pacientes }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         nome: "",
         sobrenome: "",
@@ -66,7 +66,7 @@ const Pacientes = ({ user, currentRoute, generos, pacientes }) => {
     };
 
     return (
-        <AdminLayout user={user} currentRoute={currentRoute}>
+        <AdminLayout>
             <Head title="Pacientes" />
 
             <Container fluid className="py-4">

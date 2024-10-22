@@ -1,9 +1,9 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
 
-const Agendamentos = ({ user, currentRoute }) => {
+const Agendamentos = () => {
     return (
-        <UserLayout user={user} currentRoute={currentRoute}>
+        <UserLayout>
             <Head title="Agendamentos" />
         </UserLayout>
     );

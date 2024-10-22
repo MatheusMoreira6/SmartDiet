@@ -1,10 +1,10 @@
 import NavbarAdmin from "./Admin/Navbar";
 
-const AdminLayout = ({ user, currentRoute, children }) => {
+const AdminLayout = ({ children }) => {
     return (
         <>
             <header>
-                <NavbarAdmin user={user} currentRoute={currentRoute} />
+                <NavbarAdmin />
             </header>
 
             <main>{children}</main>

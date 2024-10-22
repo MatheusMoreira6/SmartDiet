@@ -11,7 +11,7 @@ import PageTopic from "@/Components/PageTopic";
 import FormSelect from "@/Components/FormSelect";
 import SweetAlert from "@/Components/SweetAlert";
 
-const Perfil = ({ user, dados, generos }) => {
+const Perfil = ({ generos, dados }) => {
     const props = usePage().props;
 
     const { data, setData } = useForm({
@@ -71,7 +71,7 @@ const Perfil = ({ user, dados, generos }) => {
     };
 
     return (
-        <UserLayout user={user}>
+        <UserLayout>
             <Head title="Perfil" />
 
             <Container>

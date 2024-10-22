@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import {
     Container,
     Nav,
@@ -7,7 +7,9 @@ import {
     Offcanvas,
 } from "react-bootstrap";
 
-const NavbarUser = ({ user, currentRoute }) => {
+const NavbarUser = () => {
+    const { user, currentRoute } = usePage().props;
+
     function classLink(route) {
         return currentRoute == route ? "nav-link active" : "nav-link";
     }

@@ -9,7 +9,7 @@ import PageTopic from "@/Components/PageTopic";
 import SweetAlert from "@/Components/SweetAlert";
 import { Button, Col, Form, Row } from "react-bootstrap";
 
-const Perfil = ({ user, generos, dados }) => {
+const Perfil = ({ generos, dados }) => {
     const { data, setData, put, processing, errors } = useForm({
         nome: dados.nome,
         sobrenome: dados.sobrenome,
@@ -48,7 +48,7 @@ const Perfil = ({ user, generos, dados }) => {
     };
 
     return (
-        <AdminLayout user={user}>
+        <AdminLayout>
             <Head title="Perfil" />
 
             <Container>
