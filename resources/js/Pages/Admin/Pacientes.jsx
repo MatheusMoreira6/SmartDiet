@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Head, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import Card from "@/Components/Card";
+import ActionCard from "@/Components/ActionCard";
 import FormInput from "@/Components/FormInput";
 import FormModal from "@/Components/FormModal";
 import FormSelect from "@/Components/FormSelect";
@@ -59,9 +59,9 @@ const Pacientes = ({ generos, pacientes }) => {
     const renderPacientes = (pacientes) => {
         return pacientes.map((paciente) => (
             <Col key={paciente.id}>
-                <Card footer={`${paciente.nome} ${paciente.sobrenome}`}>
+                <ActionCard footer={`${paciente.nome} ${paciente.sobrenome}`}>
                     <img src="..." className="card-img-top" alt="..." />
-                </Card>
+                </ActionCard>
             </Col>
         ));
     };
@@ -73,12 +73,12 @@ const Pacientes = ({ generos, pacientes }) => {
             <Container fluid className="py-4">
                 <Row xs={1} md={2} lg={3} xl={4} xxl={5} className="g-3">
                     <Col>
-                        <Card onClick={handleShow}>
+                        <ActionCard onClick={handleShow}>
                             <i
                                 className="bi bi-person-fill-add m-auto"
                                 style={{ fontSize: "120px" }}
                             ></i>
-                        </Card>
+                        </ActionCard>
                     </Col>
 
                     {pacientes.length > 0 && renderPacientes(pacientes)}
