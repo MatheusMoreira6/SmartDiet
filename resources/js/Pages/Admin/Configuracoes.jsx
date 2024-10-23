@@ -9,7 +9,7 @@ import SweetAlert from "@/Components/SweetAlert";
 import { Button, Col, Form, Row } from "react-bootstrap";
 
 const Configuracoes = ({ dados }) => {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, processing, errors, reset } = useForm({
         email: dados.email,
         password_old: "",
         password_new: "",
@@ -45,6 +45,8 @@ const Configuracoes = ({ dados }) => {
                         title: page.props.title,
                         text: page.props.text,
                     });
+
+                    reset("password_old", "password_new");
                 },
                 onError: () => {
                     errors.error && SweetAlert.error({ title: errors.error });
