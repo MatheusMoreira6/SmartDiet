@@ -62,7 +62,11 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 
     Route::get('/agendamentos', [AgendamentosAdmin::class, 'index'])->name('admin.agendamentos');
     Route::get('/exames', [ExamesAdmin::class, 'index'])->name('admin.exames');
-    Route::get('/questionarios', [QuestionariosAdmin::class, 'index'])->name('admin.questionarios');
+
+    Route::controller(QuestionariosAdmin::class)->prefix('questionarios')->group(function () {
+        Route::get('/', 'index')->name('admin.questionarios');
+        Route::get('/cadastrar', 'cadastrar')->name('admin.questionarios.cadastrar');
+    });
 
     Route::controller(PerfilAdmin::class)->prefix('perfil')->group(function () {
         Route::get('/', 'index')->name('admin.perfil');

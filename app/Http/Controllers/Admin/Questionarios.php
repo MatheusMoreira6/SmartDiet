@@ -9,6 +9,13 @@ class Questionarios extends Controller
 {
     public function index()
     {
-        return $this->render('Admin/Questionarios');
+        return $this->render('Admin/Questionarios/Questionarios');
+    }
+
+    public function cadastrar()
+    {
+        return $this->render('Admin/Questionarios/Cadastrar', [
+            'tinymceApiKey' => env('TINYMCE_API_KEY'),
+        ]);
     }
 }
