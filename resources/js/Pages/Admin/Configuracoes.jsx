@@ -5,6 +5,7 @@ import PageTopic from "@/Components/PageTopic";
 import WrapperContainer from "@/Components/WrapperContainer";
 import AdminLayout from "@/Layouts/AdminLayout";
 import LinkWarning from "@/Components/LinkWarning";
+import SweetAlert from "@/Components/SweetAlert";
 import { Button, Col, Form, Row } from "react-bootstrap";
 
 const Configuracoes = ({ dados }) => {
