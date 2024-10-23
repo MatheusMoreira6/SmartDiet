@@ -6,6 +6,7 @@ const FormInput = ({
     label,
     type,
     mask,
+    bold,
     value,
     autoFocus,
     placeHolder,
@@ -16,7 +17,9 @@ const FormInput = ({
 }) => {
     return (
         <Form.Group controlId={id}>
-            <Form.Label>{label}</Form.Label>
+            <Form.Label className={bold ? "fw-semibold" : ""}>
+                {label}
+            </Form.Label>
 
             <Form.Control
                 as={InputMask}
