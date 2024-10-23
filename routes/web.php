@@ -93,6 +93,8 @@ Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () 
 
     Route::controller(ConfiguracoesUser::class)->prefix('configuracoes')->group(function () {
         Route::get('/', 'index')->name('user.configuracoes');
+        Route::put('/', 'salvar')->name('user.configuracoes');
+        Route::put('/alterar-senha-padrao', 'alterarSenhaPadrao')->name('user.alterar-senha-padrao');
     });
 
     Route::get('/logout', [LoginUser::class, 'logout'])->name('logout.user');
