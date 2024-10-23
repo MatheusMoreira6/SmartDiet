@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Head, useForm } from "@inertiajs/react";
-import AdminLayout from "@/Layouts/AdminLayout";
+import UserLayout from "@/Layouts/UserLayout";
 import FormInput from "@/Components/FormInput";
 import FormSelect from "@/Components/FormSelect";
 import LinkWarning from "@/Components/LinkWarning";
@@ -46,7 +46,7 @@ const Perfil = ({ generos, dados }) => {
     };
 
     return (
-        <AdminLayout>
+        <UserLayout>
             <Head title="Perfil" />
 
             <WrapperContainer>
@@ -189,7 +189,7 @@ const Perfil = ({ generos, dados }) => {
                     </Row>
                 </Form>
             </WrapperContainer>
-        </AdminLayout>
+        </UserLayout>
     );
 };
 
