@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, router, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import ActionCard from "@/Components/ActionCard";
 import FormInput from "@/Components/FormInput";
 import FormModal from "@/Components/FormModal";
 import FormSelect from "@/Components/FormSelect";
 import SweetAlert from "@/Components/SweetAlert";
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
 const Pacientes = ({ generos, pacientes }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -61,6 +61,13 @@ const Pacientes = ({ generos, pacientes }) => {
             <Col key={paciente.id}>
                 <ActionCard footer={`${paciente.nome} ${paciente.sobrenome}`}>
                     <img src="..." className="card-img-top" alt="..." />
+                    <Button
+                        onClick={() => {
+                            router.visit(`pacientes/${paciente.id}`);
+                        }}
+                    >
+                        Ver dados
+                    </Button>
                 </ActionCard>
             </Col>
         ));

@@ -58,6 +58,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
     Route::controller(PacientesAdmin::class)->group(function () {
         Route::get('/pacientes', 'index')->name('admin.pacientes');
         Route::post('/pacientes', 'cadastrar')->name('admin.pacientes');
+        Route::get('/pacientes/{id}', 'getDados')->name('admin.pacientes.id');
     });
 
     Route::get('/agendamentos', [AgendamentosAdmin::class, 'index'])->name('admin.agendamentos');

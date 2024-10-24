@@ -19,7 +19,7 @@ class Pacientes extends Controller
     {
         $nutricionista = Auth::user()->nutricionista;
 
-        return $this->render('Admin/Pacientes', [
+        return $this->render('Admin/Pacientes/Pacientes', [
             'generos' => Genero::all()->toArray(),
             'pacientes' => $nutricionista->pacientes()->get()->toArray()
         ]);
@@ -61,5 +61,16 @@ class Pacientes extends Controller
         } catch (Exception $e) {
             return $this->responseErrors(['error' => 'Falha ao cadastrar o paciente!']);
         }
+    }
+
+    public function getDados($id)
+    {
+        $dados_paciente =  Paciente::where('id', $id)->first();
+
+        $dados_paciente['genero'] = Genero::where('id', $dados_paciente['genero_id'])->first();
+
+        return $this->render('Admin/Pacientes/DadosPaciente', [
+            'dados' => $dados_paciente
+        ]);
     }
 }
