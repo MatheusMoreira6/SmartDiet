@@ -67,7 +67,7 @@ const Configuracoes = ({ dados }) => {
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <PageTopic>
                         <i className="bi bi-gear-fill"></i>
-                        Configurações
+                        Configurações teste
                     </PageTopic>
 
                     <Row className="g-3">
