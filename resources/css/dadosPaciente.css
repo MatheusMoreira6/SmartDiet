@@ -1,0 +1,33 @@
+.custom-navbar {
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: 'transparent'!important;
+}
+
+.custom-nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.custom-nav-link {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #555;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 5px;
+}
+
+.custom-nav-link.active {
+    color: #ffff!important;
+    background-color: #007bffce;
+}
+
+.custom-nav-link:hover{
+    color: #007bff!important;
+}
+
+.custom-nav-link:focus {
+    outline: none;
+    box-shadow: none;
+    color: "white";
+}

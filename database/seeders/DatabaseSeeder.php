@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             GenerosTableSeeder::class,
+            AlimentosSeeder::class,
+            DiasSemanasSeeder::class
         ]);
     }
 }

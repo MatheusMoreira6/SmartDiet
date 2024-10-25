@@ -1,18 +1,67 @@
 import PageTopic from "@/Components/PageTopic";
 import WrapperContainer from "@/Components/WrapperContainer";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Card, Row, Col } from "react-bootstrap";
+import { useState } from "react";
+import {
+    Card,
+    Row,
+    Col,
+    Navbar,
+    Nav,
+    Container,
+    Button,
+} from "react-bootstrap";
+import "../../../../css/dadosPaciente.css";
+import DietContainer from "./Dietas";
 
-export default function DadosPaciente({ dados }) {
+export default function DadosPaciente({ dados, dietas }) {
+    const [activeTab, setActiveTab] = useState("info");
+    const [visibleModal, setVisibleModal] = useState(false);
+
+    const handleSelect = (selectedKey) => {
+        setActiveTab(selectedKey);
+    };
+
     return (
         <AdminLayout>
             <WrapperContainer>
-                <Card className="my-4" style={{ padding: 10 }}>
-                    <PageTopic>
-                        <i className="bi bi-list"></i>
-                        Informações do Paciente
-                    </PageTopic>
-                    <Card.Body>
+                <Navbar expand="lg" className="custom-navbar">
+                    <Container className="rounded">
+                        <Nav
+                            activeKey={activeTab}
+                            onSelect={handleSelect}
+                            className="me-auto custom-nav"
+                        >
+                            <Nav.Link
+                                eventKey="info"
+                                className="custom-nav-link"
+                            >
+                                Informações
+                            </Nav.Link>
+                            <Nav.Link
+                                eventKey="history"
+                                className="custom-nav-link"
+                            >
+                                Histórico
+                            </Nav.Link>
+                            <Nav.Link
+                                eventKey="diet"
+                                className="custom-nav-link"
+                            >
+                                Dietas
+                            </Nav.Link>
+                        </Nav>
+                    </Container>
+                </Navbar>
+                <PageTopic>
+                    <i className="bi bi-list"></i>
+                    {activeTab === "info" && "Informações do Paciente"}
+                    {activeTab === "history" && "Histórico do Paciente"}
+                    {activeTab === "diet" && "Dietas do Paciente"}
+                </PageTopic>
+
+                {activeTab === "info" && (
+                    <>
                         <Row>
                             <Col md={6}>
                                 <h5>Nome:</h5>
@@ -33,7 +82,7 @@ export default function DadosPaciente({ dados }) {
                                 <p>{dados.genero.descricao}</p>
                             </Col>
                         </Row>
-                        <Row>
+                        <Row className="g-3 mb-3">
                             <Col md={6}>
                                 <h5>Telefone:</h5>
                                 <p>{dados.telefone}</p>
@@ -43,8 +92,31 @@ export default function DadosPaciente({ dados }) {
                                 <p>{dados.id}</p>
                             </Col>
                         </Row>
-                    </Card.Body>
-                </Card>
+                        <Row>
+                            <Col>
+                                <Button>
+                                    <i className="bi bi-pencil"></i>Editar
+                                </Button>
+                            </Col>
+                        </Row>
+                    </>
+                )}
+
+                {activeTab === "history" && (
+                    <>
+                        <Row>
+                            <Col md={6}>
+                                <h5>Consulta</h5>
+                                <p>{`${dados.nome} ${dados.sobrenome}`}</p>
+                            </Col>
+                            <Col md={6}>
+                                <h5>Consulta</h5>
+                                <p>{dados.cpf}</p>
+                            </Col>
+                        </Row>
+                    </>
+                )}
+                {activeTab === "diet" && <DietContainer dietas={dietas} />}
             </WrapperContainer>
         </AdminLayout>
     );
