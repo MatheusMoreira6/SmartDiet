@@ -1,9 +1,3 @@
-button > i,
-h3 > i,
-a > i {
-    margin-right: 0.5rem !important;
-}
-
 .form-control.is-invalid {
     border-color: var(--bs-form-invalid-border-color) !important;
     padding-right: calc(1.5em + 0.75rem) !important;
@@ -22,6 +16,15 @@ a > i {
     cursor: pointer;
 }
 
+.btn > .bi,
+h3 > .bi {
+    margin-right: 0.5rem !important;
+}
+
+.table .btn > .bi {
+    margin-right: 0 !important;
+}
+
 /**
 * Responsive CSS
 */
@@ -32,8 +35,7 @@ a > i {
 }
 
 @media (min-width: 768px) {
-    button.btn:not(:last-child),
-    a.btn:not(:last-child) {
+    .btn:not(:last-child) {
         margin-right: 0.5rem !important;
     }
 }
