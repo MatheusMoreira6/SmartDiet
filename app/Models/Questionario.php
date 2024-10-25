@@ -11,6 +11,8 @@ class Questionario extends Model
 
     protected $fillable = ['nutricionista_id', 'titulo'];
 
+    protected $hidden = ['nutricionista_id', 'created_at', 'updated_at'];
+
     public function nutricionista()
     {
         return $this->belongsTo(Nutricionista::class);
