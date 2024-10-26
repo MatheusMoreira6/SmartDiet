@@ -85,10 +85,12 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
         Route::post('/dietas', 'salvar')->name('dietas.salvar');
         Route::get('/busca-dias-horarios', 'buscaDiasHorarios')->name('dias.horarios');
         Route::get('/busca-alimentos', 'buscaAlimentos')->name('busca.alimentos');
+        Route::get('/busca-dieta/{id}', 'buscaDieta')->name('busca.dieta');
     });
 
     Route::controller(RefeicoesController::class)->group(function () {
         Route::get('/busca-refeicoes', 'buscaRefeicoes')->name('admin.refeicoes');
+        Route::post('/salva-refeicao', 'salvarRefeicao')->name('salvar.refeicao');
     });
 
     Route::get('/logout', [LoginAdmin::class, 'logout'])->name('logout.admin');

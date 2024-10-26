@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\DB;
 
 class Dietas extends Controller
 {
+
+    public function buscaDieta($id)
+    {
+        $dietas = ModelDietas::with(['refeicoes.alimentos'])
+            ->where('paciente_id', $id)
+            ->get();
+
+        return response()->json(['dietas' => $dietas]);
+    }
+
     public function salvar(Request $request)
     {
         $request->validate([

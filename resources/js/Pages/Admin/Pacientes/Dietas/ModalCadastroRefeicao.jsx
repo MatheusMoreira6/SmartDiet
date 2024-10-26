@@ -9,6 +9,7 @@ const ModalCadastroRefeicao = ({
     selectedDia,
     selectedHorario,
     onUpdateRefeicao,
+    dieta_id,
 }) => {
     const [alimentos, setAlimentos] = useState([]);
     const [selectedAlimentos, setSelectedAlimentos] = useState([]);
@@ -35,24 +36,29 @@ const ModalCadastroRefeicao = ({
 
     const handleSelectAlimento = (alimentoId) => {
         setSelectedAlimentos((prevSelected) => {
-            const alreadySelected = prevSelected.find(
+            const alreadySelected = prevSelected.some(
                 (item) => item.id === alimentoId
             );
+
             if (alreadySelected) {
                 return prevSelected.filter((item) => item.id !== alimentoId);
             } else {
-                const alimento = alimentos.find(
-                    (item) => item.id === alimentoId
-                );
-                return [...prevSelected, alimento];
+                const alimento = Object.values(alimentos)
+                    .flat()
+                    .find((item) => item.id === alimentoId);
+
+                return alimento ? [...prevSelected, alimento] : prevSelected;
             }
         });
     };
 
     const handleSave = async () => {
         try {
-            await Api.post(`/refeicoes/${refeicaoId}/alimentos`, {
+            await Api.post(route("salvar.refeicao"), {
                 alimentos: selectedAlimentos.map((alimento) => alimento.id),
+                dia: selectedDia,
+                horario: selectedHorario,
+                dieta_id: dieta_id,
             });
             onUpdateRefeicao();
             handleClose();

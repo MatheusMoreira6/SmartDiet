@@ -7,6 +7,7 @@ use App\Http\Requests\FormDataUserRequest;
 use App\Models\Dieta;
 use App\Models\Genero;
 use App\Models\Paciente;
+use App\Models\Refeicoes;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Str;
@@ -69,7 +70,10 @@ class Pacientes extends Controller
         $dados_paciente =  Paciente::where('id', $id)->first();
 
         $dados_paciente['genero'] = Genero::where('id', $dados_paciente['genero_id'])->first();
-        $dietas = Dieta::where('paciente_id', $id)->get();
+        $dietas = Dieta::with(['refeicoes.alimentos'])
+            ->where('paciente_id', $id)
+            ->get();
+
 
         return $this->render('Admin/Pacientes/DadosPaciente', [
             'dados' => $dados_paciente,

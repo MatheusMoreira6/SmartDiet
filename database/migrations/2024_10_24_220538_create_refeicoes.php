@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('refeicoes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('dieta_id');
-            $table->string('nome_refeicao');
-            $table->text('descricao')->nullable();
             $table->timestamps();
-    
+
             $table->foreign('dieta_id')->references('id')->on('dietas')->onDelete('cascade');
         });
     }
-    
+
 
     /**
      * Reverse the migrations.
