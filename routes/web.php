@@ -84,6 +84,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
     Route::controller(DietasAdmin::class)->group(function () {
         Route::post('/dietas', 'salvar')->name('dietas.salvar');
         Route::get('/busca-dias-horarios', 'buscaDiasHorarios')->name('dias.horarios');
+        Route::get('/busca-alimentos', 'buscaAlimentos')->name('busca.alimentos');
     });
 
     Route::controller(RefeicoesController::class)->group(function () {

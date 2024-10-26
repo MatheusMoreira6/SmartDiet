@@ -12,7 +12,7 @@ import {
     Button,
 } from "react-bootstrap";
 import "../../../../css/dadosPaciente.css";
-import DietContainer from "./Dietas";
+import DietContainer from "./Dietas/Dietas";
 
 export default function DadosPaciente({ dados, dietas }) {
     const [activeTab, setActiveTab] = useState("info");

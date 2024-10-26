@@ -10,7 +10,7 @@ export const ModalCadastroDieta = ({
     id_paciente,
     id_nutricionista,
 }) => {
-    const { data, setData, post, reset, errors, setError } = useForm({
+    const { data, setData, post, reset, errors } = useForm({
         nome: "",
         descricao: "",
     });

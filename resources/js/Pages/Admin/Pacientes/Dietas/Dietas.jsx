@@ -1,16 +1,20 @@
 import { Row, Col, Button, Form, Alert, Table, Spinner } from "react-bootstrap";
 import { ModalCadastroDieta } from "./ModalCadastroDieta";
 import { useState } from "react";
-import "../../../../css/tableDieta.css";
+import "../../../../../css/tableDieta.css";
 import { useEffect } from "react";
 import Api from "@/Api";
+import ModalCadastroRefeicao from "./ModalCadastroRefeicao";
 
 const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [show, setShow] = useState(false);
+    const [visibleRef, setVisibleRef] = useState(false);
     const [dietasDynamic, setDietas] = useState(dietas);
     const [diasSemana, setDias] = useState([]);
     const [horarios, setHorarios] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [selectedHorario, setSelectedHorario] = useState("");
+    const [selectedDia, setSelectedDia] = useState("");
 
     const handleShow = () => setShow(true);
 
@@ -69,6 +73,13 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                                             </td>
                                             {diasSemana.map((dia, dIndex) => (
                                                 <td
+                                                    onClick={() => {
+                                                        setVisibleRef(true);
+                                                        setSelectedDia(dia.id);
+                                                        setSelectedHorario(
+                                                            horario.id
+                                                        );
+                                                    }}
                                                     key={dIndex}
                                                     className="meal-cell"
                                                 >
@@ -98,6 +109,13 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                     </Row>
                 </>
             )}
+
+            <ModalCadastroRefeicao
+                show={visibleRef}
+                setShow={setVisibleRef}
+                selectedDia={selectedDia}
+                selectedHorario={selectedHorario}
+            />
 
             <ModalCadastroDieta
                 visible={show}

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->float('proteinas', 8, 2);
             $table->float('carboidratos', 8, 2);
             $table->float('gorduras', 8, 2);
+            $table->string('tipo_alimento');
             $table->timestamps();
         });
     }

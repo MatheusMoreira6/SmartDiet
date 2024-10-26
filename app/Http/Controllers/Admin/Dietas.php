@@ -34,4 +34,11 @@ class Dietas extends Controller
 
         return response()->json(['dias' => $dias, 'horarios' => $horarios]);
     }
+
+    public function buscaAlimentos()
+    {
+        $alimentos = DB::table('alimentos')->select()->get()->groupBy('tipo_alimentos');
+
+        return response()->json(['alimentos' => $alimentos]);
+    }
 }
