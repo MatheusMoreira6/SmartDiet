@@ -13,7 +13,7 @@ class Dietas extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'descricao' => 'required'
+            'descricao' => 'required|string'
         ]);
 
         ModelDietas::create([
@@ -24,7 +24,7 @@ class Dietas extends Controller
         ]);
 
         $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)->where("paciente_id", $request->id_paciente)->get();
-        return response()->json(["dietas" => $dietas]);
+        response()->json(["dietas" => $dietas]);
     }
 
     public function buscaDiasHorarios()

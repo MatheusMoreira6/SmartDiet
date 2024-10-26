@@ -12,11 +12,10 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [horarios, setHorarios] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     useEffect(() => {
-        setDias(dietasDynamic);
+        setDietas(dietasDynamic);
     }, [dietas]);
 
     useEffect(() => {
@@ -102,7 +101,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
 
             <ModalCadastroDieta
                 visible={show}
-                handleClose={handleClose}
+                setShow={setShow}
                 setDietas={setDietas}
                 id_paciente={id_paciente}
                 id_nutricionista={id_nutricionista}
