@@ -1,20 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Dietas;
+use App\Http\Controllers\Controller;
+use App\Models\Dieta as ModelDietas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class DietasController extends Controller
+class Dietas extends Controller
 {
     public function salvar(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'nome' => 'required|string|max:255',
+            'descricao' => 'required'
         ]);
 
-        Dietas::create($validated);
+        ModelDietas::create([
+            'nome_dieta' => $request->nome,
+            'descricao' => $request->descricao,
+            'nutricionista_id' => $request->id_nutricionista,
+            'paciente_id' => $request->id_paciente
+        ]);
 
-        return redirect()->route('dietas.index')->with('success', 'Dieta cadastrada com sucesso!');
+        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)->where("paciente_id", $request->id_paciente)->get();
+        return response()->json(["dietas" => $dietas]);
+    }
+
+    public function buscaDiasHorarios()
+    {
+        $dias = DB::table('dias_semanas')->select()->get();
+        $horarios = DB::table('horarios')->select()->get();
+
+        return response()->json(['dias' => $dias, 'horarios' => $horarios]);
     }
 }

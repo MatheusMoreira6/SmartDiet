@@ -1,28 +1,43 @@
-import Api from "../../../Api";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useForm } from "@inertiajs/react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 
-export const ModalCadastroDieta = ({ visible, handleClose, setDietas }) => {
-    const [nome, setNome] = useState("");
-    const [descricao, setDescricao] = useState("");
-    const [calorias, setCalorias] = useState("");
-    const [errors, setErrors] = useState({});
-    const [refeicoes, setRefeicoes] = useState([]);
+export const ModalCadastroDieta = ({
+    visible,
+    handleClose,
+    setDietas,
+    id_paciente,
+    id_nutricionista,
+}) => {
+    const { data, setData, post, reset, errors } = useForm({
+        nome: "",
+        descricao: "",
+    });
 
-    useEffect(() => {
-        const fn = async () => {
-            const result = await Api.get(route("admin.refeicoes"));
-            console.log(result);
-        };
+    const handleSubmit = (e) => {
+        data.id_paciente = id_paciente;
+        data.id_nutricionista = id_nutricionista;
+        e.preventDefault();
 
-        fn();
-    }, []);
+        post(route("dietas.salvar"), {
+            onSuccess: (response) => {
+                const novasDietas = response.props.dietas;
+                reset();
+                setDietas(novasDietas);
+                handleClose();
+            },
+            onError: (error) => {
+                SweetAlert.error({ title: "Ocorreu um erro" });
+            },
+        });
+    };
 
     return (
         <Modal
             show={visible}
-            onHide={handleClose}
+            onHide={() => {
+                handleClose();
+                reset();
+            }}
             backdrop="static"
             keyboard={false}
             size="lg"
@@ -33,14 +48,14 @@ export const ModalCadastroDieta = ({ visible, handleClose, setDietas }) => {
                 <Modal.Title>Cadastrar Dieta</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={() => {}}>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="nomeDieta">
                         <Form.Label>Nome da Dieta</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Digite o nome da dieta"
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
+                            value={data.nome}
+                            onChange={(e) => setData("nome", e.target.value)}
                         />
                         {errors.nome && (
                             <Alert variant="danger">{errors.nome}</Alert>
@@ -52,24 +67,13 @@ export const ModalCadastroDieta = ({ visible, handleClose, setDietas }) => {
                         <Form.Control
                             type="text"
                             placeholder="Digite uma descrição"
-                            value={descricao}
-                            onChange={(e) => setDescricao(e.target.value)}
+                            value={data.descricao}
+                            onChange={(e) =>
+                                setData("descricao", e.target.value)
+                            }
                         />
                         {errors.descricao && (
                             <Alert variant="danger">{errors.descricao}</Alert>
-                        )}
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="caloriasDieta">
-                        <Form.Label>Calorias</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="Digite as calorias"
-                            value={calorias}
-                            onChange={(e) => setCalorias(e.target.value)}
-                        />
-                        {errors.calorias && (
-                            <Alert variant="danger">{errors.calorias}</Alert>
                         )}
                     </Form.Group>
 

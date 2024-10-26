@@ -17,7 +17,6 @@ import DietContainer from "./Dietas";
 export default function DadosPaciente({ dados, dietas }) {
     const [activeTab, setActiveTab] = useState("info");
     const [visibleModal, setVisibleModal] = useState(false);
-
     const handleSelect = (selectedKey) => {
         setActiveTab(selectedKey);
     };
@@ -27,30 +26,32 @@ export default function DadosPaciente({ dados, dietas }) {
             <WrapperContainer>
                 <Navbar expand="lg" className="custom-navbar">
                     <Container className="rounded">
-                        <Nav
-                            activeKey={activeTab}
-                            onSelect={handleSelect}
-                            className="me-auto custom-nav"
-                        >
-                            <Nav.Link
-                                eventKey="info"
-                                className="custom-nav-link"
+                        <Row>
+                            <Nav
+                                activeKey={activeTab}
+                                onSelect={handleSelect}
+                                className="me-auto custom-nav"
                             >
-                                Informações
-                            </Nav.Link>
-                            <Nav.Link
-                                eventKey="history"
-                                className="custom-nav-link"
-                            >
-                                Histórico
-                            </Nav.Link>
-                            <Nav.Link
-                                eventKey="diet"
-                                className="custom-nav-link"
-                            >
-                                Dietas
-                            </Nav.Link>
-                        </Nav>
+                                <Nav.Link
+                                    eventKey="info"
+                                    className="custom-nav-link"
+                                >
+                                    Informações
+                                </Nav.Link>
+                                <Nav.Link
+                                    eventKey="history"
+                                    className="custom-nav-link"
+                                >
+                                    Histórico
+                                </Nav.Link>
+                                <Nav.Link
+                                    eventKey="diet"
+                                    className="custom-nav-link"
+                                >
+                                    Dietas
+                                </Nav.Link>
+                            </Nav>
+                        </Row>
                     </Container>
                 </Navbar>
                 <PageTopic>
@@ -116,7 +117,13 @@ export default function DadosPaciente({ dados, dietas }) {
                         </Row>
                     </>
                 )}
-                {activeTab === "diet" && <DietContainer dietas={dietas} />}
+                {activeTab === "diet" && (
+                    <DietContainer
+                        dietas={dietas}
+                        id_paciente={dados.id}
+                        id_nutricionista={dados.nutricionista_id}
+                    />
+                )}
             </WrapperContainer>
         </AdminLayout>
     );

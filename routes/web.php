@@ -8,13 +8,13 @@ use App\Http\Controllers\Admin\Pacientes as PacientesAdmin;
 use App\Http\Controllers\Admin\Questionarios as QuestionariosAdmin;
 use App\Http\Controllers\Admin\Perfil as PerfilAdmin;
 use App\Http\Controllers\Admin\Configuracoes as ConfiguracoesAdmin;
+use App\Http\Controllers\Admin\Dietas as DietasAdmin;
 use App\Http\Controllers\Admin\RefeicoesController;
 
 // Controllers Auth
 use App\Http\Controllers\Auth\CadastroAdmin as CadastroAdmin;
 use App\Http\Controllers\Auth\LoginAdmin as LoginAdmin;
 use App\Http\Controllers\Auth\LoginUser as LoginUser;
-use App\Http\Controllers\DietasController;
 // Controllers User
 use App\Http\Controllers\User\Dashboard as DashboardUser;
 use App\Http\Controllers\User\Dietas as DietasUser;
@@ -81,8 +81,9 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
         Route::put('/', 'salvar')->name('admin.configuracoes');
     });
 
-    Route::controller(DietasController::class)->prefix('dietas')->group(function () {
+    Route::controller(DietasAdmin::class)->group(function () {
         Route::post('/dietas', 'salvar')->name('dietas.salvar');
+        Route::get('/busca-dias-horarios', 'buscaDiasHorarios')->name('dias.horarios');
     });
 
     Route::controller(RefeicoesController::class)->group(function () {

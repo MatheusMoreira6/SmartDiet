@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FormDataUserRequest;
-use App\Models\Dietas;
+use App\Models\Dieta;
 use App\Models\Genero;
 use App\Models\Paciente;
 use App\Models\User;
@@ -69,7 +69,7 @@ class Pacientes extends Controller
         $dados_paciente =  Paciente::where('id', $id)->first();
 
         $dados_paciente['genero'] = Genero::where('id', $dados_paciente['genero_id'])->first();
-        $dietas = Dietas::where('paciente_id', $id)->get();
+        $dietas = Dieta::where('paciente_id', $id)->get();
 
         return $this->render('Admin/Pacientes/DadosPaciente', [
             'dados' => $dados_paciente,

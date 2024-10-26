@@ -1,0 +1,34 @@
+.diet-table {
+    width: 100%;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.time-header, .day-header {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.time-cell {
+    background-color: #e0f7fa;
+    font-weight: bold;
+    color: #007bff;
+    width: 5%;
+}
+
+.meal-cell {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    height: 100px;
+    width: 15%;
+    transition: background-color 0.3s ease;
+    font-size: 0.8em;
+    color: #333;
+}
+
+.meal-cell:hover {
+    background-color: #e8f5e9;
+    cursor: pointer;
+}

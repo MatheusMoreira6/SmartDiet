@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Dietas extends Model
+class Dieta extends Model
 {
     use HasFactory;
     protected $table = 'dietas';
+    protected $fillable = ["nome_dieta", "id", "nutricionista_id", "paciente_id", "descricao"];
 }

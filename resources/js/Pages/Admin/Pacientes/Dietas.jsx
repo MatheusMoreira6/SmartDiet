@@ -1,54 +1,111 @@
-import { Row, Col, Button, Form, Alert } from "react-bootstrap";
+import { Row, Col, Button, Form, Alert, Table, Spinner } from "react-bootstrap";
 import { ModalCadastroDieta } from "./ModalCadastroDieta";
 import { useState } from "react";
+import "../../../../css/tableDieta.css";
+import { useEffect } from "react";
+import Api from "@/Api";
 
-const DietContainer = ({ dietas }) => {
+const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [show, setShow] = useState(false);
     const [dietasDynamic, setDietas] = useState(dietas);
+    const [diasSemana, setDias] = useState([]);
+    const [horarios, setHorarios] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const columns = [
-        { name: "Nome", selector: (row) => row.nome, sortable: true },
-        { name: "Descrição", selector: (row) => row.descricao, sortable: true },
-        { name: "Calorias", selector: (row) => row.calorias, sortable: true },
-    ];
+    useEffect(() => {
+        setDias(dietasDynamic);
+    }, [dietas]);
+
+    useEffect(() => {
+        const fn = async () => {
+            setLoading(true);
+            const response = await Api.get(route("dias.horarios"));
+
+            setDias(response.data.dias);
+            setHorarios(response.data.horarios);
+            setLoading(false);
+        };
+
+        fn();
+    }, []);
 
     return (
         <>
-            <Row className="g-3 mb-3">
-                <Col md={4}>
-                    <Button type="submit" onClick={handleShow}>
-                        <i className="bi bi-plus-lg"></i> Cadastrar Dieta
-                    </Button>
-                </Col>
-            </Row>
-
-            {dietas.length === 0 ? (
-                <Row className="g-3 mb-3">
-                    <Col md={4}>Nenhuma Dieta</Col>
-                </Row>
+            {dietasDynamic.length > 0 ? (
+                <>
+                    <Table bordered responsive className="diet-table mt-3">
+                        {loading ? (
+                            <>
+                                <Spinner
+                                    animation="border"
+                                    role="status"
+                                    variant="primary"
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <thead>
+                                    <tr>
+                                        <th className="time-header">
+                                            Horários
+                                        </th>
+                                        {diasSemana.map((dia, index) => (
+                                            <th
+                                                key={index}
+                                                className="day-header"
+                                            >
+                                                {dia.dia}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {horarios.map((horario, hIndex) => (
+                                        <tr key={hIndex}>
+                                            <td className="time-cell">
+                                                {horario.horario}
+                                            </td>
+                                            {diasSemana.map((dia, dIndex) => (
+                                                <td
+                                                    key={dIndex}
+                                                    className="meal-cell"
+                                                >
+                                                    {dietas[dia]?.[horario] ||
+                                                        "Sem refeição"}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </>
+                        )}
+                    </Table>
+                </>
             ) : (
                 <>
-                    <Row className="g-3 mb-3">
-                        <Col md={4}>
-                            <h3>Dietas</h3>
+                    <Row className="g-3 mb-3" md={6}>
+                        <Col md={6}>
+                            <Button variant="primary" onClick={handleShow}>
+                                <i className="bi bi-plus-lg"></i>
+                                Cadastrar dieta
+                            </Button>
                         </Col>
                     </Row>
-                    {dietas.map((dieta) => (
-                        <Row className="g-3 mb-3" key={dieta.id}>
-                            <Col md={4}>
-                                <div>{dieta.nome}</div>
-                            </Col>
-                        </Row>
-                    ))}
+                    <Row className="g-3 mb-3">
+                        <Col>Nenhuma dieta cadastrada</Col>
+                    </Row>
                 </>
             )}
+
             <ModalCadastroDieta
                 visible={show}
                 handleClose={handleClose}
                 setDietas={setDietas}
+                id_paciente={id_paciente}
+                id_nutricionista={id_nutricionista}
             />
         </>
     );
