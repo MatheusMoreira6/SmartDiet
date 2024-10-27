@@ -69,6 +69,8 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
         Route::get('/', 'index')->name('admin.questionarios');
         Route::get('/cadastrar', 'cadastrar')->name('admin.questionarios.cadastrar');
         Route::post('/cadastrar', 'salvarQuestionario')->name('admin.questionarios.cadastrar');
+        Route::get('/editar/{id}', 'editar')->name('admin.questionarios.editar');
+        Route::post('/excluir', 'excluirQuestionario')->name('admin.questionarios.excluir');
     });
 
     Route::controller(PerfilAdmin::class)->prefix('perfil')->group(function () {

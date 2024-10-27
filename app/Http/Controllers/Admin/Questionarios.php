@@ -13,7 +13,11 @@ class Questionarios extends Controller
 {
     public function index()
     {
-        return $this->render('Admin/Questionarios/Questionarios');
+        $questionarios = Questionario::where('nutricionista_id', Auth::user()->nutricionista->id)->get();
+
+        return $this->render('Admin/Questionarios/Questionarios', [
+            'questionarios' => $questionarios->toArray(),
+        ]);
     }
 
     public function cadastrar()
@@ -76,5 +80,27 @@ class Questionarios extends Controller
             DB::rollBack();
             return $this->responseErrors(['error' => "Falha ao cadastrar o questionário!"]);
         }
+    }
+
+    public function excluirQuestionario(Request $request)
+    {
+        $regras = [
+            'id_questionario' => 'required|exists:questionarios,id',
+        ];
+
+        $feedback = [
+            'id_questionario.required' => 'O ID é obrigatório!',
+            'id_questionario.exists' => 'Questionário não encontrado!',
+        ];
+
+        $request->validate($regras, $feedback);
+
+        $questionario = Questionario::find($request->id_questionario);
+
+        if (!$questionario->delete()) {
+            return $this->responseErrors(['error' => "Falha ao excluir o questionário!"]);
+        }
+
+        return $this->response('admin.questionarios', ['title' => "Questionário excluído com sucesso!"]);
     }
 }
