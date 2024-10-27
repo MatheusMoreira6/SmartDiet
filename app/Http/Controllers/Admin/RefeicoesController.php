@@ -19,26 +19,36 @@ class RefeicoesController extends Controller
     public function salvarRefeicao(Request $request)
     {
         $request->validate([
-            'alimentos' => 'required',
+            'alimentos' => 'required|array',
             'dia' => 'required',
             'horario' => 'required',
             'dieta_id' => 'required'
         ]);
 
-        $refeicao = Refeicoes::create([
-            'dieta_id' => $request->dieta_id,
-            'horario_id' => $request->horario,
-            'dia_semana_id' => $request->dia
-        ]);
+        $refeicao = Refeicoes::where('dieta_id', $request->dieta_id)
+            ->where('dia_semana_id', $request->dia)
+            ->where('horario_id', $request->horario)
+            ->first();
 
-        foreach ($request->alimentos as $alimento) {
-
-            DB::table('alimento_refeicao')->insert([
-                'alimento_id' => $alimento,
-                'refeicao_id' => $refeicao['id']
+        if ($refeicao) {
+            DB::table('alimento_refeicao')
+                ->where('refeicao_id', $refeicao->id)
+                ->delete();
+        } else {
+            $refeicao = Refeicoes::create([
+                'dieta_id' => $request->dieta_id,
+                'horario_id' => $request->horario,
+                'dia_semana_id' => $request->dia
             ]);
-        };
+        }
 
-        response()->json(['succes' => true]);
+        foreach ($request->alimentos as $alimentoId) {
+            DB::table('alimento_refeicao')->insert([
+                'alimento_id' => $alimentoId,
+                'refeicao_id' => $refeicao->id
+            ]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

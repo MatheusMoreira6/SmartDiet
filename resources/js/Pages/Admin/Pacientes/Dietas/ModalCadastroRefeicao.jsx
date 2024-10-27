@@ -10,12 +10,16 @@ const ModalCadastroRefeicao = ({
     selectedHorario,
     onUpdateRefeicao,
     dieta_id,
+    arraySelectedAlimentos,
 }) => {
     const [alimentos, setAlimentos] = useState([]);
     const [selectedAlimentos, setSelectedAlimentos] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        setSelectedAlimentos([]);
+    };
 
     useEffect(() => {
         if (show) {
@@ -24,6 +28,7 @@ const ModalCadastroRefeicao = ({
                 try {
                     const response = await Api.get(route("busca.alimentos"));
                     setAlimentos(response.data.alimentos);
+                    setSelectedAlimentos(arraySelectedAlimentos);
                 } catch (error) {
                     console.error("Erro ao buscar alimentos:", error);
                 }
@@ -69,7 +74,7 @@ const ModalCadastroRefeicao = ({
 
     return (
         <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
+            <Modal.Header closeButton onClick={handleClose}>
                 <Modal.Title>Adicionar Alimentos à Refeição</Modal.Title>
             </Modal.Header>
             <Modal.Body>

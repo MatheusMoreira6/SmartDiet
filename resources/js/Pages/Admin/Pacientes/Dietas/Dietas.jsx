@@ -15,6 +15,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [selectedHorario, setSelectedHorario] = useState("");
     const [selectedDia, setSelectedDia] = useState("");
     const [update, setUpdate] = useState(false);
+    const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
 
     const handleShow = () => setShow(true);
 
@@ -66,6 +67,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                     key={dia.id}
                     className="meal-cell"
                     onClick={() => {
+                        setArraySelectedAlimentos(alimentos);
                         setVisibleRef(true);
                         setSelectedDia(dia.id);
                         setSelectedHorario(horarioId);
@@ -139,6 +141,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                 selectedHorario={selectedHorario}
                 dieta_id={dietasDynamic[0].id}
                 onUpdateRefeicao={onUpdateRefeicao}
+                arraySelectedAlimentos={arraySelectedAlimentos}
             />
 
             <ModalCadastroDieta
