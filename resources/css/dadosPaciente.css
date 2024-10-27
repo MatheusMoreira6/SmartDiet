@@ -1,12 +1,13 @@
 .custom-navbar {
     border-radius: 8px;
     padding: 1rem;
-    background-color: 'transparent'!important;
+    background-color: transparent !important;
 }
 
 .custom-nav {
     display: flex;
     gap: 1.5rem;
+    flex-direction: row;
 }
 
 .custom-nav-link {
@@ -17,17 +18,24 @@
     border-radius: 5px;
 }
 
+@media (max-width: 768px) {
+    .custom-nav {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+}
+
 .custom-nav-link.active {
-    color: #ffff!important;
+    color: #fff !important;
     background-color: #007bffce;
 }
 
-.custom-nav-link:hover{
-    color: #007bff!important;
+.custom-nav-link:hover {
+    color: #007bff !important;
 }
 
 .custom-nav-link:focus {
     outline: none;
     box-shadow: none;
-    color: "white";
+    color: white!important;
 }
