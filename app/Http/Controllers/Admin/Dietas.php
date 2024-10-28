@@ -47,7 +47,7 @@ class Dietas extends Controller
 
     public function buscaAlimentos()
     {
-        $alimentos = DB::table('alimentos')->select()->get()->groupBy('tipo_alimentos');
+        $alimentos = DB::table('alimentos')->select()->get()->groupBy('tipo_alimento');
 
         return response()->json(['alimentos' => $alimentos]);
     }
