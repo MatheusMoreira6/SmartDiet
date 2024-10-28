@@ -9,12 +9,12 @@ import SweetAlert from "@/Components/SweetAlert";
 
 const Questionarios = ({ questionarios }) => {
     const { data, setData, post, reset } = useForm({
-        id_questionario: "",
+        id: "",
     });
 
     useEffect(() => {
-        if (data.id_questionario) {
-            post(route("admin.questionarios.excluir"), {
+        if (data.id) {
+            post(route("admin.questionarios.delete"), {
                 onSuccess: (page) => {
                     SweetAlert.success({
                         title: page.props.title,
@@ -24,7 +24,7 @@ const Questionarios = ({ questionarios }) => {
                 },
                 onError: (errors) => {
                     SweetAlert.error({
-                        title: errors.id_questionario ?? errors.error,
+                        title: errors.id ?? errors.error,
                     });
                 },
                 onFinish: () => {
@@ -32,10 +32,10 @@ const Questionarios = ({ questionarios }) => {
                 },
             });
         }
-    }, [data.id_questionario]);
+    }, [data.id]);
 
     const handleDelete = (event) => {
-        const id_questionario = event.currentTarget.getAttribute("data-value");
+        const id = event.currentTarget.getAttribute("data-value");
 
         SweetAlert.confirm({
             title: "Excluir Questionário",
@@ -44,7 +44,7 @@ const Questionarios = ({ questionarios }) => {
             cancelButton: "Cancelar",
         }).then((result) => {
             if (result.isConfirmed) {
-                setData("id_questionario", id_questionario);
+                setData("id", id);
             } else {
                 reset();
             }
@@ -65,7 +65,7 @@ const Questionarios = ({ questionarios }) => {
                     <Col xs={12}>
                         <div className="d-grid gap-2 d-md-block">
                             <LinkPrimary
-                                href={route("admin.questionarios.cadastrar")}
+                                href={route("admin.questionarios.create")}
                             >
                                 Novo Questionário
                             </LinkPrimary>
@@ -97,7 +97,7 @@ const Questionarios = ({ questionarios }) => {
                                         <td className="align-middle text-center d-grid gap-2 d-md-block">
                                             <LinkPrimary
                                                 href={route(
-                                                    "admin.questionarios.editar",
+                                                    "admin.questionarios.edit",
                                                     {
                                                         id: questionario.id,
                                                     }

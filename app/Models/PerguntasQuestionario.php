@@ -11,6 +11,8 @@ class PerguntasQuestionario extends Model
 
     protected $fillable = ['questionario_id', 'pergunta'];
 
+    protected $hidden = ['questionario_id', 'created_at', 'updated_at'];
+
     public function questionario()
     {
         return $this->belongsTo(Questionario::class);
