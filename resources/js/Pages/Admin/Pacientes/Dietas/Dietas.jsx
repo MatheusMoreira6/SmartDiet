@@ -18,30 +18,32 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
 
     const handleShow = () => setShow(true);
-
     useEffect(() => {
         setDietas(dietas);
     }, [dietas]);
 
     useEffect(() => {
-        const fetchDiasHorarios = async () => {
-            setLoading(true);
-            const response = await Api.get(route("dias.horarios"));
+        if (dietasDynamic.length > 0) {
+            fetchDiasHorarios();
+        }
+    }, [dietasDynamic]);
 
-            setDias(response.data.dias);
-            setHorarios(response.data.horarios);
-            setLoading(false);
-        };
+    const fetchDiasHorarios = async () => {
+        setLoading(true);
+        const response = await Api.get(
+            route("dias.horarios", { id: dietas[0].id })
+        );
 
-        fetchDiasHorarios();
-    }, []);
+        setDias(response.data.dias);
+        setHorarios(response.data.horarios);
+        setLoading(false);
+    };
 
     useEffect(() => {
         const fn = async () => {
             const response = await Api.get(
                 route("busca.dieta", { id: id_paciente })
             );
-            console.log(response.data);
             setDietas(response.data.dietas);
         };
 
@@ -106,7 +108,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                                                 key={dia.id}
                                                 className="day-header"
                                             >
-                                                {dia.dia}
+                                                {dia.nome_grupo}
                                             </th>
                                         ))}
                                     </tr>

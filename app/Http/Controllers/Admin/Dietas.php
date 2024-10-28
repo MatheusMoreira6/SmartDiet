@@ -23,24 +23,51 @@ class Dietas extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'descricao' => 'required|string'
+            'descricao' => 'required|string',
+            'horarios' => 'required|array|min:1',
+            'horarios.*.horario' => 'required|string',
+            'grupos_dias' => 'required|array|min:1',
+            'grupos_dias.*.grupo_dia' => 'required|string',
         ]);
 
-        ModelDietas::create([
+        $dieta = ModelDietas::create([
             'nome_dieta' => $request->nome,
             'descricao' => $request->descricao,
             'nutricionista_id' => $request->id_nutricionista,
-            'paciente_id' => $request->id_paciente
+            'paciente_id' => $request->id_paciente,
         ]);
 
-        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)->where("paciente_id", $request->id_paciente)->get();
+        foreach ($request->horarios as $horario) {
+            DB::table('table_horarios_dietas')->insert([
+                'horario' => $horario['horario'],
+                'dieta_id' => $dieta->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        foreach ($request->grupos_dias as $index => $grupo) {
+            DB::table('table_grupo_dias_dieta')->insert([
+                'nome_grupo' => $grupo['grupo_dia'],
+                'ordem' => $index + 1,
+                'dieta_id' => $dieta->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
+            ->where("paciente_id", $request->id_paciente)
+            ->get();
+
         response()->json(["dietas" => $dietas]);
     }
 
-    public function buscaDiasHorarios()
+
+    public function buscaDiasHorarios($id)
     {
-        $dias = DB::table('dias_semanas')->select()->get();
-        $horarios = DB::table('horarios')->select()->get();
+        $dias = DB::table('table_grupo_dias_dieta')->select()->where('dieta_id', $id)->get();
+        $horarios = DB::table('table_horarios_dietas')->select()->where('dieta_id', $id)->get();
 
         return response()->json(['dias' => $dias, 'horarios' => $horarios]);
     }

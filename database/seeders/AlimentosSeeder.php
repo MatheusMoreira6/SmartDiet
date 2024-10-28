@@ -14,125 +14,145 @@ class AlimentosSeeder extends Seeder
     public function run(): void
     {
         DB::table('alimentos')->insert([
+            ['nome' => 'Banana', 'tipo_alimento' => 'fruto'],
+            ['nome' => 'Arroz Integral', 'tipo_alimento' => 'grão'],
+            ['nome' => 'Frango Grelhado', 'tipo_alimento' => 'proteina_animal'],
+            ['nome' => 'Ovo Cozido', 'tipo_alimento' => 'proteina_animal'],
+            ['nome' => 'Batata Doce', 'tipo_alimento' => 'vegetal'],
+            ['nome' => 'Maçã', 'tipo_alimento' => 'fruto'],
+            ['nome' => 'Brócolis', 'tipo_alimento' => 'vegetal'],
+            ['nome' => 'Quinoa', 'tipo_alimento' => 'grão'],
+            ['nome' => 'Amêndoas', 'tipo_alimento' => 'oleaginosa'],
+            ['nome' => 'Salmão', 'tipo_alimento' => 'proteina_animal'],
+            ['nome' => 'Aveia', 'tipo_alimento' => 'grão'],
+            ['nome' => 'Abacate', 'tipo_alimento' => 'fruto'],
+            ['nome' => 'Iogurte Natural', 'tipo_alimento' => 'laticínio'],
+            ['nome' => 'Cenoura', 'tipo_alimento' => 'vegetal'],
+            ['nome' => 'Feijão Preto', 'tipo_alimento' => 'leguminosa'],
+        ]);
+
+        $alimentos = DB::table('alimentos')->get();
+
+        DB::table('table_tipo_porcao')->insert([
             [
-                'nome' => 'Banana',
-                'calorias' => 89,
+                'alimento_id' => $alimentos->where('nome', 'Banana')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 89.0,
                 'proteinas' => 1.1,
                 'carboidratos' => 22.8,
                 'gorduras' => 0.3,
-                'tipo_alimento' => 'fruto'
             ],
             [
-                'nome' => 'Arroz Integral',
-                'calorias' => 123,
-                'proteinas' => 2.7,
-                'carboidratos' => 25.8,
-                'gorduras' => 1.0,
-                'tipo_alimento' => 'grão'
+                'alimento_id' => $alimentos->where('nome', 'Arroz Integral')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 111.0,
+                'proteinas' => 2.6,
+                'carboidratos' => 23.0,
+                'gorduras' => 0.9,
             ],
             [
-                'nome' => 'Frango Grelhado',
-                'calorias' => 165,
-                'proteinas' => 31.0,
-                'carboidratos' => 0,
-                'gorduras' => 3.6,
-                'tipo_alimento' => 'proteina_animal'
+                'alimento_id' => $alimentos->where('nome', 'Frango Grelhado')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 239.0,
+                'proteinas' => 27.3,
+                'carboidratos' => 0.0,
+                'gorduras' => 13.6,
             ],
             [
-                'nome' => 'Ovo Cozido',
-                'calorias' => 155,
+                'alimento_id' => $alimentos->where('nome', 'Ovo Cozido')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 155.0,
                 'proteinas' => 13.0,
                 'carboidratos' => 1.1,
-                'gorduras' => 11.0,
-                'tipo_alimento' => 'proteina_animal'
+                'gorduras' => 10.6,
             ],
             [
-                'nome' => 'Batata Doce',
-                'calorias' => 86,
+                'alimento_id' => $alimentos->where('nome', 'Batata Doce')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 86.0,
                 'proteinas' => 1.6,
                 'carboidratos' => 20.1,
                 'gorduras' => 0.1,
-                'tipo_alimento' => 'vegetal'
             ],
             [
-                'nome' => 'Maçã',
-                'calorias' => 52,
+                'alimento_id' => $alimentos->where('nome', 'Maçã')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 52.0,
                 'proteinas' => 0.3,
                 'carboidratos' => 13.8,
                 'gorduras' => 0.2,
-                'tipo_alimento' => 'fruto'
             ],
             [
-                'nome' => 'Brócolis',
-                'calorias' => 34,
-                'proteinas' => 2.8,
-                'carboidratos' => 6.6,
+                'alimento_id' => $alimentos->where('nome', 'Brócolis')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 35.0,
+                'proteinas' => 2.4,
+                'carboidratos' => 7.2,
                 'gorduras' => 0.4,
-                'tipo_alimento' => 'vegetal'
             ],
             [
-                'nome' => 'Quinoa',
-                'calorias' => 120,
-                'proteinas' => 4.1,
+                'alimento_id' => $alimentos->where('nome', 'Quinoa')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 120.0,
+                'proteinas' => 4.4,
                 'carboidratos' => 21.3,
                 'gorduras' => 1.9,
-                'tipo_alimento' => 'grão'
             ],
             [
-                'nome' => 'Amêndoas',
-                'calorias' => 579,
+                'alimento_id' => $alimentos->where('nome', 'Amêndoas')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 575.0,
                 'proteinas' => 21.2,
                 'carboidratos' => 21.6,
-                'gorduras' => 49.9,
-                'tipo_alimento' => 'oleaginosa'
+                'gorduras' => 49.4,
             ],
             [
-                'nome' => 'Salmão',
-                'calorias' => 208,
-                'proteinas' => 20.0,
-                'carboidratos' => 0,
-                'gorduras' => 13.0,
-                'tipo_alimento' => 'proteina_animal'
+                'alimento_id' => $alimentos->where('nome', 'Salmão')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 206.0,
+                'proteinas' => 22.1,
+                'carboidratos' => 0.0,
+                'gorduras' => 12.4,
             ],
             [
-                'nome' => 'Aveia',
-                'calorias' => 389,
+                'alimento_id' => $alimentos->where('nome', 'Aveia')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 389.0,
                 'proteinas' => 16.9,
                 'carboidratos' => 66.3,
                 'gorduras' => 6.9,
-                'tipo_alimento' => 'grão'
             ],
             [
-                'nome' => 'Abacate',
-                'calorias' => 160,
+                'alimento_id' => $alimentos->where('nome', 'Abacate')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 160.0,
                 'proteinas' => 2.0,
                 'carboidratos' => 8.5,
                 'gorduras' => 14.7,
-                'tipo_alimento' => 'fruto'
             ],
             [
-                'nome' => 'Iogurte Natural',
-                'calorias' => 61,
+                'alimento_id' => $alimentos->where('nome', 'Iogurte Natural')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 61.0,
                 'proteinas' => 3.5,
                 'carboidratos' => 4.7,
                 'gorduras' => 3.3,
-                'tipo_alimento' => 'laticínio'
             ],
             [
-                'nome' => 'Cenoura',
-                'calorias' => 41,
+                'alimento_id' => $alimentos->where('nome', 'Cenoura')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 41.0,
                 'proteinas' => 0.9,
                 'carboidratos' => 9.6,
                 'gorduras' => 0.2,
-                'tipo_alimento' => 'vegetal'
             ],
             [
-                'nome' => 'Feijão Preto',
-                'calorias' => 132,
+                'alimento_id' => $alimentos->where('nome', 'Feijão Preto')->first()->id,
+                'nome_porcao' => '100g',
+                'calorias' => 132.0,
                 'proteinas' => 8.9,
                 'carboidratos' => 23.7,
                 'gorduras' => 0.5,
-                'tipo_alimento' => 'leguminosa'
             ],
         ]);
     }

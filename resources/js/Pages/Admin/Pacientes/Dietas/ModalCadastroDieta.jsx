@@ -1,7 +1,7 @@
 import SweetAlert from "@/Components/SweetAlert";
 import { useForm } from "@inertiajs/react";
 import { useState } from "react";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Col, Form, Modal } from "react-bootstrap";
 
 export const ModalCadastroDieta = ({
     visible,
@@ -13,6 +13,8 @@ export const ModalCadastroDieta = ({
     const { data, setData, post, reset, errors } = useForm({
         nome: "",
         descricao: "",
+        horarios: [{ horario: "" }],
+        grupos_dias: [{ grupo_dia: "" }],
     });
     const [validate, setvalidate] = useState(false);
 
@@ -28,11 +30,9 @@ export const ModalCadastroDieta = ({
         e.preventDefault();
 
         const form = e.currentTarget;
-
         if (form.checkValidity()) {
             post(route("dietas.salvar"), {
                 onSuccess: (response) => {
-                    console.log(response)
                     handleClose();
                     const novasDietas = response.props.dietas;
                     setvalidate(true);
@@ -41,12 +41,39 @@ export const ModalCadastroDieta = ({
                 },
                 onError: (error) => {
                     setvalidate(false);
-                    errors.nome || error.descricao
-                        ? reset()
-                        : SweetAlert.error({ title: "Ocorreu um erro" });
+
+                    errors
+                        ? {}
+                        : SweetAlert.error({
+                              title: "Ocorreu um erro, verifique se adicionou os itens corretamente",
+                          });
                 },
             });
         }
+    };
+
+    const addHorario = () => {
+        setData("horarios", [...data.horarios, { horario: "" }]);
+    };
+
+    const removeHorario = (index) => {
+        const newHorarios = [...data.horarios];
+
+        newHorarios.splice(index, 1);
+
+        setData("horarios", newHorarios);
+    };
+
+    const addGrupoDia = () => {
+        setData("grupos_dias", [...data.grupos_dias, { grupo_dia: "" }]);
+    };
+
+    const removeGrupoDia = (index) => {
+        const newGrupos = [...data.grupos_dias];
+
+        newGrupos.splice(index, 1);
+
+        setData("grupos_dias", newGrupos);
     };
 
     return (
@@ -100,6 +127,106 @@ export const ModalCadastroDieta = ({
                                 <p>Informe uma descrição válida</p>
                             </Form.Control.Feedback>
                         )}
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Horários</Form.Label>
+                        {data.horarios.map((item, index) => (
+                            <>
+                                <div
+                                    key={index}
+                                    className="d-flex align-items-center mb-2"
+                                >
+                                    <Form.Control
+                                        type="time"
+                                        value={item.horario}
+                                        onChange={(e) => {
+                                            const newHorarios = [
+                                                ...data.horarios,
+                                            ];
+                                            newHorarios[index].horario =
+                                                e.target.value;
+                                            setData("horarios", newHorarios);
+                                        }}
+                                        isInvalid={
+                                            errors[`horarios.${index}.horario`]
+                                        }
+                                    />
+
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => removeHorario(index)}
+                                        className="ms-2"
+                                    >
+                                        Remover
+                                    </Button>
+                                </div>
+                                {errors[`horarios.${index}.horario`] && (
+                                    <Col>
+                                        <Form.Control.Feedback type="invalid">
+                                            <p>Informe um horário</p>
+                                        </Form.Control.Feedback>
+                                    </Col>
+                                )}
+                            </>
+                        ))}
+
+                        <Button variant="secondary" onClick={addHorario}>
+                            <i className="bi bi-plus-lg"></i>
+                            Adicionar Horário
+                        </Button>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Grupos de Dias</Form.Label>
+                        {data.grupos_dias.map((item, index) => (
+                            <>
+                                <div
+                                    key={index}
+                                    className="d-flex align-items-center mb-2"
+                                >
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Digite o grupo de dias (Ex: Seg/Qua)"
+                                        value={item.grupo_dia}
+                                        onChange={(e) => {
+                                            const newGruposDias = [
+                                                ...data.grupos_dias,
+                                            ];
+                                            newGruposDias[index].grupo_dia =
+                                                e.target.value;
+                                            setData(
+                                                "grupos_dias",
+                                                newGruposDias
+                                            );
+                                        }}
+                                        isInvalid={
+                                            errors[
+                                                `grupos_dias.${index}.grupo_dia`
+                                            ]
+                                        }
+                                    />
+
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => removeGrupoDia(index)}
+                                        className="ms-2"
+                                    >
+                                        Remover
+                                    </Button>
+                                </div>
+                                {errors[`grupos_dias.${index}.grupo_dia`] && (
+                                    <Form.Control.Feedback type="invalid">
+                                        <p>Informe um grupo</p>
+                                    </Form.Control.Feedback>
+                                )}
+                            </>
+                        ))}
+
+                        <Button variant="secondary" onClick={addGrupoDia}>
+                            <i className="bi bi-plus-lg"></i>
+                            Adicionar Grupo de Dias
+                        </Button>
                     </Form.Group>
 
                     <Button type="submit">Cadastrar</Button>

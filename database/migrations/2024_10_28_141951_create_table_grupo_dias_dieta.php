@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('alimentos', function (Blueprint $table) {
+        Schema::create('table_grupo_dias_dieta', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->string('tipo_alimento');
+            $table->string('nome_grupo');
+            $table->integer('ordem');
+            $table->unsignedBigInteger('dieta_id');
             $table->timestamps();
+
+            $table->foreign('dieta_id')->references('id')->on('dietas')->onDelete('cascade');
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('alimentos');
+        Schema::dropIfExists('table_grupo_dias_dieta');
     }
 };
