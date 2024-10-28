@@ -86,38 +86,55 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     return (
         <>
             {dietasDynamic.length > 0 ? (
-                <Table bordered responsive className="diet-table mt-3">
-                    {loading ? (
-                        <Spinner
-                            animation="border"
-                            role="status"
-                            variant="primary"
-                        />
-                    ) : (
-                        <>
-                            <thead>
-                                <tr>
-                                    <th className="time-header">Horários</th>
-                                    {diasSemana.map((dia) => (
-                                        <th key={dia.id} className="day-header">
-                                            {dia.dia}
+                <>
+                    <Table bordered responsive className="diet-table mt-3">
+                        {loading ? (
+                            <Spinner
+                                animation="border"
+                                role="status"
+                                variant="primary"
+                            />
+                        ) : (
+                            <>
+                                <thead>
+                                    <tr>
+                                        <th className="time-header">
+                                            Horários
                                         </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {horarios.map((horario) => (
-                                    <tr key={horario.id}>
-                                        <td className="time-cell">
-                                            {horario.horario}
-                                        </td>
-                                        {renderMeals(horario.id)}
+                                        {diasSemana.map((dia) => (
+                                            <th
+                                                key={dia.id}
+                                                className="day-header"
+                                            >
+                                                {dia.dia}
+                                            </th>
+                                        ))}
                                     </tr>
-                                ))}
-                            </tbody>
-                        </>
-                    )}
-                </Table>
+                                </thead>
+                                <tbody>
+                                    {horarios.map((horario) => (
+                                        <tr key={horario.id}>
+                                            <td className="time-cell">
+                                                {horario.horario}
+                                            </td>
+                                            {renderMeals(horario.id)}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </>
+                        )}
+                    </Table>
+
+                    <ModalCadastroRefeicao
+                        show={visibleRef}
+                        setShow={setVisibleRef}
+                        selectedDia={selectedDia}
+                        selectedHorario={selectedHorario}
+                        dieta_id={dietasDynamic[0].id}
+                        onUpdateRefeicao={onUpdateRefeicao}
+                        arraySelectedAlimentos={arraySelectedAlimentos}
+                    />
+                </>
             ) : (
                 <>
                     <Row className="g-3 mb-3" md={6}>
@@ -133,16 +150,6 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                     </Row>
                 </>
             )}
-
-            <ModalCadastroRefeicao
-                show={visibleRef}
-                setShow={setVisibleRef}
-                selectedDia={selectedDia}
-                selectedHorario={selectedHorario}
-                dieta_id={dietasDynamic[0].id}
-                onUpdateRefeicao={onUpdateRefeicao}
-                arraySelectedAlimentos={arraySelectedAlimentos}
-            />
 
             <ModalCadastroDieta
                 visible={show}

@@ -20,7 +20,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 1.1,
                 'carboidratos' => 22.8,
                 'gorduras' => 0.3,
-                'tipo_alimentos' => 'fruto'
+                'tipo_alimento' => 'fruto'
             ],
             [
                 'nome' => 'Arroz Integral',
@@ -28,7 +28,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 2.7,
                 'carboidratos' => 25.8,
                 'gorduras' => 1.0,
-                'tipo_alimentos' => 'grão'
+                'tipo_alimento' => 'grão'
             ],
             [
                 'nome' => 'Frango Grelhado',
@@ -36,7 +36,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 31.0,
                 'carboidratos' => 0,
                 'gorduras' => 3.6,
-                'tipo_alimentos' => 'proteina_animal'
+                'tipo_alimento' => 'proteina_animal'
             ],
             [
                 'nome' => 'Ovo Cozido',
@@ -44,7 +44,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 13.0,
                 'carboidratos' => 1.1,
                 'gorduras' => 11.0,
-                'tipo_alimentos' => 'proteina_animal'
+                'tipo_alimento' => 'proteina_animal'
             ],
             [
                 'nome' => 'Batata Doce',
@@ -52,7 +52,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 1.6,
                 'carboidratos' => 20.1,
                 'gorduras' => 0.1,
-                'tipo_alimentos' => 'vegetal'
+                'tipo_alimento' => 'vegetal'
             ],
             [
                 'nome' => 'Maçã',
@@ -60,7 +60,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 0.3,
                 'carboidratos' => 13.8,
                 'gorduras' => 0.2,
-                'tipo_alimentos' => 'fruto'
+                'tipo_alimento' => 'fruto'
             ],
             [
                 'nome' => 'Brócolis',
@@ -68,7 +68,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 2.8,
                 'carboidratos' => 6.6,
                 'gorduras' => 0.4,
-                'tipo_alimentos' => 'vegetal'
+                'tipo_alimento' => 'vegetal'
             ],
             [
                 'nome' => 'Quinoa',
@@ -76,7 +76,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 4.1,
                 'carboidratos' => 21.3,
                 'gorduras' => 1.9,
-                'tipo_alimentos' => 'grão'
+                'tipo_alimento' => 'grão'
             ],
             [
                 'nome' => 'Amêndoas',
@@ -84,7 +84,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 21.2,
                 'carboidratos' => 21.6,
                 'gorduras' => 49.9,
-                'tipo_alimentos' => 'oleaginosa'
+                'tipo_alimento' => 'oleaginosa'
             ],
             [
                 'nome' => 'Salmão',
@@ -92,7 +92,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 20.0,
                 'carboidratos' => 0,
                 'gorduras' => 13.0,
-                'tipo_alimentos' => 'proteina_animal'
+                'tipo_alimento' => 'proteina_animal'
             ],
             [
                 'nome' => 'Aveia',
@@ -100,7 +100,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 16.9,
                 'carboidratos' => 66.3,
                 'gorduras' => 6.9,
-                'tipo_alimentos' => 'grão'
+                'tipo_alimento' => 'grão'
             ],
             [
                 'nome' => 'Abacate',
@@ -108,7 +108,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 2.0,
                 'carboidratos' => 8.5,
                 'gorduras' => 14.7,
-                'tipo_alimentos' => 'fruto'
+                'tipo_alimento' => 'fruto'
             ],
             [
                 'nome' => 'Iogurte Natural',
@@ -116,7 +116,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 3.5,
                 'carboidratos' => 4.7,
                 'gorduras' => 3.3,
-                'tipo_alimentos' => 'laticínio'
+                'tipo_alimento' => 'laticínio'
             ],
             [
                 'nome' => 'Cenoura',
@@ -124,7 +124,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 0.9,
                 'carboidratos' => 9.6,
                 'gorduras' => 0.2,
-                'tipo_alimentos' => 'vegetal'
+                'tipo_alimento' => 'vegetal'
             ],
             [
                 'nome' => 'Feijão Preto',
@@ -132,7 +132,7 @@ class AlimentosSeeder extends Seeder
                 'proteinas' => 8.9,
                 'carboidratos' => 23.7,
                 'gorduras' => 0.5,
-                'tipo_alimentos' => 'leguminosa'
+                'tipo_alimento' => 'leguminosa'
             ],
         ]);
     }
