@@ -21,6 +21,11 @@ h3 > .bi {
     margin-right: 0.5rem !important;
 }
 
+.table th,
+.table td {
+    vertical-align: middle !important;
+}
+
 .table .btn > .bi {
     margin-right: 0 !important;
 }
