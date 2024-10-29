@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Head, router, useForm } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import WrapperContainer from "@/Components/WrapperContainer";
 import PageTopic from "@/Components/PageTopic";
@@ -7,24 +7,25 @@ import LinkPrimary from "@/Components/LinkPrimary";
 import { Button, Col, Row, Table } from "react-bootstrap";
 import SweetAlert from "@/Components/SweetAlert";
 
-const Questionarios = ({ questionarios }) => {
+const Questionarios = ({ questionarios, errors = {} }) => {
     const { data, setData, post, reset } = useForm({
-        id_questionario: "",
+        id: "",
     });
 
     useEffect(() => {
-        if (data.id_questionario) {
-            post(route("admin.questionarios.excluir"), {
+        if (errors && (errors.id || errors.error)) {
+            SweetAlert.error({
+                title: errors.id ?? errors.error,
+            });
+        }
+    }, [errors]);
+
+    useEffect(() => {
+        if (data.id) {
+            post(route("admin.questionarios.delete"), {
                 onSuccess: (page) => {
                     SweetAlert.success({
                         title: page.props.title,
-                    }).then(() => {
-                        router.visit(route("admin.questionarios"));
-                    });
-                },
-                onError: (errors) => {
-                    SweetAlert.error({
-                        title: errors.id_questionario ?? errors.error,
                     });
                 },
                 onFinish: () => {
@@ -32,11 +33,9 @@ const Questionarios = ({ questionarios }) => {
                 },
             });
         }
-    }, [data.id_questionario]);
+    }, [data.id]);
 
-    const handleDelete = (event) => {
-        const id_questionario = event.currentTarget.getAttribute("data-value");
-
+    const handleDelete = (questionario_id) => {
         SweetAlert.confirm({
             title: "Excluir Questionário",
             text: "Deseja realmente excluir este questionário?",
@@ -44,7 +43,7 @@ const Questionarios = ({ questionarios }) => {
             cancelButton: "Cancelar",
         }).then((result) => {
             if (result.isConfirmed) {
-                setData("id_questionario", id_questionario);
+                setData("id", questionario_id);
             } else {
                 reset();
             }
@@ -65,7 +64,7 @@ const Questionarios = ({ questionarios }) => {
                     <Col xs={12}>
                         <div className="d-grid gap-2 d-md-block">
                             <LinkPrimary
-                                href={route("admin.questionarios.cadastrar")}
+                                href={route("admin.questionarios.create")}
                             >
                                 Novo Questionário
                             </LinkPrimary>
@@ -82,22 +81,20 @@ const Questionarios = ({ questionarios }) => {
                         >
                             <thead>
                                 <tr>
-                                    <th className="text-center">Titulo</th>
-                                    <th className="text-center">Ações</th>
+                                    <th>Titulo</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 {questionarios.map((questionario) => (
                                     <tr key={questionario.id}>
-                                        <td className="align-middle">
-                                            {questionario.titulo}
-                                        </td>
+                                        <td>{questionario.titulo}</td>
 
-                                        <td className="align-middle text-center d-grid gap-2 d-md-block">
+                                        <td className="text-center d-grid gap-2 d-md-block">
                                             <LinkPrimary
                                                 href={route(
-                                                    "admin.questionarios.editar",
+                                                    "admin.questionarios.edit",
                                                     {
                                                         id: questionario.id,
                                                     }
@@ -108,8 +105,11 @@ const Questionarios = ({ questionarios }) => {
 
                                             <Button
                                                 variant="danger"
-                                                data-value={questionario.id}
-                                                onClick={(e) => handleDelete(e)}
+                                                onClick={() =>
+                                                    handleDelete(
+                                                        questionario.id
+                                                    )
+                                                }
                                             >
                                                 <i className="bi bi-trash"></i>
                                             </Button>
