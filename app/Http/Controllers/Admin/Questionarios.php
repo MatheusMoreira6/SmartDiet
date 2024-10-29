@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Questionarios extends Controller
 {
@@ -20,19 +21,49 @@ class Questionarios extends Controller
         ]);
     }
 
-    public function cadastrar()
+    public function create()
     {
         return $this->render('Admin/Questionarios/Cadastrar');
     }
 
-    public function salvarQuestionario(Request $request)
+    public function edit(int $id)
+    {
+        $request = new Request(['id' => $id]);
+
+        $regras = [
+            'id' => 'required|exists:questionarios,id',
+        ];
+
+        $feedback = [
+            'id.required' => 'O ID é obrigatório!',
+            'id.exists' => 'Questionário não encontrado!',
+        ];
+
+        $request->validate($regras, $feedback);
+
+        try {
+            $questionario = Questionario::findOrFail($request->id);
+            $questionario->perguntas = $questionario->perguntas;
+
+            return $this->render('Admin/Questionarios/Editar', [
+                'questionario' => $questionario->toArray(),
+            ]);
+        } catch (Exception $e) {
+            Log::error("Erro ao editar questionário: " . $e->getMessage());
+            return $this->responseErrors(['error' => "Falha ao editar o questionário!"]);
+        }
+    }
+
+    public function store(Request $request)
     {
         $regras = [
+            'id' => 'prohibited',
             'titulo' => 'required|min:3|max:255',
             'perguntas' => 'required|array|min:1',
         ];
 
         $feedback = [
+            'id.prohibited' => 'O ID não é permitido!',
             'titulo.required' => 'O título é obrigatório',
             'titulo.min' => 'O título precisa ter no mínimo 3 caracteres',
             'titulo.max' => 'O título precisa ter no máximo 255 caracteres',
@@ -45,9 +76,9 @@ class Questionarios extends Controller
 
         $errorPerguntas = [];
 
-        foreach ($request->perguntas as $key => $pergunta) {
+        foreach ($request->perguntas as $pergunta) {
             if (empty($pergunta['pergunta'])) {
-                $errorPerguntas["pergunta_$key"] = 'A pergunta é obrigatória';
+                $errorPerguntas["pergunta_{$pergunta['id']}"] = 'A pergunta é obrigatória';
             }
         }
 
@@ -75,32 +106,130 @@ class Questionarios extends Controller
             }
 
             DB::commit();
-            return $this->response('admin.questionarios.cadastrar', ['title' => "Questionário cadastrado com sucesso!"]);
+            return $this->response('admin.questionarios.create', ['title' => "Questionário cadastrado com sucesso!"]);
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error("Erro ao cadastrar questionário: " . $e->getMessage());
             return $this->responseErrors(['error' => "Falha ao cadastrar o questionário!"]);
         }
     }
 
-    public function excluirQuestionario(Request $request)
+    public function update(Request $request)
     {
         $regras = [
-            'id_questionario' => 'required|exists:questionarios,id',
+            'id' => 'required|exists:questionarios,id',
+            'titulo' => 'required|min:3|max:255',
+            'perguntas' => 'required|array|min:1',
         ];
 
         $feedback = [
-            'id_questionario.required' => 'O ID é obrigatório!',
-            'id_questionario.exists' => 'Questionário não encontrado!',
+            'id.required' => 'O ID é obrigatório!',
+            'id.exists' => 'Questionário não encontrado!',
+            'titulo.required' => 'O título é obrigatório',
+            'titulo.min' => 'O título precisa ter no mínimo 3 caracteres',
+            'titulo.max' => 'O título precisa ter no máximo 255 caracteres',
+            'perguntas.required' => 'As perguntas são obrigatórias',
+            'perguntas.array' => 'Formato inválido de perguntas',
+            'perguntas.min' => 'É necessário ter no mínimo 1 pergunta',
         ];
 
         $request->validate($regras, $feedback);
 
-        $questionario = Questionario::find($request->id_questionario);
+        $errorPerguntas = [];
 
-        if (!$questionario->delete()) {
-            return $this->responseErrors(['error' => "Falha ao excluir o questionário!"]);
+        foreach ($request->perguntas as $pergunta) {
+            if (empty($pergunta['pergunta'])) {
+                $errorPerguntas["pergunta_{$pergunta['id']}"] = 'A pergunta é obrigatória';
+            }
         }
 
-        return $this->response('admin.questionarios', ['title' => "Questionário excluído com sucesso!"]);
+        if (!empty($errorPerguntas)) {
+            return $this->responseErrors($errorPerguntas);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $questionario = Questionario::findOrFail($request->id);
+            $questionario->titulo = $request->titulo;
+
+            if (!$questionario->save()) {
+                DB::rollBack();
+                return $this->responseErrors(['error' => "Falha ao editar o questionário!"]);
+            }
+
+            $perguntas = $request->perguntas;
+
+            foreach ($perguntas as $key => $pergunta) {
+                if (empty($pergunta['id']) || $pergunta['id'] <= 0) {
+
+                    $auxPergunta = $questionario->perguntas()->create([
+                        'pergunta' => $pergunta['pergunta'],
+                    ]);
+
+                    if (!$auxPergunta) {
+                        DB::rollBack();
+                        return $this->responseErrors(['error' => "Falha ao cadastrar as perguntas!"]);
+                    }
+
+                    $perguntas[$key]['id'] = $auxPergunta->id;
+                } else {
+                    $auxPergunta = $questionario->perguntas()->where('id', $pergunta['id'])->first();
+
+                    if ($auxPergunta) {
+                        $auxPergunta->pergunta = $pergunta['pergunta'];
+
+                        if (!$auxPergunta->save()) {
+                            DB::rollBack();
+                            return $this->responseErrors(['error' => "Falha ao editar as perguntas!"]);
+                        }
+                    } else {
+                        DB::rollBack();
+                        return $this->responseErrors(['error' => "Pergunta com ID {$pergunta['id']} não encontrada!"]);
+                    }
+                }
+            }
+
+            $perguntasRemovidas = $questionario->perguntas()->whereNotIn('id', array_column($perguntas, 'id'))->get();
+
+            foreach ($perguntasRemovidas as $pergunta) {
+                if (!$pergunta->delete()) {
+                    DB::rollBack();
+                    return $this->responseErrors(['error' => "Falha ao excluir as perguntas!"]);
+                }
+            }
+
+            DB::commit();
+            return $this->response('admin.questionarios.edit', ['title' => "Questionário editado com sucesso!"], ['id' => $questionario->id]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error("Erro ao editar questionário: " . $e->getMessage());
+
+            return $this->responseErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $regras = [
+            'id' => 'required|exists:questionarios,id',
+        ];
+
+        $feedback = [
+            'id.required' => 'O ID é obrigatório!',
+            'id.exists' => 'Questionário não encontrado!',
+        ];
+
+        $request->validate($regras, $feedback);
+
+        try {
+            $questionario = Questionario::findOrFail($request->id);
+            $questionario->delete();
+
+            return $this->response('admin.questionarios', ['title' => "Questionário excluído com sucesso!"]);
+        } catch (Exception $e) {
+            Log::error("Erro ao excluir questionário: " . $e->getMessage());
+            return $this->responseErrors(['error' => "Falha ao excluir o questionário!"]);
+        }
     }
 }

@@ -32,9 +32,9 @@ abstract class Controller
      * @param array $props Propriedades adicionais para passar com o redirecionamento.
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function response($route, $props = [])
+    protected function response($route, $props = [], $parameters = [])
     {
-        redirect()->route($route)->with('props', $props);
+        redirect()->route($route, $parameters)->with('props', $props);
     }
 
     /**

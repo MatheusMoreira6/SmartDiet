@@ -9,7 +9,7 @@ const FormGroupButton = ({
     value,
     autoFocus,
     placeHolder,
-    buttonText,
+    textButton,
     buttonVariant,
     required,
     isInvalid,
@@ -35,7 +35,7 @@ const FormGroupButton = ({
                 />
 
                 <Button variant={buttonVariant} onClick={onButtonClick}>
-                    {buttonText}
+                    {textButton}
                 </Button>
             </InputGroup>
 

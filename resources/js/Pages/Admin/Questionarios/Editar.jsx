@@ -9,7 +9,7 @@ import LinkWarning from "@/Components/LinkWarning";
 import SweetAlert from "@/Components/SweetAlert";
 import { Button, Col, Form, Row } from "react-bootstrap";
 
-const Cadastrar = () => {
+const Editar = ({ questionario }) => {
     const emptyPerguntas = [
         { id: -1, pergunta: "" },
         { id: -2, pergunta: "" },
@@ -20,8 +20,9 @@ const Cadastrar = () => {
     const [validated, setValidated] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
-        titulo: "",
-        perguntas: emptyPerguntas,
+        id: questionario.id,
+        titulo: questionario.titulo ?? "",
+        perguntas: questionario.perguntas ?? emptyPerguntas,
     });
 
     const handleSubmit = (e) => {
@@ -30,7 +31,7 @@ const Cadastrar = () => {
         const form = e.currentTarget;
 
         if (form.checkValidity()) {
-            post(route("admin.questionarios.store"), {
+            post(route("admin.questionarios.update"), {
                 onSuccess: (page) => {
                     SweetAlert.success({
                         title: page.props.title,
@@ -88,12 +89,12 @@ const Cadastrar = () => {
 
     return (
         <AdminLayout>
-            <Head title="Cadastrar Questionário" />
+            <Head title="Editar Questionário" />
 
             <WrapperContainer>
                 <PageTopic>
                     <i className="bi bi-file-earmark-text"></i>
-                    Cadastrar Questionário
+                    Editar Questionário
                 </PageTopic>
 
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -173,9 +174,7 @@ const Cadastrar = () => {
                                     disabled={processing}
                                 >
                                     <i className="bi bi-floppy"></i>
-                                    {processing
-                                        ? "Cadastrando..."
-                                        : "Cadastrar"}
+                                    {processing ? "Salvando..." : "Salvar"}
                                 </Button>
 
                                 <LinkWarning
@@ -193,4 +192,4 @@ const Cadastrar = () => {
     );
 };
 
-export default Cadastrar;
+export default Editar;
