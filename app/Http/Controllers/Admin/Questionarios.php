@@ -28,9 +28,7 @@ class Questionarios extends Controller
 
     public function edit(int $id)
     {
-        $request = new Request();
-
-        $request->merge(['id' => $id]);
+        $request = new Request(['id' => $id]);
 
         $regras = [
             'id' => 'required|exists:questionarios,id',
@@ -43,12 +41,17 @@ class Questionarios extends Controller
 
         $request->validate($regras, $feedback);
 
-        $questionario = Questionario::find($request->id);
-        $questionario->perguntas = $questionario->perguntas;
+        try {
+            $questionario = Questionario::findOrFail($request->id);
+            $questionario->perguntas = $questionario->perguntas;
 
-        return $this->render('Admin/Questionarios/Editar', [
-            'questionario' => $questionario->toArray(),
-        ]);
+            return $this->render('Admin/Questionarios/Editar', [
+                'questionario' => $questionario->toArray(),
+            ]);
+        } catch (Exception $e) {
+            Log::error("Erro ao editar questionário: " . $e->getMessage());
+            return $this->responseErrors(['error' => "Falha ao editar o questionário!"]);
+        }
     }
 
     public function store(Request $request)
@@ -103,7 +106,7 @@ class Questionarios extends Controller
             }
 
             DB::commit();
-            return $this->response('admin.questionarios.store', ['title' => "Questionário cadastrado com sucesso!"]);
+            return $this->response('admin.questionarios.create', ['title' => "Questionário cadastrado com sucesso!"]);
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("Erro ao cadastrar questionário: " . $e->getMessage());
@@ -171,7 +174,6 @@ class Questionarios extends Controller
 
                     $perguntas[$key]['id'] = $auxPergunta->id;
                 } else {
-
                     $auxPergunta = $questionario->perguntas()->where('id', $pergunta['id'])->first();
 
                     if ($auxPergunta) {
@@ -198,7 +200,7 @@ class Questionarios extends Controller
             }
 
             DB::commit();
-            return $this->response('admin.questionarios.update', ['title' => "Questionário editado com sucesso!"]);
+            return $this->response('admin.questionarios.edit', ['title' => "Questionário editado com sucesso!"], ['id' => $questionario->id]);
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("Erro ao editar questionário: " . $e->getMessage());
@@ -225,7 +227,7 @@ class Questionarios extends Controller
             $questionario->delete();
 
             return $this->response('admin.questionarios', ['title' => "Questionário excluído com sucesso!"]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao excluir questionário: " . $e->getMessage());
             return $this->responseErrors(['error' => "Falha ao excluir o questionário!"]);
         }

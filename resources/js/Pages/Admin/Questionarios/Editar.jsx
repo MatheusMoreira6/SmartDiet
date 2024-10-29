@@ -19,7 +19,7 @@ const Editar = ({ questionario }) => {
     const [id_empty, setEmpty] = useState(-4);
     const [validated, setValidated] = useState(false);
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         id: questionario.id,
         titulo: questionario.titulo ?? "",
         perguntas: questionario.perguntas ?? emptyPerguntas,
@@ -37,14 +37,22 @@ const Editar = ({ questionario }) => {
                         title: page.props.title,
                     }).then(() => {
                         router.visit(route("admin.questionarios"));
-                        reset();
                     });
                 },
                 onError: () => {
-                    (errors.perguntas || errors.error) &&
-                        SweetAlert.error({
-                            title: errors.perguntas ?? errors.error,
-                        });
+                    let mensagem = "Erro ao cadastrar o questionário";
+
+                    if (errors.id) {
+                        mensagem = errors.id;
+                    } else if (errors.perguntas) {
+                        mensagem = errors.perguntas;
+                    } else if (errors.error) {
+                        mensagem = errors.error;
+                    }
+
+                    SweetAlert.error({
+                        title: mensagem,
+                    });
                 },
             });
         } else {
@@ -81,16 +89,16 @@ const Editar = ({ questionario }) => {
 
     return (
         <AdminLayout>
-            <Head title="Cadastrar Questionário" />
+            <Head title="Editar Questionário" />
 
             <WrapperContainer>
                 <PageTopic>
                     <i className="bi bi-file-earmark-text"></i>
-                    Cadastrar Questionário
+                    Editar Questionário
                 </PageTopic>
 
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                    <Row className="g-3 mb-3">
+                    <Row className="g-3">
                         <Col xs={12}>
                             <FormInput
                                 id={"titulo"}
@@ -157,24 +165,26 @@ const Editar = ({ questionario }) => {
                                 </Col>
                             );
                         })}
-                    </Row>
 
-                    <Row className="g-3">
-                        <div className="d-grid gap-2 d-md-block">
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                disabled={processing}
-                            >
-                                <i className="bi bi-floppy"></i>
-                                {processing ? "Salvando..." : "Salvar"}
-                            </Button>
+                        <Col xs={12}>
+                            <div className="d-grid gap-2 d-md-block">
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    disabled={processing}
+                                >
+                                    <i className="bi bi-floppy"></i>
+                                    {processing ? "Salvando..." : "Salvar"}
+                                </Button>
 
-                            <LinkWarning href={route("admin.questionarios")}>
-                                <i className="bi bi-arrow-return-left"></i>
-                                Cancelar
-                            </LinkWarning>
-                        </div>
+                                <LinkWarning
+                                    href={route("admin.questionarios")}
+                                >
+                                    <i className="bi bi-arrow-return-left"></i>
+                                    Cancelar
+                                </LinkWarning>
+                            </div>
+                        </Col>
                     </Row>
                 </Form>
             </WrapperContainer>
