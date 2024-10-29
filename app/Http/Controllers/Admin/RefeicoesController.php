@@ -9,11 +9,19 @@ use Illuminate\Support\Facades\DB;
 
 class RefeicoesController extends Controller
 {
-    public function buscaRefeicoes()
+    public function buscaRefeicoes($dieta_id, $dia_id)
     {
-        $refeicoes = Refeicoes::all();
+        $refeicoes = Refeicoes::with('aliementos')->where('dieta_id', $dieta_id)->where('dia_semana_id', $dia_id)->get();
 
-        return response()->json(['refeicoes' => $refeicoes]);
+        $alimentos =  DB::table('alimentos')->select()->get()->groupBy('tipo_alimento');
+
+        $horarios = DB::table('table_horarios_dietas')->select()->where('dieta_id', $dieta_id)->get();
+
+        return $this->render('Admin/Pacientes/Dietas/TableRefeicoes',[
+            'refeicoes' => $refeicoes,
+            'horarios' => $horarios,
+            'alimentos' => $alimentos
+        ]);
     }
 
     public function salvarRefeicao(Request $request)

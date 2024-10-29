@@ -91,7 +91,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
     });
 
     Route::controller(RefeicoesController::class)->group(function () {
-        Route::get('/busca-refeicoes', 'buscaRefeicoes')->name('admin.refeicoes');
+        Route::get('/busca-refeicoes/{dia_id}/{dieta_id}', 'buscaRefeicoes')->name('admin.refeicoes');
         Route::post('/salva-refeicao', 'salvarRefeicao')->name('salvar.refeicao');
     });
 
