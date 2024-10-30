@@ -18,8 +18,13 @@ class Questionario extends Model
         return $this->belongsTo(Nutricionista::class);
     }
 
+    public function paciente()
+    {
+        return $this->hasMany(Paciente::class);
+    }
+
     public function perguntas()
     {
-        return $this->hasMany(PerguntasQuestionario::class);
+        return $this->hasMany(Pergunta::class);
     }
 }

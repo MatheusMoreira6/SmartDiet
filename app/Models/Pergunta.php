@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PerguntasQuestionario extends Model
+class Pergunta extends Model
 {
     use HasFactory;
 
@@ -23,6 +23,6 @@ class PerguntasQuestionario extends Model
      */
     public function respostas()
     {
-        return $this->hasMany(RespostasQuestionario::class);
+        return $this->hasMany(Resposta::class);
     }
 }

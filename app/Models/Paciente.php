@@ -40,4 +40,14 @@ class Paciente extends Model
     {
         return $this->belongsTo(Nutricionista::class);
     }
+
+    public function questionario()
+    {
+        return $this->belongsTo(Questionario::class);
+    }
+
+    public function respostas()
+    {
+        return $this->hasMany(Resposta::class);
+    }
 }

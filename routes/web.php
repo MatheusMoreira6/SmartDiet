@@ -19,7 +19,7 @@ use App\Http\Controllers\User\Dashboard as DashboardUser;
 use App\Http\Controllers\User\Dietas as DietasUser;
 use App\Http\Controllers\User\Agendamentos as AgendamentosUser;
 use App\Http\Controllers\User\Exames as ExamesUser;
-use App\Http\Controllers\User\Questionarios as QuestionariosUser;
+use App\Http\Controllers\User\Questionario as QuestionarioUser;
 use App\Http\Controllers\User\Perfil as PerfilUser;
 use App\Http\Controllers\User\Configuracoes as ConfiguracoesUser;
 
@@ -27,7 +27,7 @@ use App\Http\Controllers\User\Configuracoes as ConfiguracoesUser;
 use App\Http\Middleware\CheckLogout;
 use App\Http\Middleware\AuthenticateAdmin;
 use App\Http\Middleware\AuthenticateUser;
-
+use App\Http\Middleware\CheckQuestionarioUser;
 // Facades
 use Illuminate\Support\Facades\Route;
 
@@ -88,11 +88,17 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 // Rotas do painel de usuário
 Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () {
 
-    Route::get('/', [DashboardUser::class, 'index'])->name('user.home');
-    Route::get('/dietas', [DietasUser::class, 'index'])->name('user.dietas');
-    Route::get('/agendamentos', [AgendamentosUser::class, 'index'])->name('user.agendamentos');
-    Route::get('/exames', [ExamesUser::class, 'index'])->name('user.exames');
-    Route::get('/questionarios', [QuestionariosUser::class, 'index'])->name('user.questionarios');
+    Route::middleware([CheckQuestionarioUser::class])->group(function () {
+        Route::get('/', [DashboardUser::class, 'index'])->name('user.home');
+        Route::get('/dietas', [DietasUser::class, 'index'])->name('user.dietas');
+        Route::get('/agendamentos', [AgendamentosUser::class, 'index'])->name('user.agendamentos');
+        Route::get('/exames', [ExamesUser::class, 'index'])->name('user.exames');
+    });
+
+    Route::controller(QuestionarioUser::class)->group(function () {
+        Route::get('/questionario', 'index')->name('user.questionario');
+        Route::post('/questionario', 'store')->name('user.questionario');
+    });
 
     Route::controller(PerfilUser::class)->prefix('perfil')->group(function () {
         Route::get('/', 'index')->name('user.perfil');
