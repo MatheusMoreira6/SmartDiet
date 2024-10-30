@@ -1,80 +1,150 @@
-import { Container, Spinner, Table, Button } from "react-bootstrap";
+import { Container, Spinner, Table, Badge } from "react-bootstrap";
 import "../../../../../css/tableDieta.css";
 import ModalCadastroRefeicao from "./ModalCadastroRefeicao";
 import { useState } from "react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head } from "@inertiajs/react";
 
-export default function TableRefeicoes({ refeicoes, horarios }) {
+export default function TableRefeicoes({
+    refeicoes,
+    horarios,
+    dieta_id,
+    dia_id,
+}) {
+    const [dynamincRef, setDynamicRef] = useState(refeicoes);
     const [visibleRef, setVisibleRef] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [selectedHorario, setSelectedHorario] = useState("");
-    const [selectedDia, setSelectedDia] = useState(""); 
     const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
 
     const handleOpenModal = (horario) => {
+        console.log(dynamincRef)
         setSelectedHorario(horario.id);
         setVisibleRef(true);
     };
 
     return (
         <AdminLayout>
-            <Head title="Cadastrar Questionário" />
-        <Container>
-            <Table bordered responsive className="diet-table mt-3">
-                {loading ? (
-                    <Spinner animation="border" role="status" variant="primary" />
-                ) : (
-                    <>
-                        <thead>
-                            <tr>
-                                <th>Horário</th>
-                                <th>Refeições</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {horarios.map((horario) => {
-                                const refeicoesHorario = refeicoes.filter(ref => ref.horario_id === horario.id);
-                                return (
-                                    <tr key={horario.id}>
-                                        <td>{horario.horario}</td>
-                                        <td>
-                                            {refeicoesHorario.length > 0 ? (
-                                                <ul>
-                                                    {refeicoesHorario.map(refeicao => (
+            <Head title="Cadastro de Refeições" />
+            <Container>
+                <h3 className="text-center mt-4 mb-3">
+                    Horários e Refeições da Dieta
+                </h3>
+                <Table bordered hover responsive className="diet-table mt-3">
+                    <thead>
+                        <tr>
+                            <th className="time-header">Horário</th>
+                            <th className="day-header">Refeição</th>
+                            <th className="day-header">Qtd.</th>
+                            <th className="day-header">Kcal</th>
+                            <th className="day-header">Carbs</th>
+                            <th className="day-header">Proteínas</th>
+                            <th className="day-header">Gorduras</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {horarios.map((horario) => {
+                            const refeicoesHorario = dynamincRef.filter(
+                                (ref) => ref.horario_id === horario.id
+                            );
+                            return (
+                                <tr
+                                    key={horario.id}
+                                    style={{ borderColor: "black" }}
+                                >
+                                    <td className="time-cell">
+                                        {horario.horario}
+                                    </td>
+                                    <td
+                                        onClick={() => handleOpenModal(horario)}
+                                        className="meal-cell"
+                                    >
+                                        {refeicoesHorario.length > 0 ? (
+                                            <ul className="list-unstyled">
+                                                {refeicoesHorario.map(
+                                                    (refeicao) => (
                                                         <li key={refeicao.id}>
-                                                            Refeição ID: {refeicao.id} - Dia da Semana: {refeicao.dia_semana_id}
+                                                            <Badge
+                                                                className="card-hover"
+                                                                style={{
+                                                                    backgroundColor:
+                                                                        "#47c98d",
+                                                                    color: "white",
+                                                                }}
+                                                            >
+                                                                Refeição{" "}
+                                                                {refeicao.id}
+                                                            </Badge>
+                                                            <ul>
+                                                                {refeicao.alimentos.map(
+                                                                    (
+                                                                        alimento
+                                                                    ) => (
+                                                                        <li
+                                                                            key={
+                                                                                alimento.id
+                                                                            }
+                                                                            style={{
+                                                                                fontSize:
+                                                                                    "0.85em",
+                                                                                color: "#333",
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                alimento.nome
+                                                                            }{" "}
+                                                                            -{" "}
+                                                                            {
+                                                                                alimento.porcao
+                                                                            }
+                                                                        </li>
+                                                                    )
+                                                                )}
+                                                            </ul>
                                                         </li>
-                                                    ))}
-                                                </ul>
-                                            ) : (
-                                                <span>Sem refeição cadastrada</span>
-                                            )}
+                                                    )
+                                                )}
+                                            </ul>
+                                        ) : (
+                                            <span
+                                                style={{
+                                                    color: "#888",
+                                                    fontStyle: "italic",
+                                                }}
+                                            >
+                                                Sem refeição cadastrada
+                                            </span>
+                                        )}
+                                    </td>
+                                    {[
+                                        "Quantidade",
+                                        "Kcal",
+                                        "Carbs",
+                                        "Proteínas",
+                                        "Gorduras",
+                                    ].map((attr, index) => (
+                                        <td
+                                            key={index}
+                                            className="text-center meal-cell-itens"
+                                        >
+                                            <span>0</span>
                                         </td>
-                                        <td>
-                                            <Button variant="primary" onClick={() => handleOpenModal(horario)}>
-                                                Adicionar Refeição
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </>
-                )}
-            </Table>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </Table>
 
-            {/* Modal para cadastrar nova refeição */}
-            <ModalCadastroRefeicao
-                show={visibleRef}
-                setShow={setVisibleRef}
-                selectedDia={selectedDia}
-                selectedHorario={selectedHorario}
-                onUpdateRefeicao={() => setLoading(!loading)}
-                arraySelectedAlimentos={arraySelectedAlimentos}
-            />
-        </Container>
+                <ModalCadastroRefeicao
+                    show={visibleRef}
+                    setShow={setVisibleRef}
+                    selectedDia={dia_id}
+                    selectedHorario={selectedHorario}
+                    onUpdateRefeicao={(param) => setDynamicRef(param)}
+                    arraySelectedAlimentos={arraySelectedAlimentos}
+                    dieta_id={dieta_id}
+                />
+            </Container>
         </AdminLayout>
     );
 }

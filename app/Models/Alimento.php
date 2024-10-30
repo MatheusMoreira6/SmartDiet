@@ -12,15 +12,16 @@ class Alimento extends Model
 
     protected $fillable = [
         'nome',
-        'calorias',
-        'proteinas',
-        'carboidratos',
-        'gorduras',
         'tipo_alimento',
     ];
 
     public function refeicoes()
     {
         return $this->belongsToMany(Refeicoes::class, 'alimento_refeicao');
+    }
+
+    public function tipoPorcao()
+    {
+        return $this->hasMany(TipoPorcao::class, 'alimento_id', 'id'); // Definindo o relacionamento
     }
 }

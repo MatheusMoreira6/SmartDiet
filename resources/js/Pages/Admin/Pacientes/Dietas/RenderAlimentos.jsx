@@ -1,4 +1,4 @@
-import { Accordion, ListGroup, Badge } from "react-bootstrap";
+import { Accordion, ListGroup, Badge, Form } from "react-bootstrap";
 import { Apple } from "react-bootstrap-icons";
 import { LuLeaf } from "react-icons/lu";
 import { RiSeedlingFill } from "react-icons/ri";
@@ -12,6 +12,7 @@ const RenderAlimentos = ({
     alimentos,
     handleSelectAlimento,
     selectedAlimentos,
+    handlePorcaoId,
 }) => {
     const getIconByType = (type) => {
         switch (type) {
@@ -33,6 +34,7 @@ const RenderAlimentos = ({
                 return <IoFishSharp color="#1E90FF" />;
         }
     };
+    
 
     return (
         <Accordion>
@@ -49,26 +51,57 @@ const RenderAlimentos = ({
                             {listaAlimentos.map((alimento) => (
                                 <ListGroup.Item
                                     key={alimento.id}
-                                    action
-                                    onClick={() =>
-                                        handleSelectAlimento(alimento.id)
-                                    }
                                     active={selectedAlimentos.some(
                                         (item) => item.id === alimento.id
                                     )}
                                     style={{
                                         display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
+                                        flexDirection: "column",
                                         padding: "10px 15px",
                                     }}
                                 >
-                                    <span>
-                                        {alimento.nome} -{" "}
-                                        <Badge bg="info">
-                                            {alimento.calorias} kcal
-                                        </Badge>
-                                    </span>
+                                    <Form.Check
+                                        onClick={() =>
+                                            handleSelectAlimento(alimento.id)
+                                        }
+                                        type="switch"
+                                        id={alimento.id}
+                                    />
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <span>
+                                            {alimento.nome} -{" "}
+                                            <Badge bg="info">porções</Badge>
+                                        </span>
+                                    </div>
+                                    <Form.Select
+                                        className="mt-2"
+                                        onChange={(e) => {
+                                            handlePorcaoId(
+                                                alimento.id,
+                                                e.target.value
+                                            );
+                                        }}
+                                    >
+                                        <option value="">
+                                            Selecione o tipo de porção
+                                        </option>
+                                        {alimento.tipo_porcao   .map((porcao) => (
+                                            <option
+                                                key={porcao.id}
+                                                value={porcao.id}
+                                            >
+                                                {porcao.nome_porcao} -{" "}
+                                                {porcao.calorias} kcal
+                                            </option>
+                                        ))}
+                                    </Form.Select>
                                 </ListGroup.Item>
                             ))}
                         </ListGroup>

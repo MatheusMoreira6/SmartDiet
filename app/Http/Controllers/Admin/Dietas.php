@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Alimento;
 use App\Models\Dieta as ModelDietas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -74,7 +75,7 @@ class Dietas extends Controller
 
     public function buscaAlimentos()
     {
-        $alimentos = DB::table('alimentos')->select()->get()->groupBy('tipo_alimento');
+        $alimentos = Alimento::with('tipoPorcao')->get()->groupBy('tipo_alimento');
 
         return response()->json(['alimentos' => $alimentos]);
     }

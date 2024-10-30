@@ -16,14 +16,25 @@
     background-color: #e0f7fa;
     font-weight: bold;
     color: #198754 !important;
-    width: 5%;
+    width: 8%;
+    border: 1px solid #ddd !important;
 }
 
 .meal-cell {
     background-color: #ffffff;
-    border: 1px solid #ddd;
+    border: 1px solid #ddd !important;
     height: 100px;
-    width: 15%;
+    width: 42%;
+    transition: background-color 0.3s ease;
+    font-size: 0.8em;
+    color: #333 !important;
+}
+
+.meal-cell-itens {
+    background-color: #ffffff;
+    border: 1px solid #ddd !important;
+    height: 100px;
+    width: 8%;
     transition: background-color 0.3s ease;
     font-size: 0.8em;
     color: #333 !important;
@@ -36,7 +47,7 @@
 
 .card-hover {
     transition: box-shadow 0.3s ease;
-    border: "1px solid #ddd",
+    border: 1px solid #ddd;
 }
 
 .card-hover:hover {

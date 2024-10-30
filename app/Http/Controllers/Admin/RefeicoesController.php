@@ -11,18 +11,26 @@ class RefeicoesController extends Controller
 {
     public function buscaRefeicoes($dieta_id, $dia_id)
     {
-        $refeicoes = Refeicoes::with('aliementos')->where('dieta_id', $dieta_id)->where('dia_semana_id', $dia_id)->get();
+        $refeicoes = Refeicoes::with(['alimentos.tipoPorcao' => function ($query) {
+            $query->select('table_tipo_porcao.id', 'table_tipo_porcao.nome_porcao', 'table_tipo_porcao.calorias', 'table_tipo_porcao.proteinas', 'table_tipo_porcao.carboidratos', 'table_tipo_porcao.gorduras');
+        }])
+            ->where('dieta_id', $dieta_id)
+            ->where('dia_semana_id', $dia_id)
+            ->get();
 
-        $alimentos =  DB::table('alimentos')->select()->get()->groupBy('tipo_alimento');
+        $horarios = DB::table('table_horarios_dietas')
+            ->select()
+            ->where('dieta_id', $dieta_id)
+            ->get();
 
-        $horarios = DB::table('table_horarios_dietas')->select()->where('dieta_id', $dieta_id)->get();
-
-        return $this->render('Admin/Pacientes/Dietas/TableRefeicoes',[
+        return $this->render('Admin/Pacientes/Dietas/TableRefeicoes', [
             'refeicoes' => $refeicoes,
             'horarios' => $horarios,
-            'alimentos' => $alimentos
+            'dieta_id' => $dieta_id,
+            'dia_id' => $dia_id
         ]);
     }
+
 
     public function salvarRefeicao(Request $request)
     {
@@ -50,13 +58,23 @@ class RefeicoesController extends Controller
             ]);
         }
 
-        foreach ($request->alimentos as $alimentoId) {
+        foreach ($request->alimentos as $alimento) {
+            $id_porcao = $alimento['tipo_porcao']['id'];
             DB::table('alimento_refeicao')->insert([
-                'alimento_id' => $alimentoId,
-                'refeicao_id' => $refeicao->id
+                'alimento_id' => $alimento['id'],
+                'refeicao_id' => $refeicao->id,
+                'porcao_id' => $id_porcao
             ]);
         }
 
-        return response()->json(['success' => true]);
+        $refeicoes = Refeicoes::with(['alimentos.tipoPorcao' => function ($query) {
+            $query->select('table_tipo_porcao.id', 'table_tipo_porcao.nome_porcao', 'table_tipo_porcao.calorias', 'table_tipo_porcao.proteinas', 'table_tipo_porcao.carboidratos', 'table_tipo_porcao.gorduras');
+        }])
+            ->where('dieta_id', $request->dieta_id)
+            ->where('dia_semana_id', $request->dia)
+            ->get();
+
+
+        return response()->json(['refeicoes' => $refeicoes]);
     }
 }
