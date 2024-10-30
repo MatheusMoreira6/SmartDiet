@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('data_nascimento');
             $table->unsignedBigInteger('genero_id');
             $table->string('cpf', 14)->unique();
-            $table->string('crn', 9)->unique();
+            $table->string('crn', 8)->unique();
             $table->string('telefone', 15);
             $table->string('telefone_fixo', 9)->nullable();
             $table->timestamps();

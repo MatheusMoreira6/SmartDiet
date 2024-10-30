@@ -155,7 +155,7 @@ const CadastroAdmin = ({ generos }) => {
                                         type={"text"}
                                         mask={"999.999.999-99"}
                                         value={data.cpf}
-                                        placeHolder={"Digite seu CPF"}
+                                        placeHolder={"999.999.999-99"}
                                         required={true}
                                         isInvalid={errors.cpf}
                                         onChange={(e) =>
@@ -172,9 +172,9 @@ const CadastroAdmin = ({ generos }) => {
                                         id={"crn"}
                                         label={"CRN"}
                                         type={"text"}
-                                        mask={"9/99999/a"}
+                                        mask={"9/9999/a"}
                                         value={data.crn}
-                                        placeHolder={"Digite seu CRN"}
+                                        placeHolder={"3/1234/P"}
                                         required={true}
                                         isInvalid={errors.crn}
                                         onChange={(e) =>
@@ -196,7 +196,7 @@ const CadastroAdmin = ({ generos }) => {
                                         type={"text"}
                                         mask={"(99) 99999-9999"}
                                         value={data.telefone}
-                                        placeHolder={"Digite seu telefone"}
+                                        placeHolder={"(99) 99999-9999"}
                                         required={true}
                                         isInvalid={errors.telefone}
                                         onChange={(e) =>
@@ -216,7 +216,7 @@ const CadastroAdmin = ({ generos }) => {
                                         type={"text"}
                                         mask={"9999-9999"}
                                         value={data.telefone_fixo}
-                                        placeHolder={"Digite seu telefone fixo"}
+                                        placeHolder={"9999-9999"}
                                         required={false}
                                         isInvalid={errors.telefone_fixo}
                                         onChange={(e) =>
@@ -254,7 +254,7 @@ const CadastroAdmin = ({ generos }) => {
                                 <Col xs={12} md={6}>
                                     <FormInput
                                         id={"password"}
-                                        label={"Senha"}
+                                        label={"Senha (mínimo 6 caracteres)"}
                                         type={"password"}
                                         value={data.password}
                                         placeHolder={"Digite sua senha"}
