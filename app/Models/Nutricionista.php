@@ -40,4 +40,9 @@ class Nutricionista extends Model
     {
         return $this->hasMany(Paciente::class);
     }
+
+    public function questionarios()
+    {
+        return $this->hasMany(Questionario::class);
+    }
 }

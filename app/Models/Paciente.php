@@ -17,7 +17,8 @@ class Paciente extends Model
         'data_nascimento',
         'genero_id',
         'cpf',
-        'telefone'
+        'telefone',
+        'questionario_id'
     ];
 
     protected $hidden = [

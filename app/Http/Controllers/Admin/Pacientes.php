@@ -18,10 +18,21 @@ class Pacientes extends Controller
     public function index()
     {
         $nutricionista = Auth::user()->nutricionista;
+        $questionarios = $nutricionista->questionarios()->get()->toArray();
+
+        $auxQuestionario = [];
+
+        foreach ($questionarios as $questionario) {
+            $auxQuestionario[] = [
+                'id' => $questionario['id'],
+                'descricao' => $questionario['titulo']
+            ];
+        }
 
         return $this->render('Admin/Pacientes', [
             'generos' => Genero::all()->toArray(),
-            'pacientes' => $nutricionista->pacientes()->get()->toArray()
+            'questionarios' => $auxQuestionario,
+            'pacientes' => $nutricionista->pacientes()->get()->toArray(),
         ]);
     }
 
@@ -51,6 +62,7 @@ class Pacientes extends Controller
                     'genero_id' => $request->genero_id,
                     'cpf' => $request->cpf,
                     'telefone' => $request->telefone,
+                    'questionario_id' => $request->questionario_id,
                 ]);
             });
 
