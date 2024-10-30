@@ -28,7 +28,7 @@ const FormSelect = ({
                     <option
                         key={index}
                         value={option.id}
-                        disabled={option.id === ""}
+                        disabled={required && option.id === ""}
                     >
                         {option.descricao}
                     </option>
