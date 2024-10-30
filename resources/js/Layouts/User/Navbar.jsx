@@ -8,9 +8,13 @@ import {
 } from "react-bootstrap";
 
 const NavbarUser = () => {
-    const { user, currentRoute } = usePage().props;
+    const { user, currentRoute, lockRoute } = usePage().props;
 
     function classLink(route) {
+        if (lockRoute) {
+            return "nav-link disabled";
+        }
+
         return currentRoute == route ? "nav-link active" : "nav-link";
     }
 

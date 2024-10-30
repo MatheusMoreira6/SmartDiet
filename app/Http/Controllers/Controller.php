@@ -19,9 +19,18 @@ abstract class Controller
     {
         $props = array_merge($props, session('props', []));
 
+        $user = Auth::user();
+
+        if ($user && !$user->administrador) {
+            $lockRoute = !empty($user->paciente->questionario_id);
+        } else {
+            $lockRoute = false;
+        }
+
         return Inertia::render($component, array_merge($props, [
-            'user' =>  Auth::user(),
+            'user' =>  $user,
             'currentRoute' => Route::currentRouteName(),
+            'lockRoute' => $lockRoute,
         ]));
     }
 
