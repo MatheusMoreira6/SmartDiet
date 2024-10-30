@@ -57,13 +57,6 @@ const NavbarUser = () => {
                                 Exames
                             </Link>
 
-                            <Link
-                                className={classLink("user.questionarios")}
-                                href={route("user.questionarios")}
-                            >
-                                Questionários
-                            </Link>
-
                             <NavDropdown
                                 id="offcanvas-dropdown"
                                 title={
