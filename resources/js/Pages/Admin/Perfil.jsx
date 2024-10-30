@@ -156,7 +156,7 @@ const Perfil = ({ generos, dados }) => {
                                 id={"crn"}
                                 label={"CRN"}
                                 type={"text"}
-                                mask={"9/99999/a"}
+                                mask={"9/9999/a"}
                                 value={data.crn}
                                 placeHolder={dados.crn}
                                 required={true}
