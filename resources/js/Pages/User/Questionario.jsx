@@ -116,7 +116,7 @@ const Questionario = ({ questionario }) => {
                         ))}
 
                         <Col xs={12}>
-                            <div className="d-grid g-2 d-md-block">
+                            <div className="d-grid gap-2 d-md-block">
                                 <Button
                                     variant="primary"
                                     type="submit"
