@@ -61,7 +61,15 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
     });
 
     Route::get('/agendamentos', [AgendamentosAdmin::class, 'index'])->name('admin.agendamentos');
-    Route::get('/exames', [ExamesAdmin::class, 'index'])->name('admin.exames');
+
+    Route::controller(ExamesAdmin::class)->prefix('exames')->group(function () {
+        Route::get('/', 'index')->name('admin.exames');
+        Route::get('/create', 'create')->name('admin.exames.create');
+        Route::get('/edit/{id}', 'edit')->name('admin.exames.edit');
+        Route::post('/store', 'store')->name('admin.exames.store');
+        Route::post('/update', 'update')->name('admin.exames.update');
+        Route::post('/delete', 'delete')->name('admin.exames.delete');
+    });
 
     Route::controller(QuestionariosAdmin::class)->prefix('questionarios')->group(function () {
         Route::get('/', 'index')->name('admin.questionarios');

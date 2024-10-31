@@ -9,6 +9,6 @@ class Exames extends Controller
 {
     public function index()
     {
-        return $this->render('Admin/Exames');
+        return $this->render('Admin/Exames/Exames');
     }
 }
