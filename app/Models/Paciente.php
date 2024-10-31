@@ -50,4 +50,9 @@ class Paciente extends Model
     {
         return $this->hasMany(Resposta::class);
     }
+
+    public function pedidosExames()
+    {
+        return $this->hasMany(PedidoExame::class);
+    }
 }
