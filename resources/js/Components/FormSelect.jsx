@@ -3,6 +3,7 @@ import { Form } from "react-bootstrap";
 const FormSelect = ({
     id,
     label,
+    bold,
     options,
     value,
     autoFocus,
@@ -15,7 +16,9 @@ const FormSelect = ({
 
     return (
         <Form.Group controlId={id}>
-            <Form.Label>{label}</Form.Label>
+            <Form.Label className={bold ? "fw-semibold" : ""}>
+                {label}
+            </Form.Label>
 
             <Form.Select
                 value={value}
