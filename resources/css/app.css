@@ -15,26 +15,19 @@
     box-shadow: 0 0 0 0.25rem rgba(var(--bs-danger-rgb), 0.25) !important;
 }
 
+.form-check-input.is-invalid {
+    border-color: var(--bs-form-invalid-border-color) !important;
+}
+
+.form-check-input.is-invalid ~ .form-check-label {
+    color: var(--bs-danger) !important;
+}
+
 /**
 * Card CSS
 */
 .card-pointer:not(:disabled) {
     cursor: pointer;
-}
-
-/**
-* DataPicker
-*/
-.react-date-picker__wrapper {
-    border: 0 !important;
-}
-
-.react-date-picker__button {
-    padding: 0px 6px !important;
-}
-
-.react-date-picker__inputGroup__divider {
-    padding: 0px !important;
 }
 
 /**
