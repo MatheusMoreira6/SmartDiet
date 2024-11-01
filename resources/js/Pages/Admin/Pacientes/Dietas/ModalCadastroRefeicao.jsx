@@ -28,7 +28,7 @@ const ModalCadastroRefeicao = ({
                 setLoading(true);
                 try {
                     const response = await Api.get(route("busca.alimentos"));
-                    const newAlimentos = response.data.alimentos
+                    const newAlimentos = response.data.alimentos;
                     for (const i in newAlimentos) {
                         newAlimentos[i].forEach((element) => {
                             element.tipo_porcao.forEach((porcao, id) => {
@@ -38,8 +38,27 @@ const ModalCadastroRefeicao = ({
                         });
                     }
 
+                    const updatedArraySelectedAlimentos =
+                        arraySelectedAlimentos.map((selectedAlimento) => {
+                            const tipoAlimento =
+                                newAlimentos[selectedAlimento.tipo_alimento] ||
+                                [];
+                            const matchingAlimento = tipoAlimento.find(
+                                (alimento) =>
+                                    alimento.id === selectedAlimento.id
+                            );
+
+                            if (matchingAlimento) {
+                                selectedAlimento.tipo_porcao =
+                                    matchingAlimento.tipo_porcao;
+                            }
+
+                            return selectedAlimento;
+                        });
+
                     setAlimentos(newAlimentos);
-                    setSelectedAlimentos(arraySelectedAlimentos);
+
+                    setSelectedAlimentos(updatedArraySelectedAlimentos);
                 } catch (error) {
                     console.error("Erro ao buscar alimentos:", error);
                 }
@@ -76,13 +95,12 @@ const ModalCadastroRefeicao = ({
 
             if (alreadySelected) {
                 return prevSelected.map((item) => {
-                    console.log(item)
+                    console.log(item);
                     if (item.id === alimentoId) {
                         const updatedItem = { ...item };
-                        updatedItem.tipo_porcao =
-                            item.tipo_porcao[porcao_id];
+                        updatedItem.tipo_porcao = item.tipo_porcao[porcao_id];
 
-                            console.log(updatedItem, "update")
+                        console.log(updatedItem, "update");
                         return updatedItem;
                     }
                     return item;
@@ -98,6 +116,18 @@ const ModalCadastroRefeicao = ({
     };
 
     async function handleSave() {
+        const missingPorcao = selectedAlimentos.some((item) => {
+            const key = Object.keys(item.tipo_porcao);
+            if (!item.tipo_porcao || item.tipo_porcao[key] !== undefined)
+                return true;
+        });
+        if (missingPorcao) {
+            SweetAlert.warning({
+                title: "Porções faltando!",
+                text: "Certifique-se de selecionar uma porção para todos os alimentos.",
+            });
+            return;
+        }
         try {
             const response = await Api.post(route("salvar.refeicao"), {
                 alimentos: selectedAlimentos,

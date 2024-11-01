@@ -34,7 +34,6 @@ const RenderAlimentos = ({
                 return <IoFishSharp color="#1E90FF" />;
         }
     };
-    
 
     return (
         <Accordion>
@@ -61,6 +60,9 @@ const RenderAlimentos = ({
                                     }}
                                 >
                                     <Form.Check
+                                        defaultChecked={selectedAlimentos.some(
+                                            (item) => item.id === alimento.id
+                                        )}
                                         onClick={() =>
                                             handleSelectAlimento(alimento.id)
                                         }
@@ -92,7 +94,7 @@ const RenderAlimentos = ({
                                         <option value="">
                                             Selecione o tipo de porção
                                         </option>
-                                        {alimento.tipo_porcao   .map((porcao) => (
+                                        {alimento.tipo_porcao.map((porcao) => (
                                             <option
                                                 key={porcao.id}
                                                 value={porcao.id}

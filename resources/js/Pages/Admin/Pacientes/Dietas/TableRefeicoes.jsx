@@ -17,10 +17,18 @@ export default function TableRefeicoes({
     const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
 
     const handleOpenModal = (horario) => {
-        console.log(dynamincRef)
+        const refeicaoSelected = dynamincRef.filter(
+            (ref) => ref.horario_id === horario.id
+        );
+        if (refeicaoSelected.length > 0) {
+            console.log(refeicaoSelected);
+            setArraySelectedAlimentos(refeicaoSelected[0].alimentos);
+        }
         setSelectedHorario(horario.id);
         setVisibleRef(true);
     };
+
+    console.log(dynamincRef);
 
     return (
         <AdminLayout>
@@ -34,7 +42,6 @@ export default function TableRefeicoes({
                         <tr>
                             <th className="time-header">Horário</th>
                             <th className="day-header">Refeição</th>
-                            <th className="day-header">Qtd.</th>
                             <th className="day-header">Kcal</th>
                             <th className="day-header">Carbs</th>
                             <th className="day-header">Proteínas</th>
@@ -63,17 +70,6 @@ export default function TableRefeicoes({
                                                 {refeicoesHorario.map(
                                                     (refeicao) => (
                                                         <li key={refeicao.id}>
-                                                            <Badge
-                                                                className="card-hover"
-                                                                style={{
-                                                                    backgroundColor:
-                                                                        "#47c98d",
-                                                                    color: "white",
-                                                                }}
-                                                            >
-                                                                Refeição{" "}
-                                                                {refeicao.id}
-                                                            </Badge>
                                                             <ul>
                                                                 {refeicao.alimentos.map(
                                                                     (
@@ -94,7 +90,7 @@ export default function TableRefeicoes({
                                                                             }{" "}
                                                                             -{" "}
                                                                             {
-                                                                                alimento.porcao
+                                                                                alimento.porcao.nome_porcao
                                                                             }
                                                                         </li>
                                                                     )
@@ -116,7 +112,6 @@ export default function TableRefeicoes({
                                         )}
                                     </td>
                                     {[
-                                        "Quantidade",
                                         "Kcal",
                                         "Carbs",
                                         "Proteínas",

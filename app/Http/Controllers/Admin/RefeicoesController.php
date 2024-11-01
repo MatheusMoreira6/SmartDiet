@@ -11,12 +11,34 @@ class RefeicoesController extends Controller
 {
     public function buscaRefeicoes($dieta_id, $dia_id)
     {
-        $refeicoes = Refeicoes::with(['alimentos.tipoPorcao' => function ($query) {
-            $query->select('table_tipo_porcao.id', 'table_tipo_porcao.nome_porcao', 'table_tipo_porcao.calorias', 'table_tipo_porcao.proteinas', 'table_tipo_porcao.carboidratos', 'table_tipo_porcao.gorduras');
+        $refeicoes = Refeicoes::with(['alimentos' => function ($query) {
+            $query->with('tipoPorcao');
         }])
             ->where('dieta_id', $dieta_id)
             ->where('dia_semana_id', $dia_id)
             ->get();
+
+
+        $refeicoes->each(function ($refeicao) {
+            $refeicao->alimentos->each(function ($alimento) {
+                if (isset($alimento->pivot)) {
+                    $porcaoId = $alimento->pivot->porcao_id;
+
+                    $porcao = $alimento->tipoPorcao->firstWhere('id', $porcaoId);
+
+                    $alimento->porcao = [
+                        'id' => $porcaoId,
+                        'nome_porcao' => $porcao->nome_porcao ?? null,
+                        'calorias' => $porcao->calorias ?? null,
+                        'proteinas' => $porcao->proteinas ?? null,
+                        'carboidratos' => $porcao->carboidratos ?? null,
+                        'gorduras' => $porcao->gorduras ?? null,
+                    ];
+
+                    $alimento->makeHidden('pivot');
+                }
+            });
+        });
 
         $horarios = DB::table('table_horarios_dietas')
             ->select()
@@ -30,6 +52,7 @@ class RefeicoesController extends Controller
             'dia_id' => $dia_id
         ]);
     }
+
 
 
     public function salvarRefeicao(Request $request)
@@ -67,12 +90,34 @@ class RefeicoesController extends Controller
             ]);
         }
 
-        $refeicoes = Refeicoes::with(['alimentos.tipoPorcao' => function ($query) {
-            $query->select('table_tipo_porcao.id', 'table_tipo_porcao.nome_porcao', 'table_tipo_porcao.calorias', 'table_tipo_porcao.proteinas', 'table_tipo_porcao.carboidratos', 'table_tipo_porcao.gorduras');
+        $refeicoes = Refeicoes::with(['alimentos' => function ($query) {
+            $query->with('tipoPorcao');
         }])
-            ->where('dieta_id', $request->dieta_id)
+            ->where('dieta_id',$request->dieta_id)
             ->where('dia_semana_id', $request->dia)
             ->get();
+
+
+        $refeicoes->each(function ($refeicao) {
+            $refeicao->alimentos->each(function ($alimento) {
+                if (isset($alimento->pivot)) {
+                    $porcaoId = $alimento->pivot->porcao_id;
+
+                    $porcao = $alimento->tipoPorcao->firstWhere('id', $porcaoId);
+
+                    $alimento->porcao = [
+                        'id' => $porcaoId,
+                        'nome_porcao' => $porcao->nome_porcao ?? null,
+                        'calorias' => $porcao->calorias ?? null,
+                        'proteinas' => $porcao->proteinas ?? null,
+                        'carboidratos' => $porcao->carboidratos ?? null,
+                        'gorduras' => $porcao->gorduras ?? null,
+                    ];
+
+                    $alimento->makeHidden('pivot');
+                }
+            });
+        });
 
 
         return response()->json(['refeicoes' => $refeicoes]);
