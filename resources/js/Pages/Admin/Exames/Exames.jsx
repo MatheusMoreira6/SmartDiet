@@ -1,25 +1,46 @@
+import { useState } from "react";
 import { Head, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import WrapperContainer from "@/Components/WrapperContainer";
 import PageTopic from "@/Components/PageTopic";
-import { Button, Col, Row, Table } from "react-bootstrap";
-import ModalExames from "./Components/ModalExame";
-import { useState } from "react";
+import FormModal from "@/Components/FormModal";
+import FormInput from "@/Components/FormInput";
+import FormSelect from "@/Components/FormSelect";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
 
-const Exames = ({ pacientes, pacientes_exame }) => {
+const Exames = ({ exames, pacientes, pacientes_exame }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
-        id: "",
+        paciente_id: "",
+        data_pedido: new Date().toLocaleDateString("pt-BR"),
     });
 
     const [showModal, setShowModal] = useState(false);
     const [validated, setValidated] = useState(false);
+    const [errorExames, setErrorExame] = useState(false);
+
+    const [selectedExames, setSelectedExames] = useState([]);
 
     const handleShow = () => setShowModal(true);
 
     const handleClose = () => {
         setShowModal(false);
         setValidated(false);
+        setErrorExame(false);
         reset();
+    };
+
+    const handleCheckboxChange = (event, exameId) => {
+        if (event.target.checked) {
+            setSelectedExames([...selectedExames, exameId]);
+        } else {
+            setSelectedExames(selectedExames.filter((id) => id !== exameId));
+        }
+
+        if (selectedExames.length > 0) {
+            setErrorExame(false);
+        } else {
+            setErrorExame(true);
+        }
     };
 
     const handleSubmit = (e) => {
@@ -27,7 +48,9 @@ const Exames = ({ pacientes, pacientes_exame }) => {
 
         const form = e.currentTarget;
 
-        if (form.checkValidity()) {
+        if (form.checkValidity() && selectedExames.length > 0) {
+            setErrorExame(false);
+
             post(route("admin.exames"), {
                 onSuccess: (page) => {
                     const title = page.props.title;
@@ -43,6 +66,7 @@ const Exames = ({ pacientes, pacientes_exame }) => {
             });
         } else {
             e.stopPropagation();
+            setErrorExame(true);
         }
 
         setValidated(true);
@@ -84,7 +108,8 @@ const Exames = ({ pacientes, pacientes_exame }) => {
                             </thead>
 
                             <tbody>
-                                {pacientes_exame ? (
+                                {pacientes_exame &&
+                                pacientes_exame.length > 0 ? (
                                     pacientes_exame.map((paciente) => (
                                         <tr key={paciente.id}>
                                             <td>{paciente.nome}</td>
@@ -116,17 +141,84 @@ const Exames = ({ pacientes, pacientes_exame }) => {
                     </Col>
                 </Row>
 
-                <ModalExames
-                    data={data}
-                    setData={setData}
-                    erros={errors}
-                    pacientes={pacientes}
-                    showModal={showModal}
+                <FormModal
+                    show={showModal}
+                    title={"Cadastrar Pedido de Exame"}
                     validated={validated}
                     processing={processing}
                     handleClose={handleClose}
                     handleSubmit={handleSubmit}
-                />
+                >
+                    <Row className="g-3">
+                        <Col xs={12} lg={6}>
+                            <FormSelect
+                                id={"paciente_id"}
+                                label={"Paciente"}
+                                bold={true}
+                                options={pacientes}
+                                value={data.paciente_id}
+                                required={true}
+                                isInvalid={errors.paciente_id}
+                                onChange={(e) =>
+                                    setData("paciente_id", e.target.value)
+                                }
+                                textError={
+                                    errors.paciente_id ?? "Selecione o paciente"
+                                }
+                            />
+                        </Col>
+
+                        <Col xs={12} lg={6}>
+                            <FormInput
+                                id={"data_pedido"}
+                                label={"Data do Pedido"}
+                                type={"text"}
+                                mask={"99/99/9999"}
+                                bold={true}
+                                value={data.data_pedido}
+                                placeHolder={"__/__/____"}
+                                required={true}
+                                isInvalid={errors.data_pedido}
+                                onChange={(e) =>
+                                    setData("data_pedido", e.target.value)
+                                }
+                                textError={
+                                    errors.data_pedido ??
+                                    "Informe a data do pedido"
+                                }
+                            />
+                        </Col>
+
+                        <Col xs={12}>
+                            <Form.Label className="fw-semibold">
+                                Exames
+                            </Form.Label>
+
+                            {exames.map((exame) => (
+                                <Form.Check
+                                    id={exame.id}
+                                    key={exame.id}
+                                    type={"checkbox"}
+                                    isInvalid={errorExames}
+                                    label={exame.nome}
+                                    onChange={(event) =>
+                                        handleCheckboxChange(event, exame.id)
+                                    }
+                                />
+                            ))}
+
+                            {errorExames && (
+                                <Form.Control.Feedback
+                                    type="invalid"
+                                    className="d-block"
+                                >
+                                    Selecione pelo menos um exame antes de
+                                    enviar o pedido.
+                                </Form.Control.Feedback>
+                            )}
+                        </Col>
+                    </Row>
+                </FormModal>
             </WrapperContainer>
         </AdminLayout>
     );
