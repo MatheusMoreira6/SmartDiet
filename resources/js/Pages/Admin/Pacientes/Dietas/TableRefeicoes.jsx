@@ -16,7 +16,7 @@ export default function TableRefeicoes({
     const [visibleRef, setVisibleRef] = useState(false);
     const [selectedHorario, setSelectedHorario] = useState("");
     const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
-    const [refAlt, setRefAlt] = useState(0);
+    const [refAlt, setRefAlt] = useState(null);
 
     const handleOpenModal = (horario) => {
         const refeicaoSelected = dynamincRef.filter(

@@ -9,7 +9,7 @@ class Refeicoes extends Model
 {
     use HasFactory;
     protected $table = 'refeicoes';
-    protected $fillable = ['id', 'dieta_id', 'horario_id', 'dia_semana_id'];
+    protected $fillable = ['id', 'dieta_id', 'horario_id', 'dia_semana_id', 'id_ref_alt'];
 
     public function alimentos()
     {

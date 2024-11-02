@@ -20,11 +20,13 @@ const ModalCadastroRefeicao = ({
     const [selectedAlimentos, setSelectedAlimentos] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    console.log(refAlt)
+
     const handleClose = () => {
         setShow(false);
         setSelectedAlimentos([]);
         setArraySelectedAlimentos([]);
-        setRefAlt(false);
+        setRefAlt(null);
     };
 
     useEffect(() => {
@@ -138,6 +140,7 @@ const ModalCadastroRefeicao = ({
                 dia: selectedDia,
                 horario: selectedHorario,
                 dieta_id: dieta_id,
+                ref_id: refAlt ?? null
             });
             onUpdateRefeicao(response.data.refeicoes);
             handleClose();

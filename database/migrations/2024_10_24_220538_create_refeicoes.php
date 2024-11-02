@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('dieta_id');
             $table->timestamps();
+            $table->integer('id_ref_alt')->nullable();
 
             $table->foreign('dieta_id')->references('id')->on('dietas')->onDelete('cascade');
         });

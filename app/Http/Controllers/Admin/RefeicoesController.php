@@ -16,8 +16,25 @@ class RefeicoesController extends Controller
         }])
             ->where('dieta_id', $dieta_id)
             ->where('dia_semana_id', $dia_id)
+            ->where('id_ref_alt', null)
             ->get();
 
+        $refeicoesAlternativas = Refeicoes::with(['alimentos' => function ($query) {
+            $query->with('tipoPorcao');
+        }])
+            ->where('dieta_id', $dieta_id)
+            ->where('dia_semana_id', $dia_id)
+            ->where('id_ref_alt', '<>', null)
+            ->get();
+
+
+        foreach ($refeicoes as $ref) {
+            foreach ($refeicoesAlternativas as $refAlt) {
+                if ($ref['id'] == $refAlt['id_ref_alt']) {
+                    $ref['refeicao_alternativa'] = $refAlt;
+                }
+            }
+        }
 
         $refeicoes->each(function ($refeicao) {
             $refeicao->alimentos->each(function ($alimento) {
@@ -53,10 +70,9 @@ class RefeicoesController extends Controller
         ]);
     }
 
-
-
     public function salvarRefeicao(Request $request)
     {
+
         $request->validate([
             'alimentos' => 'required|array',
             'dia' => 'required',
@@ -69,7 +85,7 @@ class RefeicoesController extends Controller
             ->where('horario_id', $request->horario)
             ->first();
 
-        if ($refeicao) {
+        if ($refeicao && !($request->ref_id)) {
             DB::table('alimento_refeicao')
                 ->where('refeicao_id', $refeicao->id)
                 ->delete();
@@ -77,7 +93,8 @@ class RefeicoesController extends Controller
             $refeicao = Refeicoes::create([
                 'dieta_id' => $request->dieta_id,
                 'horario_id' => $request->horario,
-                'dia_semana_id' => $request->dia
+                'dia_semana_id' => $request->dia,
+                'id_ref_alt' => $request->ref_id,
             ]);
         }
 
@@ -93,10 +110,27 @@ class RefeicoesController extends Controller
         $refeicoes = Refeicoes::with(['alimentos' => function ($query) {
             $query->with('tipoPorcao');
         }])
-            ->where('dieta_id',$request->dieta_id)
+            ->where('dieta_id', $request->dieta_id)
             ->where('dia_semana_id', $request->dia)
+            ->where('id_ref_alt', null)
             ->get();
 
+        $refeicoesAlternativas = Refeicoes::with(['alimentos' => function ($query) {
+            $query->with('tipoPorcao');
+        }])
+            ->where('dieta_id', $request->dieta_id)
+            ->where('dia_semana_id', $request->dia)
+            ->where('id_ref_alt', '<>', null)
+            ->get();
+
+
+        foreach ($refeicoes as $ref) {
+            foreach ($refeicoesAlternativas as $refAlt) {
+                if ($ref['id'] == $refAlt['id_ref_alt']) {
+                    $ref['refeicao_alternativa'] = $refAlt;
+                }
+            }
+        }
 
         $refeicoes->each(function ($refeicao) {
             $refeicao->alimentos->each(function ($alimento) {
