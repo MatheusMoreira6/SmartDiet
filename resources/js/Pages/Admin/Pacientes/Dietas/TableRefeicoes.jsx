@@ -1,10 +1,11 @@
 import { Container, Spinner, Table, Badge, Button } from "react-bootstrap";
-import { Plus } from "react-bootstrap-icons";
+import { Eye, Plus } from "react-bootstrap-icons";
 import "../../../../../css/tableDieta.css";
 import ModalCadastroRefeicao from "./ModalCadastroRefeicao";
 import { useState } from "react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head } from "@inertiajs/react";
+import ModalRenderRefeicaoAlternativa from "./ModalRenderRefeicaoAlternativa";
 
 export default function TableRefeicoes({
     refeicoes,
@@ -17,6 +18,8 @@ export default function TableRefeicoes({
     const [selectedHorario, setSelectedHorario] = useState("");
     const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
     const [refAlt, setRefAlt] = useState(null);
+    const [visibleRefAltModal, setVisiblerefAltModal] = useState(false);
+    const [alimentosRefAlt, setAlimentosRefAlt] = useState([]);
 
     const handleOpenModal = (horario) => {
         const refeicaoSelected = dynamincRef.filter(
@@ -42,6 +45,11 @@ export default function TableRefeicoes({
             soma += arrayNumeros[i];
         }
         return parseFloat(soma.toFixed(1));
+    };
+
+    const vizualizeRefAlt = ({ alimentos }) => {
+        setVisiblerefAltModal(true);
+        setAlimentosRefAlt(alimentos);
     };
 
     return (
@@ -82,22 +90,65 @@ export default function TableRefeicoes({
                                     >
                                         {refeicoesHorario.length > 0 ? (
                                             <>
-                                                <div className="add-refeicao-btn">
-                                                    <Button
-                                                        variant="primary"
-                                                        size="sm"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleAddRefeicao({refeicao: refeicoesHorario[0], horario: horario});
-                                                        }}
-                                                        style={{ fontSize: 10 }}
-                                                    >
-                                                        <Plus />{" "}
-                                                        <span className="d-none d-md-inline">
-                                                            Refeição Alt
-                                                        </span>
-                                                    </Button>
-                                                </div>
+                                                {refeicoesHorario[0]
+                                                    .refeicao_alternativa ? (
+                                                    <>
+                                                        <div className="add-refeicao-btn">
+                                                            <Button
+                                                                variant="primary"
+                                                                size="sm"
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.stopPropagation();
+                                                                    vizualizeRefAlt(
+                                                                        {
+                                                                            alimentos:
+                                                                                refeicoesHorario[0]
+                                                                                    .refeicao_alternativa
+                                                                                    .alimentos,
+                                                                        }
+                                                                    );
+                                                                }}
+                                                                style={{
+                                                                    fontSize: 10,
+                                                                }}
+                                                            >
+                                                                <Eye />{" "}
+                                                                <span className="d-none d-md-inline">
+                                                                    Ver ref.
+                                                                    alt.
+                                                                </span>
+                                                            </Button>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <div className="add-refeicao-btn">
+                                                        <Button
+                                                            variant="primary"
+                                                            size="sm"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleAddRefeicao(
+                                                                    {
+                                                                        refeicao:
+                                                                            refeicoesHorario[0],
+                                                                        horario:
+                                                                            horario,
+                                                                    }
+                                                                );
+                                                            }}
+                                                            style={{
+                                                                fontSize: 10,
+                                                            }}
+                                                        >
+                                                            <Plus />{" "}
+                                                            <span className="d-none d-md-inline">
+                                                                Refeição Alt
+                                                            </span>
+                                                        </Button>
+                                                    </div>
+                                                )}
                                                 <ul className="list-unstyled">
                                                     {refeicoesHorario.map(
                                                         (refeicao) => (
@@ -210,6 +261,14 @@ export default function TableRefeicoes({
                     setArraySelectedAlimentos={setArraySelectedAlimentos}
                     refAlt={refAlt}
                     setRefAlt={setRefAlt}
+                />
+                <ModalRenderRefeicaoAlternativa
+                    show={visibleRefAltModal}
+                    refeicao={alimentosRefAlt}
+                    handleClose={() => {
+                        setVisiblerefAltModal(false);
+                        setAlimentosRefAlt([]);
+                    }}
                 />
             </Container>
         </AdminLayout>
