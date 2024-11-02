@@ -12,6 +12,9 @@ const ModalCadastroRefeicao = ({
     onUpdateRefeicao,
     dieta_id,
     arraySelectedAlimentos,
+    setArraySelectedAlimentos,
+    refAlt,
+    setRefAlt,
 }) => {
     const [alimentos, setAlimentos] = useState([]);
     const [selectedAlimentos, setSelectedAlimentos] = useState([]);
@@ -20,6 +23,8 @@ const ModalCadastroRefeicao = ({
     const handleClose = () => {
         setShow(false);
         setSelectedAlimentos([]);
+        setArraySelectedAlimentos([]);
+        setRefAlt(false);
     };
 
     useEffect(() => {
@@ -95,7 +100,6 @@ const ModalCadastroRefeicao = ({
 
             if (alreadySelected) {
                 return prevSelected.map((item) => {
-                    console.log(item);
                     if (item.id === alimentoId) {
                         const updatedItem = { ...item };
                         updatedItem.tipo_porcao = item.tipo_porcao[porcao_id];

@@ -1,4 +1,5 @@
-import { Container, Spinner, Table, Badge } from "react-bootstrap";
+import { Container, Spinner, Table, Badge, Button } from "react-bootstrap";
+import { Plus } from "react-bootstrap-icons";
 import "../../../../../css/tableDieta.css";
 import ModalCadastroRefeicao from "./ModalCadastroRefeicao";
 import { useState } from "react";
@@ -15,6 +16,7 @@ export default function TableRefeicoes({
     const [visibleRef, setVisibleRef] = useState(false);
     const [selectedHorario, setSelectedHorario] = useState("");
     const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
+    const [refAlt, setRefAlt] = useState(0);
 
     const handleOpenModal = (horario) => {
         const refeicaoSelected = dynamincRef.filter(
@@ -28,7 +30,19 @@ export default function TableRefeicoes({
         setVisibleRef(true);
     };
 
-    console.log(dynamincRef);
+    const handleAddRefeicao = ({ refeicao, horario }) => {
+        setVisibleRef(true);
+        setSelectedHorario(horario.id);
+        setRefAlt(refeicao.id);
+    };
+
+    const somaNutriente = (arrayNumeros) => {
+        let soma = 0;
+        for (const i in arrayNumeros) {
+            soma += arrayNumeros[i];
+        }
+        return parseFloat(soma.toFixed(1));
+    };
 
     return (
         <AdminLayout>
@@ -64,42 +78,67 @@ export default function TableRefeicoes({
                                     <td
                                         onClick={() => handleOpenModal(horario)}
                                         className="meal-cell"
+                                        style={{ position: "relative" }}
                                     >
                                         {refeicoesHorario.length > 0 ? (
-                                            <ul className="list-unstyled">
-                                                {refeicoesHorario.map(
-                                                    (refeicao) => (
-                                                        <li key={refeicao.id}>
-                                                            <ul>
-                                                                {refeicao.alimentos.map(
-                                                                    (
-                                                                        alimento
-                                                                    ) => (
-                                                                        <li
-                                                                            key={
-                                                                                alimento.id
-                                                                            }
-                                                                            style={{
-                                                                                fontSize:
-                                                                                    "0.85em",
-                                                                                color: "#333",
-                                                                            }}
-                                                                        >
-                                                                            {
-                                                                                alimento.nome
-                                                                            }{" "}
-                                                                            -{" "}
-                                                                            {
-                                                                                alimento.porcao.nome_porcao
-                                                                            }
-                                                                        </li>
-                                                                    )
-                                                                )}
-                                                            </ul>
-                                                        </li>
-                                                    )
-                                                )}
-                                            </ul>
+                                            <>
+                                                <div className="add-refeicao-btn">
+                                                    <Button
+                                                        variant="primary"
+                                                        size="sm"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleAddRefeicao({refeicao: refeicoesHorario[0], horario: horario});
+                                                        }}
+                                                        style={{ fontSize: 10 }}
+                                                    >
+                                                        <Plus />{" "}
+                                                        <span className="d-none d-md-inline">
+                                                            Refeição Alt
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                                <ul className="list-unstyled">
+                                                    {refeicoesHorario.map(
+                                                        (refeicao) => (
+                                                            <li
+                                                                key={
+                                                                    refeicao.id
+                                                                }
+                                                            >
+                                                                <ul>
+                                                                    {refeicao.alimentos.map(
+                                                                        (
+                                                                            alimento
+                                                                        ) => (
+                                                                            <li
+                                                                                key={
+                                                                                    alimento.id
+                                                                                }
+                                                                                style={{
+                                                                                    fontSize:
+                                                                                        "0.85em",
+                                                                                    color: "#333",
+                                                                                }}
+                                                                            >
+                                                                                {
+                                                                                    alimento.nome
+                                                                                }{" "}
+                                                                                -{" "}
+                                                                                {
+                                                                                    alimento
+                                                                                        .porcao
+                                                                                        .nome_porcao
+                                                                                }
+                                                                            </li>
+                                                                        )
+                                                                    )}
+                                                                </ul>
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            </>
                                         ) : (
                                             <span
                                                 style={{
@@ -112,18 +151,48 @@ export default function TableRefeicoes({
                                         )}
                                     </td>
                                     {[
-                                        "Kcal",
-                                        "Carbs",
-                                        "Proteínas",
-                                        "Gorduras",
-                                    ].map((attr, index) => (
-                                        <td
-                                            key={index}
-                                            className="text-center meal-cell-itens"
-                                        >
-                                            <span>0</span>
-                                        </td>
-                                    ))}
+                                        "calorias",
+                                        "carboidratos",
+                                        "proteinas",
+                                        "gorduras",
+                                    ].map((attr, index) => {
+                                        if (refeicoesHorario.length > 0) {
+                                            const arrayAlimentos =
+                                                refeicoesHorario[0].alimentos;
+                                            const arrayNumeros = [];
+
+                                            arrayAlimentos.forEach(
+                                                (element) => {
+                                                    arrayNumeros.push(
+                                                        parseFloat(
+                                                            element.porcao[attr]
+                                                        )
+                                                    );
+                                                }
+                                            );
+                                            return (
+                                                <td
+                                                    key={index}
+                                                    className="text-center meal-cell-itens"
+                                                >
+                                                    <span>
+                                                        {somaNutriente(
+                                                            arrayNumeros
+                                                        )}
+                                                    </span>
+                                                </td>
+                                            );
+                                        } else {
+                                            return (
+                                                <td
+                                                    key={index}
+                                                    className="text-center meal-cell-itens"
+                                                >
+                                                    <span>0</span>
+                                                </td>
+                                            );
+                                        }
+                                    })}
                                 </tr>
                             );
                         })}
@@ -138,6 +207,9 @@ export default function TableRefeicoes({
                     onUpdateRefeicao={(param) => setDynamicRef(param)}
                     arraySelectedAlimentos={arraySelectedAlimentos}
                     dieta_id={dieta_id}
+                    setArraySelectedAlimentos={setArraySelectedAlimentos}
+                    refAlt={refAlt}
+                    setRefAlt={setRefAlt}
                 />
             </Container>
         </AdminLayout>
