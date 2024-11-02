@@ -2,7 +2,6 @@ import React from "react";
 import { Modal, Button, ListGroup } from "react-bootstrap";
 
 const ModalRenderRefeicaoAlternativa = ({ show, handleClose, refeicao, handleEdit }) => {
-    console.log(refeicao)
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>

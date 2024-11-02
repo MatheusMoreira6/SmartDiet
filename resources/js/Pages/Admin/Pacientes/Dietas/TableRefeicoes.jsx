@@ -1,4 +1,11 @@
-import { Container, Spinner, Table, Badge, Button } from "react-bootstrap";
+import {
+    Container,
+    Spinner,
+    Table,
+    Badge,
+    Button,
+    Form,
+} from "react-bootstrap";
 import { Eye, Plus } from "react-bootstrap-icons";
 import "../../../../../css/tableDieta.css";
 import ModalCadastroRefeicao from "./ModalCadastroRefeicao";
@@ -6,6 +13,8 @@ import { useState } from "react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head } from "@inertiajs/react";
 import ModalRenderRefeicaoAlternativa from "./ModalRenderRefeicaoAlternativa";
+import Api from "@/Api";
+import SweetAlert from "@/Components/SweetAlert";
 
 export default function TableRefeicoes({
     refeicoes,
@@ -14,6 +23,7 @@ export default function TableRefeicoes({
     dia_id,
 }) {
     const [dynamincRef, setDynamicRef] = useState(refeicoes);
+    const [dynamicHorarios, setDynamicHorarios] = useState(horarios)
     const [visibleRef, setVisibleRef] = useState(false);
     const [selectedHorario, setSelectedHorario] = useState("");
     const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
@@ -21,7 +31,9 @@ export default function TableRefeicoes({
     const [visibleRefAltModal, setVisiblerefAltModal] = useState(false);
     const [alimentosRefAlt, setAlimentosRefAlt] = useState([]);
     const [refeicaoSelected, setRefeicaoSelected] = useState(0);
-
+    const [editingHorario, setEditingHorario] = useState(null); // Estado para o horário sendo editado
+    const [newHorario, setNewHorario] = useState("");
+    
     const handleOpenModal = (horario) => {
         const refeicaoSelected = dynamincRef.filter(
             (ref) => ref.horario_id === horario.id
@@ -56,6 +68,41 @@ export default function TableRefeicoes({
         setRefeicaoSelected(refeicao_id);
     };
 
+    const handleHorarioEdit = (horario) => {
+        setEditingHorario(horario.id);
+        setNewHorario(horario.horario);
+    };
+
+    const handleHorarioChange = (e) => {
+        setNewHorario(e.target.value);
+    };
+
+    const handleHorarioBlur = (horarioId) => {
+        updateHorario(horarioId, newHorario);
+        setEditingHorario(null);
+    };
+
+    const updateHorario = async (horarioId, novoHorario) => {
+        console.log(novoHorario, console.log(horarioId));
+        try {
+            const response = await Api.post(route("horario.editar"), {
+                horario: novoHorario,
+                id: horarioId,
+                dieta_id: dieta_id,
+                dia_id,
+                dia_id,
+            });
+
+            const updatedHorarios = response.data.horarios;
+            setDynamicHorarios(updatedHorarios);
+        } catch (error) {
+            console.error(error);
+            SweetAlert.warning({
+                title: "Falha ao atualizar o horário!",
+            });
+        }
+    };
+
     return (
         <AdminLayout>
             <Head title="Cadastro de Refeições" />
@@ -75,7 +122,7 @@ export default function TableRefeicoes({
                         </tr>
                     </thead>
                     <tbody>
-                        {horarios.map((horario) => {
+                        {dynamicHorarios.map((horario) => {
                             const refeicoesHorario = dynamincRef.filter(
                                 (ref) => ref.horario_id === horario.id
                             );
@@ -85,7 +132,27 @@ export default function TableRefeicoes({
                                     style={{ borderColor: "black" }}
                                 >
                                     <td className="time-cell">
-                                        {horario.horario}
+                                        {editingHorario === horario.id ? (
+                                            <Form.Control
+                                                type="time"
+                                                value={newHorario}
+                                                onChange={handleHorarioChange}
+                                                onBlur={() =>
+                                                    handleHorarioBlur(
+                                                        horario.id
+                                                    )
+                                                }
+                                                autoFocus
+                                            />
+                                        ) : (
+                                            <span
+                                                onClick={() =>
+                                                    handleHorarioEdit(horario)
+                                                }
+                                            >
+                                                {horario.horario}
+                                            </span>
+                                        )}
                                     </td>
                                     <td
                                         onClick={() => handleOpenModal(horario)}

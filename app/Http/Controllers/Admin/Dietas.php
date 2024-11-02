@@ -69,12 +69,12 @@ class Dietas extends Controller
     public function editaDia(Request $request)
     {
         $validatedData = $request->validate([
-            'grupo_dia' => 'required|integer|exists:table_grupo_dias_dieta,id', // Confirme que o nome da tabela está correto
+            'grupo_dia' => 'required|integer|exists:table_grupo_dias_dieta,id',
             'newNome' => 'required|string|max:255',
         ]);
 
         try {
-            $updateResult = DB::table('table_grupo_dias_dieta')
+            DB::table('table_grupo_dias_dieta')
                 ->where('id', $validatedData['grupo_dia'])
                 ->update(['nome_grupo' => $validatedData['newNome']]);
 
@@ -83,8 +83,6 @@ class Dietas extends Controller
             return response()->json(['message' => 'Erro ao atualizar o nome do grupo.'], 500);
         }
     }
-
-
 
 
     public function buscaDiasHorarios($id)

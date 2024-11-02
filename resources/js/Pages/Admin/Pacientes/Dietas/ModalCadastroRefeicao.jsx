@@ -107,7 +107,6 @@ const ModalCadastroRefeicao = ({
                         const updatedItem = { ...item };
                         updatedItem.tipo_porcao = item.tipo_porcao[porcao_id];
 
-                        console.log(updatedItem, "update");
                         return updatedItem;
                     }
                     return item;
@@ -136,7 +135,6 @@ const ModalCadastroRefeicao = ({
             return;
         }
         try {
-            console.log(refeicaoSelected)
             if (refeicaoSelected && refeicaoSelected != 0) {
                 const response = await Api.post(route("editar.refeicao"), {
                     id: refeicaoSelected,

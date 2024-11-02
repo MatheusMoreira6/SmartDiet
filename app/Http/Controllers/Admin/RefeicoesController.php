@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class RefeicoesController extends Controller
 {
-    public function buscaRefeicoes($dieta_id, $dia_id)
+    public function buscaRefeicoes($dia_id, $dieta_id)
     {
-
         $refeicoes = $this->formattedRefeicao($dieta_id, $dia_id);
 
         $horarios = DB::table('table_horarios_dietas')
             ->select()
-            ->where('dieta_id', $dieta_id)
+            ->where('dieta_id', $dieta_id)->orderBy('horario')
             ->get();
+
 
         return $this->render('Admin/Pacientes/Dietas/TableRefeicoes', [
             'refeicoes' => $refeicoes,
@@ -91,7 +91,34 @@ class RefeicoesController extends Controller
         return response()->json(['refeicoes' => $refeicoes]);
     }
 
-    public function formattedRefeicao($dieta_id, $dia_id)
+    public function editaHorario(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id' => 'required|integer|exists:table_horarios_dietas,id',
+            'horario' => 'required|string|max:255',
+            'dieta_id' => 'required|integer|exists:dietas,id',
+            'dia_id' => 'required|integer|exists:table_grupo_dias_dieta,id'
+        ]);
+
+        try {
+            DB::table('table_horarios_dietas')
+                ->where('id', $validatedData['id'])
+                ->update(['horario' => $validatedData['horario']]);
+
+            $horarios = DB::table('table_horarios_dietas')
+                ->select()
+                ->where('dieta_id', $request->dieta_id)->orderBy('horario')
+                ->get();
+
+
+            return response()->json(['horarios' => $horarios], 200);
+        } catch (\Exception $e) {
+            dd($e);
+            return response()->json(['message' => 'Erro ao atualizar o horairio.'], 500);
+        }
+    }
+
+    static public function formattedRefeicao($dieta_id, $dia_id)
     {
         $refeicoes = Refeicoes::with(['alimentos' => function ($query) {
             $query->with('tipoPorcao');

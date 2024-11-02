@@ -33,11 +33,9 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
             route("dias.horarios", { id: dietas[0].id })
         );
 
-        console.log(response.data.dias);
         setDias(response.data.dias);
         setHorarios(response.data.horarios);
     };
-
 
     useEffect(() => {
         const fn = async () => {
