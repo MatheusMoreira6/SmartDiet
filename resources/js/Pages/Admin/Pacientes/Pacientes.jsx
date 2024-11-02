@@ -60,15 +60,13 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
     const renderPacientes = (pacientes) => {
         return pacientes.map((paciente) => (
             <Col key={paciente.id}>
-                <ActionCard footer={`${paciente.nome} ${paciente.sobrenome}`}>
+                <ActionCard
+                    footer={`${paciente.nome} ${paciente.sobrenome}`}
+                    onClick={() => {
+                        router.visit(`pacientes/${paciente.id}`);
+                    }}
+                >
                     <img src="..." className="card-img-top" alt="..." />
-                    <Button
-                        onClick={() => {
-                            router.visit(`pacientes/${paciente.id}`);
-                        }}
-                    >
-                        Ver dados
-                    </Button>
                 </ActionCard>
             </Col>
         ));

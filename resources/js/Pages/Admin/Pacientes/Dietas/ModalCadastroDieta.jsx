@@ -21,6 +21,8 @@ export const ModalCadastroDieta = ({
     const handleClose = () => {
         setShow(false);
         setvalidate(false);
+        setData("horarios", [{ horario: "" }]);
+        setData("grupos_dias", [{ grupo_dia: "" }]);
         reset();
     };
 
@@ -81,16 +83,16 @@ export const ModalCadastroDieta = ({
             show={visible}
             onHide={() => {
                 handleClose();
+
                 reset();
             }}
-            handleClose={handleClose}
             backdrop="static"
             keyboard={false}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
-            <Modal.Header closeButton handleClose={handleClose}>
+            <Modal.Header closeButton>
                 <Modal.Title>Cadastrar Dieta</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -132,35 +134,30 @@ export const ModalCadastroDieta = ({
                     <Form.Group className="mb-3">
                         <Form.Label>Horários</Form.Label>
                         {data.horarios.map((item, index) => (
-                            <>
-                                <div
-                                    key={index}
-                                    className="d-flex align-items-center mb-2"
+                            <div
+                                key={`horario-${index}`}
+                                className="d-flex align-items-center mb-2"
+                            >
+                                <Form.Control
+                                    type="time"
+                                    value={item.horario}
+                                    onChange={(e) => {
+                                        const newHorarios = [...data.horarios];
+                                        newHorarios[index].horario =
+                                            e.target.value;
+                                        setData("horarios", newHorarios);
+                                    }}
+                                    isInvalid={
+                                        errors[`horarios.${index}.horario`]
+                                    }
+                                />
+                                <Button
+                                    variant="danger"
+                                    onClick={() => removeHorario(index)}
+                                    className="ms-2"
                                 >
-                                    <Form.Control
-                                        type="time"
-                                        value={item.horario}
-                                        onChange={(e) => {
-                                            const newHorarios = [
-                                                ...data.horarios,
-                                            ];
-                                            newHorarios[index].horario =
-                                                e.target.value;
-                                            setData("horarios", newHorarios);
-                                        }}
-                                        isInvalid={
-                                            errors[`horarios.${index}.horario`]
-                                        }
-                                    />
-
-                                    <Button
-                                        variant="danger"
-                                        onClick={() => removeHorario(index)}
-                                        className="ms-2"
-                                    >
-                                        Remover
-                                    </Button>
-                                </div>
+                                    Remover
+                                </Button>
                                 {errors[`horarios.${index}.horario`] && (
                                     <Col>
                                         <Form.Control.Feedback type="invalid">
@@ -168,64 +165,53 @@ export const ModalCadastroDieta = ({
                                         </Form.Control.Feedback>
                                     </Col>
                                 )}
-                            </>
+                            </div>
                         ))}
-
                         <Button variant="secondary" onClick={addHorario}>
-                            <i className="bi bi-plus-lg"></i>
-                            Adicionar Horário
+                            <i className="bi bi-plus-lg"></i> Adicionar Horário
                         </Button>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Grupos de Dias</Form.Label>
                         {data.grupos_dias.map((item, index) => (
-                            <>
-                                <div
-                                    key={index}
-                                    className="d-flex align-items-center mb-2"
+                            <div
+                                key={`grupo-dia-${index}`}
+                                className="d-flex align-items-center mb-2"
+                            >
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Digite o grupo de dias (Ex: Seg/Qua)"
+                                    value={item.grupo_dia}
+                                    onChange={(e) => {
+                                        const newGruposDias = [
+                                            ...data.grupos_dias,
+                                        ];
+                                        newGruposDias[index].grupo_dia =
+                                            e.target.value;
+                                        setData("grupos_dias", newGruposDias);
+                                    }}
+                                    isInvalid={
+                                        errors[`grupos_dias.${index}.grupo_dia`]
+                                    }
+                                />
+                                <Button
+                                    variant="danger"
+                                    onClick={() => removeGrupoDia(index)}
+                                    className="ms-2"
                                 >
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Digite o grupo de dias (Ex: Seg/Qua)"
-                                        value={item.grupo_dia}
-                                        onChange={(e) => {
-                                            const newGruposDias = [
-                                                ...data.grupos_dias,
-                                            ];
-                                            newGruposDias[index].grupo_dia =
-                                                e.target.value;
-                                            setData(
-                                                "grupos_dias",
-                                                newGruposDias
-                                            );
-                                        }}
-                                        isInvalid={
-                                            errors[
-                                                `grupos_dias.${index}.grupo_dia`
-                                            ]
-                                        }
-                                    />
-
-                                    <Button
-                                        variant="danger"
-                                        onClick={() => removeGrupoDia(index)}
-                                        className="ms-2"
-                                    >
-                                        Remover
-                                    </Button>
-                                </div>
+                                    Remover
+                                </Button>
                                 {errors[`grupos_dias.${index}.grupo_dia`] && (
                                     <Form.Control.Feedback type="invalid">
                                         <p>Informe um grupo</p>
                                     </Form.Control.Feedback>
                                 )}
-                            </>
+                            </div>
                         ))}
-
                         <Button variant="secondary" onClick={addGrupoDia}>
-                            <i className="bi bi-plus-lg"></i>
-                            Adicionar Grupo de Dias
+                            <i className="bi bi-plus-lg"></i> Adicionar Grupo de
+                            Dias
                         </Button>
                     </Form.Group>
 

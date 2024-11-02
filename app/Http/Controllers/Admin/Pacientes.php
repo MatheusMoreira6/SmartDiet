@@ -86,6 +86,9 @@ class Pacientes extends Controller
             ->where('paciente_id', $id)
             ->get();
 
+        $dados_user = User::where('id', $dados_paciente->user_id)->first();   
+        
+        $dados_paciente['senha_temp'] = $dados_user['password_temp'];
 
         return $this->render('Admin/Pacientes/DadosPaciente', [
             'dados' => $dados_paciente,

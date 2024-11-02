@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Api from "@/Api";
 import "../../../../../css/tableDieta.css";
 import { router } from "@inertiajs/react";
+import ModalEditDia from "./ModalEditDia";
 
 const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [show, setShow] = useState(false);
@@ -12,8 +13,9 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [diasSemana, setDias] = useState([]);
     const [horarios, setHorarios] = useState([]);
 
-    const [selectedDia, setSelectedDia] = useState("");
+    const [selectedDia, setSelectedDia] = useState({});
     const [update, setUpdate] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     const handleShow = () => setShow(true);
     useEffect(() => {
@@ -31,9 +33,11 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
             route("dias.horarios", { id: dietas[0].id })
         );
 
+        console.log(response.data.dias);
         setDias(response.data.dias);
         setHorarios(response.data.horarios);
     };
+
 
     useEffect(() => {
         const fn = async () => {
@@ -46,6 +50,11 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
         fn();
     }, [update]);
 
+    const handleEditDia = ({ grupo_dia }) => {
+        setSelectedDia(grupo_dia);
+        setShowEditModal(true);
+    };
+
     return (
         <>
             {dietasDynamic.length > 0 ? (
@@ -56,6 +65,16 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                                 <Row>
                                     <Col>
                                         <strong>{dia.nome_grupo}</strong>
+                                        <Button
+                                            variant="link"
+                                            onClick={(e) => {
+                                                handleEditDia({
+                                                    grupo_dia: dia,
+                                                });
+                                            }}
+                                        >
+                                            <i className="bi bi-pencil"></i>
+                                        </Button>
                                     </Col>
                                     <Col className="text-end">
                                         <Button
@@ -66,8 +85,8 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                                             onClick={() => {
                                                 router.visit(
                                                     route("admin.refeicoes", {
-                                                        dieta_id: dietasDynamic[0]
-                                                            .id,
+                                                        dieta_id:
+                                                            dietasDynamic[0].id,
                                                         dia_id: dia.id,
                                                     })
                                                 );
@@ -104,6 +123,16 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                 setDietas={setDietas}
                 id_paciente={id_paciente}
                 id_nutricionista={id_nutricionista}
+            />
+
+            <ModalEditDia
+                show={showEditModal}
+                handleClose={() => {
+                    setSelectedDia({});
+                    setShowEditModal(false);
+                }}
+                grupo_dia={selectedDia}
+                setUpdate={setUpdate}
             />
         </>
     );

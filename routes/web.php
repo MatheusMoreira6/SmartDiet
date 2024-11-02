@@ -97,6 +97,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
         Route::get('/busca-dias-horarios/{id}', 'buscaDiasHorarios')->name('dias.horarios');
         Route::get('/busca-alimentos', 'buscaAlimentos')->name('busca.alimentos');
         Route::get('/busca-dieta/{id}', 'buscaDieta')->name('busca.dieta');
+        Route::post('/editar-dia', 'editaDia')->name('grupo_dia.editar');
     });
 
     Route::controller(RefeicoesController::class)->group(function () {

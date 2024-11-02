@@ -93,6 +93,13 @@ export default function DadosPaciente({ dados, dietas }) {
                                 <p>{dados.id}</p>
                             </Col>
                         </Row>
+
+                        <Row className="g-3 mb-3">
+                            <Col md={6}>
+                                <h5>Senha:</h5>
+                                <p>{dados.senha_temp}</p>
+                            </Col>
+                        </Row>
                         <Row>
                             <Col>
                                 <Button>

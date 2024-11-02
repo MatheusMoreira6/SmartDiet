@@ -8,6 +8,8 @@ use App\Models\Dieta as ModelDietas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function Laravel\Prompts\select;
+
 class Dietas extends Controller
 {
 
@@ -64,10 +66,35 @@ class Dietas extends Controller
         response()->json(["dietas" => $dietas]);
     }
 
+    public function editaDia(Request $request)
+    {
+        $validatedData = $request->validate([
+            'grupo_dia' => 'required|integer|exists:table_grupo_dias_dieta,id', // Confirme que o nome da tabela está correto
+            'newNome' => 'required|string|max:255',
+        ]);
+
+        try {
+            $updateResult = DB::table('table_grupo_dias_dieta')
+                ->where('id', $validatedData['grupo_dia'])
+                ->update(['nome_grupo' => $validatedData['newNome']]);
+
+            return response()->json(['message' => 'Nome do grupo atualizado com sucesso!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao atualizar o nome do grupo.'], 500);
+        }
+    }
+
+
+
 
     public function buscaDiasHorarios($id)
     {
-        $dias = DB::table('table_grupo_dias_dieta')->select()->where('dieta_id', $id)->get();
+        $dias = DB::table('table_grupo_dias_dieta')
+            ->select()
+            ->where('dieta_id', $id)
+            ->orderBy('ordem')
+            ->get();
+
         $horarios = DB::table('table_horarios_dietas')->select()->where('dieta_id', $id)->get();
 
         return response()->json(['dias' => $dias, 'horarios' => $horarios]);
