@@ -17,7 +17,8 @@ class Paciente extends Model
         'data_nascimento',
         'genero_id',
         'cpf',
-        'telefone'
+        'telefone',
+        'questionario_id'
     ];
 
     protected $hidden = [
@@ -38,5 +39,20 @@ class Paciente extends Model
     public function nutricionista()
     {
         return $this->belongsTo(Nutricionista::class);
+    }
+
+    public function questionario()
+    {
+        return $this->belongsTo(Questionario::class);
+    }
+
+    public function respostas()
+    {
+        return $this->hasMany(Resposta::class);
+    }
+
+    public function pedidosExames()
+    {
+        return $this->hasMany(PedidoExame::class);
     }
 }

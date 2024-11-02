@@ -8,7 +8,7 @@ import FormSelect from "@/Components/FormSelect";
 import SweetAlert from "@/Components/SweetAlert";
 import { Button, Col, Container, Row } from "react-bootstrap";
 
-const Pacientes = ({ generos, pacientes }) => {
+const Pacientes = ({ generos, questionarios, pacientes }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         nome: "",
         sobrenome: "",
@@ -16,6 +16,7 @@ const Pacientes = ({ generos, pacientes }) => {
         genero_id: "",
         cpf: "",
         telefone: "",
+        questionario_id: "",
         email: "",
     });
 
@@ -206,6 +207,21 @@ const Pacientes = ({ generos, pacientes }) => {
                                 errors.telefone ??
                                 "Informe o telefone do paciente"
                             }
+                        />
+                    </Col>
+
+                    <Col xs={12}>
+                        <FormSelect
+                            id={"questionario"}
+                            label={"Questionário"}
+                            options={questionarios}
+                            value={data.questionario_id}
+                            required={false}
+                            isInvalid={errors.questionario_id}
+                            onChange={(e) =>
+                                setData("questionario_id", e.target.value)
+                            }
+                            textError={errors.questionario_id ?? ""}
                         />
                     </Col>
 

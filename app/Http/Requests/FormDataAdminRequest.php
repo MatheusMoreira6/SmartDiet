@@ -31,7 +31,7 @@ class FormDataAdminRequest extends FormRequest
             'data_nascimento' => 'required',
             'genero_id' => 'required|exists:generos,id',
             'cpf' => 'required|size:14|unique:nutricionistas,cpf',
-            'crn' => 'required|size:9|unique:nutricionistas,crn',
+            'crn' => 'required|size:8|unique:nutricionistas,crn',
             'telefone' => 'required|size:15',
             'telefone_fixo' => 'nullable|size:9',
             'email' => 'required|email|unique:users,email',

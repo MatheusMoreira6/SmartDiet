@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('respostas_questionarios', function (Blueprint $table) {
+        Schema::create('respostas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pergunta_questionario_id');
+            $table->unsignedBigInteger('pergunta_id');
+            $table->unsignedBigInteger('paciente_id');
             $table->string('resposta');
             $table->timestamps();
 
-            $table->foreign('pergunta_questionario_id')->references('id')->on('perguntas_questionarios')->onDelete('cascade');
+            $table->foreign('pergunta_id')->references('id')->on('perguntas')->onDelete('cascade');
+            $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');
         });
     }
 

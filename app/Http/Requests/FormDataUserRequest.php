@@ -18,6 +18,7 @@ class FormDataUserRequest extends FormRequest
             'nome' => trim($this->nome),
             'sobrenome' => trim($this->sobrenome),
             'data_nascimento' => LibConversion::convertBrToIso($this->data_nascimento),
+            'questionario_id' => !empty($this->questionario_id) ? (int) $this->questionario_id : null,
             'email' => trim($this->email),
             'password' => trim($this->password),
         ]);
@@ -35,6 +36,7 @@ class FormDataUserRequest extends FormRequest
             'genero_id' => 'required|exists:generos,id',
             'cpf' => 'required|size:14|unique:pacientes,cpf',
             'telefone' => 'required|size:15',
+            'questionario_id' => 'nullable|exists:questionarios,id',
             'email' => 'required|email|unique:users,email',
             'password' => 'nullable|min:6|confirmed',
         ];
@@ -43,8 +45,8 @@ class FormDataUserRequest extends FormRequest
             $paciente = Auth::user()->paciente;
 
             $rules['cpf'] .= ',' . $paciente->id . ',id';
-            $rules['email'] .= ',' . $paciente->id . ',id';
 
+            $rules['questionario_id'] = 'prohibited';
             $rules['email'] = 'prohibited';
             $rules['password'] = 'prohibited';
         }
@@ -71,6 +73,7 @@ class FormDataUserRequest extends FormRequest
             'cpf.size' => 'O CPF deve ter 14 caracteres',
             'cpf.unique' => 'O CPF já está em uso',
             'telefone.size' => 'O telefone deve ter 11 números',
+            'questionario_id.exists' => 'O questionário é inválido',
             'email.required' => 'O campo email é obrigatório',
             'email.email' => 'O email é inválido',
             'email.unique' => 'O email já está em uso',

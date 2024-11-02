@@ -21,11 +21,13 @@ return new class extends Migration
             $table->unsignedBigInteger('genero_id');
             $table->string('cpf', 14)->unique();
             $table->string('telefone', 15);
+            $table->unsignedBigInteger('questionario_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('nutricionista_id')->references('id')->on('nutricionistas');
             $table->foreign('genero_id')->references('id')->on('generos');
+            $table->foreign('questionario_id')->references('id')->on('questionarios');
         });
     }
 

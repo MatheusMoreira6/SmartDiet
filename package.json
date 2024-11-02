@@ -6,6 +6,7 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@floating-ui/react": "^0.26.26",
         "@headlessui/react": "^2.0.0",
         "@inertiajs/react": "^1.0.0",
         "@tinymce/tinymce-react": "^5.1.1",

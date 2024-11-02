@@ -16,7 +16,7 @@ const TinyMCE = ({ value, onChange }) => {
                 fontsize_formats: "10pt 12pt 14pt 18pt 24pt 36pt",
             }}
             initialValue={value}
-            onEditorChange={onChange}
+            onEditorChange={(content) => onChange(content)}
         />
     );
 };

@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
             GenerosTableSeeder::class,
             AlimentosSeeder::class,
             DiasSemanasSeeder::class,
-            HorariosSeeder::class
+            HorariosSeeder::class,
+            ExamesTableSeeder::class,
         ]);
     }
 }

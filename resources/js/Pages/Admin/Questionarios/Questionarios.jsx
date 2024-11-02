@@ -87,35 +87,43 @@ const Questionarios = ({ questionarios, errors = {} }) => {
                             </thead>
 
                             <tbody>
-                                {questionarios.map((questionario) => (
-                                    <tr key={questionario.id}>
-                                        <td>{questionario.titulo}</td>
+                                {questionarios && questionarios.length > 0 ? (
+                                    questionarios.map((questionario) => (
+                                        <tr key={questionario.id}>
+                                            <td>{questionario.titulo}</td>
 
-                                        <td className="text-center d-grid gap-2 d-md-block">
-                                            <LinkPrimary
-                                                href={route(
-                                                    "admin.questionarios.edit",
-                                                    {
-                                                        id: questionario.id,
+                                            <td className="text-center d-grid gap-2 d-md-block">
+                                                <LinkPrimary
+                                                    href={route(
+                                                        "admin.questionarios.edit",
+                                                        {
+                                                            id: questionario.id,
+                                                        }
+                                                    )}
+                                                >
+                                                    <i className="bi bi-pencil-square"></i>
+                                                </LinkPrimary>
+
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={() =>
+                                                        handleDelete(
+                                                            questionario.id
+                                                        )
                                                     }
-                                                )}
-                                            >
-                                                <i className="bi bi-pencil-square"></i>
-                                            </LinkPrimary>
-
-                                            <Button
-                                                variant="danger"
-                                                onClick={() =>
-                                                    handleDelete(
-                                                        questionario.id
-                                                    )
-                                                }
-                                            >
-                                                <i className="bi bi-trash"></i>
-                                            </Button>
+                                                >
+                                                    <i className="bi bi-trash"></i>
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="2" className="text-center">
+                                            Nenhum questionário cadastrado.
                                         </td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </Table>
                     </Col>
