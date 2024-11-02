@@ -15,18 +15,19 @@ const ModalCadastroRefeicao = ({
     setArraySelectedAlimentos,
     refAlt,
     setRefAlt,
+    refeicaoSelected,
+    setRefeicaoSelected,
 }) => {
     const [alimentos, setAlimentos] = useState([]);
     const [selectedAlimentos, setSelectedAlimentos] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    console.log(refAlt)
 
     const handleClose = () => {
         setShow(false);
         setSelectedAlimentos([]);
         setArraySelectedAlimentos([]);
         setRefAlt(null);
+        setRefeicaoSelected(0)
     };
 
     useEffect(() => {
@@ -135,14 +136,27 @@ const ModalCadastroRefeicao = ({
             return;
         }
         try {
-            const response = await Api.post(route("salvar.refeicao"), {
-                alimentos: selectedAlimentos,
-                dia: selectedDia,
-                horario: selectedHorario,
-                dieta_id: dieta_id,
-                ref_id: refAlt ?? null
-            });
-            onUpdateRefeicao(response.data.refeicoes);
+            console.log(refeicaoSelected)
+            if (refeicaoSelected && refeicaoSelected != 0) {
+                const response = await Api.post(route("editar.refeicao"), {
+                    id: refeicaoSelected,
+                    alimentos: selectedAlimentos,
+                    dia: selectedDia,
+                    horario: selectedHorario,
+                    dieta_id: dieta_id,
+                    ref_id: refAlt ?? null,
+                });
+                onUpdateRefeicao(response.data.refeicoes);
+            } else {
+                const response = await Api.post(route("salvar.refeicao"), {
+                    alimentos: selectedAlimentos,
+                    dia: selectedDia,
+                    horario: selectedHorario,
+                    dieta_id: dieta_id,
+                    ref_id: refAlt ?? null,
+                });
+                onUpdateRefeicao(response.data.refeicoes);
+            }
             handleClose();
         } catch (error) {
             console.error("Erro ao salvar alimentos na refeição:", error);

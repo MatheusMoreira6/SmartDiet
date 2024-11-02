@@ -102,6 +102,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
     Route::controller(RefeicoesController::class)->group(function () {
         Route::get('/busca-refeicoes/{dia_id}/{dieta_id}', 'buscaRefeicoes')->name('admin.refeicoes');
         Route::post('/salva-refeicao', 'salvarRefeicao')->name('salvar.refeicao');
+        Route::post('/edita-refeicao', 'editarRefeicao')->name('editar.refeicao');
     });
 
     Route::get('/logout', [LoginAdmin::class, 'logout'])->name('logout.admin');

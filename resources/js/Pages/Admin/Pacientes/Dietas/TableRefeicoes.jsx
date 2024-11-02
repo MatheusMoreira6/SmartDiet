@@ -20,14 +20,15 @@ export default function TableRefeicoes({
     const [refAlt, setRefAlt] = useState(null);
     const [visibleRefAltModal, setVisiblerefAltModal] = useState(false);
     const [alimentosRefAlt, setAlimentosRefAlt] = useState([]);
+    const [refeicaoSelected, setRefeicaoSelected] = useState(0);
 
     const handleOpenModal = (horario) => {
         const refeicaoSelected = dynamincRef.filter(
             (ref) => ref.horario_id === horario.id
         );
         if (refeicaoSelected.length > 0) {
-            console.log(refeicaoSelected);
             setArraySelectedAlimentos(refeicaoSelected[0].alimentos);
+            setRefeicaoSelected([refeicaoSelected[0].id]);
         }
         setSelectedHorario(horario.id);
         setVisibleRef(true);
@@ -47,9 +48,12 @@ export default function TableRefeicoes({
         return parseFloat(soma.toFixed(1));
     };
 
-    const vizualizeRefAlt = ({ alimentos }) => {
+    const vizualizeRefAlt = ({ alimentos, refeicao_id, horario }) => {
+        setSelectedHorario(horario);
         setVisiblerefAltModal(true);
         setAlimentosRefAlt(alimentos);
+        setArraySelectedAlimentos(alimentos);
+        setRefeicaoSelected(refeicao_id);
     };
 
     return (
@@ -107,6 +111,12 @@ export default function TableRefeicoes({
                                                                                 refeicoesHorario[0]
                                                                                     .refeicao_alternativa
                                                                                     .alimentos,
+                                                                            refeicao_id:
+                                                                                refeicoesHorario[0]
+                                                                                    .refeicao_alternativa
+                                                                                    .id,
+                                                                            horario:
+                                                                                horario.id,
                                                                         }
                                                                     );
                                                                 }}
@@ -261,6 +271,8 @@ export default function TableRefeicoes({
                     setArraySelectedAlimentos={setArraySelectedAlimentos}
                     refAlt={refAlt}
                     setRefAlt={setRefAlt}
+                    refeicaoSelected={refeicaoSelected}
+                    setRefeicaoSelected={setRefeicaoSelected}
                 />
                 <ModalRenderRefeicaoAlternativa
                     show={visibleRefAltModal}
@@ -268,6 +280,10 @@ export default function TableRefeicoes({
                     handleClose={() => {
                         setVisiblerefAltModal(false);
                         setAlimentosRefAlt([]);
+                    }}
+                    handleEdit={() => {
+                        setVisiblerefAltModal(false);
+                        setVisibleRef(true);
                     }}
                 />
             </Container>
