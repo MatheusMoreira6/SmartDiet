@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Alimento extends Model
 {
     use HasFactory;
-    protected $table = 'alimentos'; // Definindo a tabela caso não siga a convenção de nomenclatura
+    protected $table = 'alimentos';
 
     protected $fillable = [
         'nome',
@@ -23,5 +23,10 @@ class Alimento extends Model
     public function tipoPorcao()
     {
         return $this->hasMany(TipoPorcao::class, 'alimento_id', 'id'); // Definindo o relacionamento
+    }
+
+    public function porcao()
+    {
+        return $this->belongsTo(Porcao::class, 'porcao_id');
     }
 }
