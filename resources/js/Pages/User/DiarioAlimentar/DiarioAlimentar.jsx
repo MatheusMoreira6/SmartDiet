@@ -1,6 +1,6 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
-import { Container, Form, Button, Card, Alert } from "react-bootstrap";
+import { Container, Form, Button, Card, Alert, Col, Row } from "react-bootstrap";
 import { useState } from "react";
 import Api from "@/Api";
 import WrapperContainer from "@/Components/WrapperContainer";
@@ -17,13 +17,14 @@ const DiarioAlimentar = ({ fotosDiario }) => {
         formData.append("imagem_refeicao", imagem);
         formData.append("notas", notas);
 
-        const response = await Api.post(route('diario.postar'), formData);
+        const response = await Api.post(route("diario.postar"), formData);
         console.log(response);
     };
 
     return (
         <UserLayout>
             <Head title="Diário Alimentar" />
+
             <WrapperContainer>
                 <h3 className="text-center mb-4">
                     Adicionar ao Diário Alimentar
@@ -65,6 +66,30 @@ const DiarioAlimentar = ({ fotosDiario }) => {
                     </Button>
                 </Form>
             </WrapperContainer>
+            <Container>
+                <h3 className="text-center mt-4 mb-4">Diário Alimentar</h3>
+                <Row>
+                    {fotosDiario.map((foto) => (
+                        <Col md={4} key={foto.id} className="mb-4">
+                            <Card className="shadow-sm">
+                                <Card.Img
+                                    variant="top"
+                                    src={foto.foto_url}
+                                    alt="Foto de Alimentação"
+                                />
+                                <Card.Body>
+                                    <Card.Text>
+                                        Data:{" "}
+                                        {new Date(
+                                            foto.created_at
+                                        ).toLocaleDateString()}
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            </Container>
         </UserLayout>
     );
 };
