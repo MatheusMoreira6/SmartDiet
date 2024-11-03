@@ -22,6 +22,7 @@ const Dietas = ({ dieta, horarios, dias }) => {
         <UserLayout>
             <Head title="Dietas" />
             <h3 className="text-center mt-4 mb-3">{dieta.nome_dieta}</h3>
+            <h6 className="text-center mt-4 mb-3">Descrição: {dieta.descricao}</h6>
             <div style={{ margin: "5%", marginTop: 0 }}>
                 <Accordion defaultActiveKey="0" style={{ width: "100%" }}>
                     {dias.map((dia, index) => (
@@ -169,7 +170,7 @@ const Dietas = ({ dieta, horarios, dias }) => {
                                                             <td className="meal-cell-itens">
                                                                 {refeicoesHorario[0]
                                                                     .refeicao_alternativa ? (
-                                                                    <Button
+                                                                    <Button 
                                                                         variant="primary"
                                                                         size="sm"
                                                                         onClick={() =>
