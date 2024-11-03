@@ -23,12 +23,13 @@ use App\Http\Controllers\User\Exames as ExamesUser;
 use App\Http\Controllers\User\Questionario as QuestionarioUser;
 use App\Http\Controllers\User\Perfil as PerfilUser;
 use App\Http\Controllers\User\Configuracoes as ConfiguracoesUser;
-
+use App\Http\Controllers\User\DiariosAlimentares;
 // Middlewares
 use App\Http\Middleware\CheckLogout;
 use App\Http\Middleware\AuthenticateAdmin;
 use App\Http\Middleware\AuthenticateUser;
 use App\Http\Middleware\CheckQuestionarioUser;
+use App\Models\DiarioAlimentar;
 // Facades
 use Illuminate\Support\Facades\Route;
 
@@ -134,6 +135,11 @@ Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () 
         Route::get('/', 'index')->name('user.configuracoes');
         Route::put('/', 'salvar')->name('user.configuracoes');
         Route::put('/alterar-senha-padrao', 'alterarSenhaPadrao')->name('user.alterar-senha-padrao');
+    });
+
+    Route::controller(DiariosAlimentares::class)->group(function () {
+        Route::get('/diario-paciente', 'index')->name('diario.buscar');
+        Route::post('/diario-postar', 'store')->name('diario.postar');
     });
 
     Route::get('/logout', [LoginUser::class, 'logout'])->name('logout.user');
