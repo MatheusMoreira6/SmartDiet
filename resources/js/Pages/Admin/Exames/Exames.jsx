@@ -1,24 +1,34 @@
-import { useState } from "react";
-import { Head, useForm } from "@inertiajs/react";
+import { useEffect, useState } from "react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import WrapperContainer from "@/Components/WrapperContainer";
 import PageTopic from "@/Components/PageTopic";
 import FormModal from "@/Components/FormModal";
 import FormInput from "@/Components/FormInput";
 import FormSelect from "@/Components/FormSelect";
+import SweetAlert from "@/Components/SweetAlert";
+import LinkPrimary from "@/Components/LinkPrimary";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 
-const Exames = ({ exames, pacientes, pacientes_exame }) => {
-    const { data, setData, post, processing, errors, reset } = useForm({
+const Exames = ({ exames, pacientes, pacientes_exames, errors = {} }) => {
+    useEffect(() => {
+        if (errors && (errors.id || errors.error)) {
+            SweetAlert.error({
+                title: errors.id ?? errors.error,
+            });
+        }
+    }, [errors]);
+
+    const { data, setData, post, processing, reset, clearErrors } = useForm({
         paciente_id: "",
+        titulo_pedido: "",
         data_pedido: new Date().toLocaleDateString("pt-BR"),
+        itens_pedido_exame: [],
     });
 
     const [showModal, setShowModal] = useState(false);
     const [validated, setValidated] = useState(false);
     const [errorExames, setErrorExame] = useState(false);
-
-    const [selectedExames, setSelectedExames] = useState([]);
 
     const handleShow = () => setShowModal(true);
 
@@ -27,19 +37,26 @@ const Exames = ({ exames, pacientes, pacientes_exame }) => {
         setValidated(false);
         setErrorExame(false);
         reset();
+        clearErrors();
     };
 
-    const handleCheckboxChange = (event, exameId) => {
-        if (event.target.checked) {
-            setSelectedExames([...selectedExames, exameId]);
-        } else {
-            setSelectedExames(selectedExames.filter((id) => id !== exameId));
-        }
+    useEffect(() => {
+        setErrorExame(data.itens_pedido_exame.length == 0);
+    }, [data.itens_pedido_exame]);
 
-        if (selectedExames.length > 0) {
-            setErrorExame(false);
+    const handleCheckboxChange = (event, id_pedido_exame) => {
+        if (event.target.checked) {
+            setData("itens_pedido_exame", [
+                ...data.itens_pedido_exame,
+                id_pedido_exame,
+            ]);
         } else {
-            setErrorExame(true);
+            setData(
+                "itens_pedido_exame",
+                data.itens_pedido_exame.filter(
+                    (exame) => exame !== id_pedido_exame
+                )
+            );
         }
     };
 
@@ -48,25 +65,17 @@ const Exames = ({ exames, pacientes, pacientes_exame }) => {
 
         const form = e.currentTarget;
 
-        if (form.checkValidity() && selectedExames.length > 0) {
-            setErrorExame(false);
-
-            post(route("admin.exames"), {
+        if (form.checkValidity() && errorExames == false) {
+            post(route("admin.exames.store"), {
                 onSuccess: (page) => {
-                    const title = page.props.title;
-                    const text = page.props.text;
-
-                    SweetAlert.success({ title: title, text: text }).then(() =>
-                        handleClose()
-                    );
-                },
-                onError: () => {
-                    errors.error && SweetAlert.error({ title: errors.error });
+                    SweetAlert.success({
+                        title: page.props.title,
+                        text: page.props.text,
+                    }).then(() => handleClose());
                 },
             });
         } else {
             e.stopPropagation();
-            setErrorExame(true);
         }
 
         setValidated(true);
@@ -108,23 +117,22 @@ const Exames = ({ exames, pacientes, pacientes_exame }) => {
                             </thead>
 
                             <tbody>
-                                {pacientes_exame &&
-                                pacientes_exame.length > 0 ? (
-                                    pacientes_exame.map((paciente) => (
+                                {pacientes_exames &&
+                                pacientes_exames.length > 0 ? (
+                                    pacientes_exames.map((paciente) => (
                                         <tr key={paciente.id}>
                                             <td>{paciente.nome}</td>
 
                                             <td className="text-center d-grid gap-2 d-md-block">
-                                                <Button
-                                                    variant="danger"
-                                                    onClick={() =>
-                                                        console.log(
-                                                            "Excluir exame"
-                                                        )
-                                                    }
+                                                <LinkPrimary
+                                                    href={route(
+                                                        "admin.exames.edit",
+                                                        { id: paciente.id }
+                                                    )}
+                                                    title="Visualizar Exames"
                                                 >
-                                                    <i className="bi bi-trash"></i>
-                                                </Button>
+                                                    <i className="bi bi-eye"></i>
+                                                </LinkPrimary>
                                             </td>
                                         </tr>
                                     ))
@@ -150,7 +158,7 @@ const Exames = ({ exames, pacientes, pacientes_exame }) => {
                     handleSubmit={handleSubmit}
                 >
                     <Row className="g-3">
-                        <Col xs={12} lg={6}>
+                        <Col xs={12}>
                             <FormSelect
                                 id={"paciente_id"}
                                 label={"Paciente"}
@@ -158,7 +166,7 @@ const Exames = ({ exames, pacientes, pacientes_exame }) => {
                                 options={pacientes}
                                 value={data.paciente_id}
                                 required={true}
-                                isInvalid={errors.paciente_id}
+                                isInvalid={validated && errors.paciente_id}
                                 onChange={(e) =>
                                     setData("paciente_id", e.target.value)
                                 }
@@ -168,7 +176,26 @@ const Exames = ({ exames, pacientes, pacientes_exame }) => {
                             />
                         </Col>
 
-                        <Col xs={12} lg={6}>
+                        <Col xs={12} lg={8}>
+                            <FormInput
+                                id={"titulo_pedido"}
+                                label={"Título do Pedido"}
+                                type={"text"}
+                                bold={true}
+                                value={data.titulo_pedido}
+                                required={true}
+                                isInvalid={validated && errors.titulo_pedido}
+                                onChange={(e) =>
+                                    setData("titulo_pedido", e.target.value)
+                                }
+                                textError={
+                                    errors.titulo_pedido ??
+                                    "Informe o título do pedido"
+                                }
+                            />
+                        </Col>
+
+                        <Col xs={12} lg={4}>
                             <FormInput
                                 id={"data_pedido"}
                                 label={"Data do Pedido"}
@@ -178,7 +205,7 @@ const Exames = ({ exames, pacientes, pacientes_exame }) => {
                                 value={data.data_pedido}
                                 placeHolder={"__/__/____"}
                                 required={true}
-                                isInvalid={errors.data_pedido}
+                                isInvalid={validated && errors.data_pedido}
                                 onChange={(e) =>
                                     setData("data_pedido", e.target.value)
                                 }
@@ -190,32 +217,37 @@ const Exames = ({ exames, pacientes, pacientes_exame }) => {
                         </Col>
 
                         <Col xs={12}>
-                            <Form.Label className="fw-semibold">
-                                Exames
-                            </Form.Label>
+                            <Form.Group controlId="itens_pedido_exame">
+                                <Form.Label className="fw-semibold">
+                                    Itens do Pedido
+                                </Form.Label>
 
-                            {exames.map((exame) => (
-                                <Form.Check
-                                    id={exame.id}
-                                    key={exame.id}
-                                    type={"checkbox"}
-                                    isInvalid={errorExames}
-                                    label={exame.nome}
-                                    onChange={(event) =>
-                                        handleCheckboxChange(event, exame.id)
-                                    }
-                                />
-                            ))}
+                                {exames.map((exame) => (
+                                    <Form.Check
+                                        id={exame.id}
+                                        key={exame.id}
+                                        type={"checkbox"}
+                                        label={exame.nome}
+                                        isInvalid={validated && errorExames}
+                                        onChange={(event) =>
+                                            handleCheckboxChange(
+                                                event,
+                                                exame.id
+                                            )
+                                        }
+                                    />
+                                ))}
 
-                            {errorExames && (
-                                <Form.Control.Feedback
-                                    type="invalid"
-                                    className="d-block"
-                                >
-                                    Selecione pelo menos um exame antes de
-                                    enviar o pedido.
-                                </Form.Control.Feedback>
-                            )}
+                                {validated && errorExames && (
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        className="d-block"
+                                    >
+                                        Selecione pelo menos um exame antes de
+                                        enviar o pedido.
+                                    </Form.Control.Feedback>
+                                )}
+                            </Form.Group>
                         </Col>
                     </Row>
                 </FormModal>
