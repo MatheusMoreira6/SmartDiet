@@ -20,6 +20,7 @@ class Exames extends Controller
     {
         $nutricionista = Auth::user()->nutricionista;
 
+        $exames = $nutricionista->exames()->select('id', 'nome')->orderBy('nome')->get()->toArray();
         $pacientes = $nutricionista->pacientes()->get(['id', 'nome', 'sobrenome'])->toArray();
         $pacientes_exames = $nutricionista->pedidosExame()->with('paciente:id,nome,sobrenome')->get()->toArray();
 
@@ -45,7 +46,7 @@ class Exames extends Controller
         }
 
         return $this->render('Admin/Exames/Exames', [
-            'exames' => Exame::all(['id', 'nome'])->toArray(),
+            'exames' => $exames,
             'pacientes' => $auxPacientes,
             'pacientes_exames' => $auxPacientesExames,
         ]);

@@ -19,7 +19,11 @@ class Configuracoes extends Controller
     public function index()
     {
         $user = Auth::user();
-        $exames = $user->nutricionista->exames()->orderBy('nome')->get();
+
+        $exames = $user->nutricionista->exames()
+            ->select('id', 'nome', 'unidade_medida', 'valor_referencia')
+            ->orderBy('nome')
+            ->get()->toArray();
 
         return $this->render('Admin/Configuracoes/Configuracoes', [
             'dados' => $user,
