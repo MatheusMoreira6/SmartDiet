@@ -87,7 +87,11 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 
     Route::controller(ConfiguracoesAdmin::class)->prefix('configuracoes')->group(function () {
         Route::get('/', 'index')->name('admin.configuracoes');
-        Route::put('/', 'salvar')->name('admin.configuracoes');
+        Route::get('/show-exame/{id}', 'showExame')->name('admin.configuracoes.exames.show');
+        Route::post('/update-seguranca', 'updateSeguranca')->name('admin.configuracoes.seguranca.update');
+        Route::post('/update-exame', 'updateExame')->name('admin.configuracoes.exames.update');
+        Route::post('/delete-exame', 'deleteExame')->name('admin.configuracoes.exames.delete');
+        Route::post('/import-exame', 'importExame')->name('admin.configuracoes.exames.import');
     });
 
     Route::get('/logout', [LoginAdmin::class, 'logout'])->name('logout.admin');

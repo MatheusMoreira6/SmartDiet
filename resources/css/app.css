@@ -55,6 +55,17 @@ h3 > .bi {
 }
 
 /**
+* Nav Tab
+*/
+.nav-tabs {
+    margin-bottom: 0.5rem !important;
+}
+
+.nav-tabs button.nav-link.active {
+    background-color: #47c98d !important;
+}
+
+/**
 * Responsive CSS
 */
 @media (min-width: 0px) and (max-width: 300px) {

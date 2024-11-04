@@ -13,7 +13,7 @@ class ExamesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('exames')->insert([
+        DB::table('exames_default')->insert([
             ['nome' => 'Hemograma completo', 'unidade_medida' => 'milhões/mm³'],
             ['nome' => 'Colesterol total', 'unidade_medida' => 'mg/dL'],
             ['nome' => 'Triglicerídeos', 'unidade_medida' => 'mg/dL'],
