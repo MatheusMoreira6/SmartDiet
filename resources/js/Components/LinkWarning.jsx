@@ -1,8 +1,8 @@
 import { Link } from "@inertiajs/react";
 
-const LinkWarning = ({ href = "#", children }) => {
+const LinkWarning = ({ href = "#", title = "", children }) => {
     return (
-        <Link href={href} className="btn btn-warning">
+        <Link href={href} title={title} className="btn btn-warning">
             {children}
         </Link>
     );
