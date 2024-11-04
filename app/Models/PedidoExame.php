@@ -9,7 +9,9 @@ class PedidoExame extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['paciente_id', 'nutricionista_id', 'data_pedido'];
+    protected $table = 'pedidos_exames';
+
+    protected $fillable = ['paciente_id', 'nutricionista_id', 'titulo_pedido', 'data_pedido', 'data_resultado'];
 
     protected $hidden = ['created_at', 'updated_at'];
 
@@ -18,8 +20,13 @@ class PedidoExame extends Model
         return $this->belongsTo(Paciente::class);
     }
 
-    public function exames()
+    public function nutricionista()
     {
-        return $this->belongsToMany(Exame::class, 'itens_pedido_exame', 'pedido_exame_id', 'exame_id');
+        return $this->belongsTo(Nutricionista::class);
+    }
+
+    public function itensPedidoExame()
+    {
+        return $this->hasMany(ItemPedidoExame::class);
     }
 }

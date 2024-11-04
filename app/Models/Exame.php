@@ -13,7 +13,7 @@ class Exame extends Model
 
     protected $hiiiden = ['created_at', 'updated_at'];
 
-    public function itensPedidos()
+    public function itensPedidosExames()
     {
         return $this->hasMany(ItemPedidoExame::class);
     }

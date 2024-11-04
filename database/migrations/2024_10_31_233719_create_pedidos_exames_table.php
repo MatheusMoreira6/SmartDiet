@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('paciente_id');
             $table->unsignedBigInteger('nutricionista_id');
+            $table->string('titulo_pedido');
             $table->date('data_pedido');
+            $table->date('data_resultado');
             $table->timestamps();
 
             $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');

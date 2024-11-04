@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pedido_exame_id');
             $table->unsignedBigInteger('exame_id');
+            $table->string('resultado')->nullable();
             $table->timestamps();
 
             $table->foreign('pedido_exame_id')->references('id')->on('pedidos_exames')->onDelete('cascade');
