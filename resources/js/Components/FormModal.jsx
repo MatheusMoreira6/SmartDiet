@@ -47,10 +47,16 @@ const FormModal = ({
 
             <Modal.Footer>
                 <Button variant="danger" onClick={handleClose}>
+                    <i className="bi bi-x-lg"></i>
                     Cancelar
                 </Button>
 
-                <Button variant="primary" onClick={performSubmit}>
+                <Button
+                    variant="primary"
+                    disabled={processing}
+                    onClick={performSubmit}
+                >
+                    <i className="bi bi-floppy"></i>
                     {processing ? "Salvando..." : "Salvar"}
                 </Button>
             </Modal.Footer>

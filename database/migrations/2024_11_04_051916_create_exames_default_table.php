@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exames', function (Blueprint $table) {
+        Schema::create('exames_default', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('nutricionista_id');
             $table->string('nome');
             $table->string('unidade_medida');
             $table->string('valor_referencia')->nullable();
             $table->timestamps();
-
-            $table->foreign('nutricionista_id')->references('id')->on('nutricionistas');
         });
     }
 
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('exames');
+        Schema::dropIfExists('exames_default');
     }
 };

@@ -9,11 +9,16 @@ class Exame extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nome', 'unidade_medida', 'valor_referencia'];
+    protected $fillable = ['nutricionista_id', 'nome', 'unidade_medida', 'valor_referencia'];
 
-    protected $hiiiden = ['created_at', 'updated_at'];
+    protected $hiiiden = ['nutricionista_id', 'created_at', 'updated_at'];
 
-    public function itensPedidos()
+    public function nutricionista()
+    {
+        return $this->belongsTo(Nutricionista::class);
+    }
+
+    public function itensPedidosExames()
     {
         return $this->hasMany(ItemPedidoExame::class);
     }

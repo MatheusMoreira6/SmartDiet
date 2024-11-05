@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pedidos_exames', function (Blueprint $table) {
+        Schema::create('horarios_nutricionistas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('paciente_id');
             $table->unsignedBigInteger('nutricionista_id');
-            $table->string('titulo_pedido');
-            $table->date('data_pedido');
-            $table->date('data_resultado');
+            $table->unsignedBigInteger('dia_semana_id');
             $table->timestamps();
 
-            $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');
             $table->foreign('nutricionista_id')->references('id')->on('nutricionistas')->onDelete('cascade');
+            $table->foreign('dia_semana_id')->references('id')->on('dias_semana')->onDelete('cascade');
         });
     }
 
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pedidos_exames');
+        Schema::dropIfExists('horarios_nutricionistas');
     }
 };

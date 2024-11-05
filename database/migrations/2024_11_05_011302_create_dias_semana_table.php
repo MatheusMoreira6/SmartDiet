@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exames', function (Blueprint $table) {
+        Schema::create('dias_semana', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('nutricionista_id');
-            $table->string('nome');
-            $table->string('unidade_medida');
-            $table->string('valor_referencia')->nullable();
+            $table->string('nome')->unique();
+            $table->integer('ordem')->unique();
             $table->timestamps();
-
-            $table->foreign('nutricionista_id')->references('id')->on('nutricionistas');
         });
     }
 
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('exames');
+        Schema::dropIfExists('dias_semana');
     }
 };

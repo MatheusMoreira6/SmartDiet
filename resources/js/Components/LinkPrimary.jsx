@@ -1,8 +1,8 @@
 import { Link } from "@inertiajs/react";
 
-const LinkPrimary = ({ href = "#", children }) => {
+const LinkPrimary = ({ href = "#", title = "", children }) => {
     return (
-        <Link href={href} className="btn btn-primary">
+        <Link href={href} title={title} className="btn btn-primary">
             {children}
         </Link>
     );

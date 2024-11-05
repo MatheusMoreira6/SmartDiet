@@ -4,6 +4,15 @@ namespace App\Libraries;
 
 class LibValidation
 {
+    public static function validateDate($date, $format = 'Y-m-d')
+    {
+        // Cria um objeto DateTime a partir do formato e data fornecidos
+        $d = \DateTime::createFromFormat($format, $date);
+
+        // Verifica se a data é válida e está no formato correto
+        return $d && $d->format($format) === $date;
+    }
+
     public static function validateDateOfBirth($date, $format = 'Y-m-d')
     {
         // Cria um objeto DateTime a partir do formato e data fornecidos
