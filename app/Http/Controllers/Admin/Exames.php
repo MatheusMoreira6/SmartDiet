@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Libraries\LibConversion;
 use App\Libraries\LibValidation;
-use App\Models\Exame;
 use App\Models\Paciente;
 use App\Models\PedidoExame;
 use Exception;
