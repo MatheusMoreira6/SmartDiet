@@ -1,24 +1,60 @@
-import { Head } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
-import { Container, Form, Button, Card, Alert, Col, Row } from "react-bootstrap";
-import { useState } from "react";
-import Api from "@/Api";
+import {
+    Container,
+    Form,
+    Button,
+    Card,
+    Alert,
+    Col,
+    Row,
+} from "react-bootstrap";
+import SweetAlert from "@/Components/SweetAlert";
 import WrapperContainer from "@/Components/WrapperContainer";
+import PageTopic from "@/Components/PageTopic";
+import { useRef } from "react";
+import { useState } from "react";
 
 const DiarioAlimentar = ({ fotosDiario }) => {
-    console.log(fotosDiario);
-    const [imagem, setImagem] = useState(null);
-    const [notas, setNotas] = useState("");
-    const [feedback, setFeedback] = useState(null);
+    const [dynamicFotos, setDynamisFotos] = useState(fotosDiario);
+    const fileInputRef = useRef(null);
 
-    const handleSubmit = async (e) => {
+    const { data, setData, post, reset, errors } = useForm({
+        imagem_refeicao: null,
+        notas: "",
+    });
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append("imagem_refeicao", imagem);
-        formData.append("notas", notas);
+        post(route("diario.postar"), {
+            onSuccess: (response) => {
+                SweetAlert.success({
+                    title: "Enviado!",
+                    text: "Foto enviada com sucesso",
+                });
+                if (response.props.fotosDiario) {
+                    setDynamisFotos(response.props.fotosDiario);
+                }
 
-        const response = await Api.post(route("diario.postar"), formData);
-        console.log(response);
+                reset();
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+            },
+            onError: (error) => {
+                if (errors.imagem_refeicao) {
+                    SweetAlert.error({
+                        title: "Erro ao enviar arquivo",
+                        text: errors.imagem_refeicao,
+                    });
+                } else {
+                    SweetAlert.error({
+                        title: "Erro ao enviar arquivo",
+                        text: "Ocorreu um erro inesperado!",
+                    });
+                }
+            },
+        });
     };
 
     return (
@@ -30,22 +66,15 @@ const DiarioAlimentar = ({ fotosDiario }) => {
                     Adicionar ao Diário Alimentar
                 </h3>
 
-                {feedback && (
-                    <Alert
-                        variant={feedback.type}
-                        onClose={() => setFeedback(null)}
-                        dismissible
-                    >
-                        {feedback.message}
-                    </Alert>
-                )}
-
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formFile" className="mb-3">
                         <Form.Label>Foto da Refeição</Form.Label>
                         <Form.Control
                             type="file"
-                            onChange={(e) => setImagem(e.target.files[0])}
+                            ref={fileInputRef} // Referência para o campo de arquivo
+                            onChange={(e) =>
+                                setData("imagem_refeicao", e.target.files[0])
+                            }
                             required
                         />
                     </Form.Group>
@@ -55,8 +84,8 @@ const DiarioAlimentar = ({ fotosDiario }) => {
                         <Form.Control
                             as="textarea"
                             rows={3}
-                            value={notas}
-                            onChange={(e) => setNotas(e.target.value)}
+                            value={data.notas}
+                            onChange={(e) => setData("notas", e.target.value)}
                             placeholder="Adicione comentários sobre a refeição..."
                         />
                     </Form.Group>
@@ -66,10 +95,11 @@ const DiarioAlimentar = ({ fotosDiario }) => {
                     </Button>
                 </Form>
             </WrapperContainer>
+
             <Container>
                 <h3 className="text-center mt-4 mb-4">Diário Alimentar</h3>
                 <Row>
-                    {fotosDiario.map((foto) => (
+                    {dynamicFotos.map((foto) => (
                         <Col md={4} key={foto.id} className="mb-4">
                             <Card className="shadow-sm">
                                 <Card.Img

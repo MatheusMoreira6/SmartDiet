@@ -21,7 +21,7 @@ class DiariosAlimentares extends Controller
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($foto) {
-                $foto->foto_url = asset('storage/' . $foto->imagem_refeicao);
+                $foto->foto_url = asset('storage/' . $foto->imagem_refeicao--);
                 return $foto;
             });
 
@@ -48,6 +48,14 @@ class DiariosAlimentares extends Controller
             'data_refeicao' => now(),
         ]);
 
-        return back()->with('success', 'Refeição adicionada ao diário!');
+        $fotosDiario = DiarioAlimentar::where('paciente_id', $paciente->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($foto) {
+                $foto->foto_url = asset('storage/' . $foto->imagem_refeicao--);
+                return $foto;
+            });
+
+        response()->json(['fotos' => $fotosDiario]);
     }
 }
