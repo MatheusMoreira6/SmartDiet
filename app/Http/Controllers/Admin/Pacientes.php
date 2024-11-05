@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FormDataUserRequest;
+use App\Models\DiarioAlimentar;
 use App\Models\Dieta;
 use App\Models\Genero;
 use App\Models\Paciente;
@@ -86,13 +87,22 @@ class Pacientes extends Controller
             ->where('paciente_id', $id)
             ->get();
 
-        $dados_user = User::where('id', $dados_paciente->user_id)->first();   
-        
+        $dados_user = User::where('id', $dados_paciente->user_id)->first();
+
         $dados_paciente['senha_temp'] = $dados_user['password_temp'];
+
+        $fotosDiario = DiarioAlimentar::where('paciente_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($foto) {
+                $foto->foto_url = asset('storage/' . $foto->imagem_refeicao--);
+                return $foto;
+            });
 
         return $this->render('Admin/Pacientes/DadosPaciente', [
             'dados' => $dados_paciente,
-            'dietas' =>  $dietas
+            'dietas' =>  $dietas,
+            'fotos' => $fotosDiario
         ]);
     }
 }

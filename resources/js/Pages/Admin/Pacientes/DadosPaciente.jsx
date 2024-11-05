@@ -13,8 +13,9 @@ import {
 } from "react-bootstrap";
 import "../../../../css/dadosPaciente.css";
 import DietContainer from "./Dietas/Dietas";
+import RenderFotos from "./DiarioAlimentar/DiarioAlimentar";
 
-export default function DadosPaciente({ dados, dietas }) {
+export default function DadosPaciente({ dados, dietas, fotos }) {
     const [activeTab, setActiveTab] = useState("info");
     const [visibleModal, setVisibleModal] = useState(false);
     const handleSelect = (selectedKey) => {
@@ -50,6 +51,12 @@ export default function DadosPaciente({ dados, dietas }) {
                                 >
                                     Dietas
                                 </Nav.Link>
+                                <Nav.Link
+                                    eventKey="day"
+                                    className="custom-nav-link"
+                                >
+                                    Diário alimentar
+                                </Nav.Link>
                             </Nav>
                         </Row>
                     </Container>
@@ -59,6 +66,7 @@ export default function DadosPaciente({ dados, dietas }) {
                     {activeTab === "info" && "Informações do Paciente"}
                     {activeTab === "history" && "Histórico do Paciente"}
                     {activeTab === "diet" && "Dietas do Paciente"}
+                    {activeTab === "day" && "Diário alimentar"}
                 </PageTopic>
 
                 {activeTab === "info" && (
@@ -130,6 +138,12 @@ export default function DadosPaciente({ dados, dietas }) {
                         id_paciente={dados.id}
                         id_nutricionista={dados.nutricionista_id}
                     />
+                )}
+
+                {activeTab === "day" && (
+                    <>
+                        <RenderFotos fotos={fotos} />
+                    </>
                 )}
             </WrapperContainer>
         </AdminLayout>
