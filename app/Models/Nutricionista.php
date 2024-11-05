@@ -55,4 +55,9 @@ class Nutricionista extends Model
     {
         return $this->hasMany(PedidoExame::class);
     }
+
+    public function horariosNutricionista()
+    {
+        return $this->hasMany(HorarioNutricionista::class);
+    }
 }

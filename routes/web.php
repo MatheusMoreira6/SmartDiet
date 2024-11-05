@@ -87,8 +87,11 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 
     Route::controller(ConfiguracoesAdmin::class)->prefix('configuracoes')->group(function () {
         Route::get('/', 'index')->name('admin.configuracoes');
+        Route::get('/show-horario/{id}', 'showHorario')->name('admin.configuracoes.horario.show');
         Route::get('/show-exame/{id}', 'showExame')->name('admin.configuracoes.exames.show');
         Route::post('/update-seguranca', 'updateSeguranca')->name('admin.configuracoes.seguranca.update');
+        Route::post('/update-horario', 'updateHorario')->name('admin.configuracoes.horario.update');
+        Route::post('/delete-horario', 'deleteHorario')->name('admin.configuracoes.horario.delete');
         Route::post('/update-exame', 'updateExame')->name('admin.configuracoes.exames.update');
         Route::post('/delete-exame', 'deleteExame')->name('admin.configuracoes.exames.delete');
         Route::post('/import-exame', 'importExame')->name('admin.configuracoes.exames.import');

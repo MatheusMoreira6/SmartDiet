@@ -4,6 +4,7 @@ import WrapperContainer from "@/Components/WrapperContainer";
 import PageTopic from "@/Components/PageTopic";
 import Seguranca from "./Seguranca";
 import Exames from "./Exames";
+import Horarios from "./Horarios";
 import { Tab, Tabs } from "react-bootstrap";
 
 const Configuracoes = () => {
@@ -20,6 +21,10 @@ const Configuracoes = () => {
                 <Tabs id="configuracoes-tabs" defaultActiveKey="seguranca">
                     <Tab eventKey="seguranca" title="Segurança">
                         <Seguranca />
+                    </Tab>
+
+                    <Tab eventKey="horarios" title="Horários">
+                        <Horarios />
                     </Tab>
 
                     <Tab eventKey="exames" title="Exames">
