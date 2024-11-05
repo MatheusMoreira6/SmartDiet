@@ -42,6 +42,7 @@ h3 > .bi {
 * Table CSS
 */
 .table th {
+    font-weight: 600 !important;
     text-align: center !important;
 }
 
@@ -63,6 +64,13 @@ h3 > .bi {
 
 .nav-tabs button.nav-link.active {
     background-color: #47c98d !important;
+}
+
+/*
+* Accordion CSS
+*/
+.accordion-button {
+    font-weight: 600 !important;
 }
 
 /**
