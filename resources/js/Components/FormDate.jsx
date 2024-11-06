@@ -6,7 +6,6 @@ const FormDate = ({
     label,
     bold,
     value,
-    autoFocus,
     required,
     isValid,
     isInvalid,
@@ -32,7 +31,6 @@ const FormDate = ({
                         ref={ref}
                         type="text"
                         value={value}
-                        autoFocus={autoFocus}
                         required={required}
                         isValid={isValid}
                         isInvalid={isInvalid}
