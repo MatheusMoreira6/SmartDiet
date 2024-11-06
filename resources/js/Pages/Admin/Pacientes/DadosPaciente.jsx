@@ -108,13 +108,6 @@ export default function DadosPaciente({ dados, dietas, fotos }) {
                                 <p>{dados.senha_temp}</p>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
-                                <Button>
-                                    <i className="bi bi-pencil"></i>Editar
-                                </Button>
-                            </Col>
-                        </Row>
                     </>
                 )}
 
