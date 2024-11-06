@@ -5,6 +5,7 @@ import FormModal from "@/Components/FormModal";
 import FormSelect from "@/Components/FormSelect";
 import FormHours from "@/Components/FormHours";
 import SweetAlert from "@/Components/SweetAlert";
+import LinkPrimary from "@/Components/LinkPrimary";
 import { Accordion, Button, Col, Row, Table } from "react-bootstrap";
 
 const tableHorarios = (horarios, handleShow, handleDelete) => {
@@ -171,7 +172,7 @@ const Horarios = () => {
     const handleDelete = (id_horario) => {
         SweetAlert.confirm({
             title: "Deseja realmente excluir o horário?",
-            text: "Essa ação excluirá os agendamentos vinculados!",
+            text: "Essa ação excluirá as consultas vinculadas!",
             confirmButton: "Sim, excluir",
             cancelButton: "Cancelar",
         }).then((result) => {
@@ -222,6 +223,15 @@ const Horarios = () => {
                             </Accordion.Item>
                         ))}
                     </Accordion>
+                </Col>
+
+                <Col xs={12}>
+                    <div className="d-grid gap-2 d-md-block">
+                        <LinkPrimary href={route("admin.home")}>
+                            <i className="bi bi-arrow-return-left"></i>
+                            Voltar
+                        </LinkPrimary>
+                    </div>
                 </Col>
             </Row>
 

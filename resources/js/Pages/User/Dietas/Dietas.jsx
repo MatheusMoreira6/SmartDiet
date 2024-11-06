@@ -13,6 +13,11 @@ import { useState } from "react";
 import "../../../../css/tableDieta.css";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { useEffect } from "react";
+
+const MySwal = withReactContent(Swal);
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -33,8 +38,6 @@ const Dietas = ({ dieta, horarios, dias }) => {
         const refeicoesDias = dieta.refeicoes.filter(
             (refeicao) => refeicao.dia_semana_id === dia
         );
-
-        console.log(refeicoesDias);
 
         let totalCarboidratos = 0;
         let totalProteinas = 0;
@@ -63,6 +66,22 @@ const Dietas = ({ dieta, horarios, dias }) => {
             ],
         };
     };
+
+    if (!dieta || dieta.length > 0) {
+        useEffect(() => {
+            MySwal.fire({
+                icon: "warning",
+                title: "Você ainda não possui dietas",
+                text: "Entre em contato com seu nutricionista.",
+                allowOutsideClick: false,
+            });
+        }, [dieta]);
+        return (
+            <UserLayout>
+                <Head title="Dietas" />
+            </UserLayout>
+        );
+    }
 
     return (
         <UserLayout>
@@ -113,6 +132,7 @@ const Dietas = ({ dieta, horarios, dias }) => {
                                     </thead>
                                     <tbody>
                                         {horarios.map((horario) => {
+                                            if (!dieta.refeicoes) return;
                                             const refeicoesHorario =
                                                 dieta.refeicoes.filter(
                                                     (refeicao) =>

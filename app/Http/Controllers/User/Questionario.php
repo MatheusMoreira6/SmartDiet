@@ -23,7 +23,6 @@ class Questionario extends Controller
         }
 
         return $this->render('User/Questionario', [
-            'tinymceApiKey' => env('TINYMCE_API_KEY'),
             'questionario' => $questionario
         ]);
     }

@@ -217,37 +217,41 @@ const Exames = ({ exames, pacientes, pacientes_exames, errors = {} }) => {
                         </Col>
 
                         <Col xs={12}>
-                            <Form.Group controlId="itens_pedido_exame">
-                                <Form.Label className="fw-semibold">
-                                    Itens do Pedido
-                                </Form.Label>
+                            {exames.length > 0 ? (
+                                <Form.Group controlId="itens_pedido_exame">
+                                    <Form.Label>Itens do Pedido</Form.Label>
 
-                                {exames.map((exame) => (
-                                    <Form.Check
-                                        id={exame.id}
-                                        key={exame.id}
-                                        type={"checkbox"}
-                                        label={exame.nome}
-                                        isInvalid={validated && errorExames}
-                                        onChange={(event) =>
-                                            handleCheckboxChange(
-                                                event,
-                                                exame.id
-                                            )
-                                        }
-                                    />
-                                ))}
+                                    {exames.map((exame) => (
+                                        <Form.Check
+                                            id={exame.id}
+                                            key={exame.id}
+                                            type={"checkbox"}
+                                            label={exame.nome}
+                                            isInvalid={validated && errorExames}
+                                            onChange={(event) =>
+                                                handleCheckboxChange(
+                                                    event,
+                                                    exame.id
+                                                )
+                                            }
+                                        />
+                                    ))}
 
-                                {validated && errorExames && (
-                                    <Form.Control.Feedback
-                                        type="invalid"
-                                        className="d-block"
-                                    >
-                                        Selecione pelo menos um exame antes de
-                                        enviar o pedido.
-                                    </Form.Control.Feedback>
-                                )}
-                            </Form.Group>
+                                    {validated && errorExames && (
+                                        <Form.Control.Feedback
+                                            type="invalid"
+                                            className="d-block"
+                                        >
+                                            Selecione pelo menos um exame antes
+                                            de enviar o pedido.
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            ) : (
+                                <p className="bg-warning-subtle text-center py-3 mb-0">
+                                    Nenhum tipo de exame cadastrado.
+                                </p>
+                            )}
                         </Col>
                     </Row>
                 </FormModal>

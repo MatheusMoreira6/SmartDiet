@@ -89,6 +89,7 @@ const Exames = () => {
 
         if (form.checkValidity()) {
             post(route("admin.configuracoes.exames.update"), {
+                preserveScroll: true,
                 onSuccess: (page) => {
                     SweetAlert.success({
                         title: page.props.title,

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             GenerosTableSeeder::class,
             AlimentosSeeder::class,
             ExamesTableSeeder::class,
+            DiasSemanaSeeder::class,
         ]);
     }
 }

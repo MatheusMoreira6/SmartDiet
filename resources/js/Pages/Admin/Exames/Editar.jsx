@@ -9,16 +9,16 @@ import FormInput from "@/Components/FormInput";
 import SweetAlert from "@/Components/SweetAlert";
 import LinkPrimary from "@/Components/LinkPrimary";
 import {
+    Accordion,
     Button,
     Col,
-    Collapse,
     Form,
     InputGroup,
     Row,
     Table,
 } from "react-bootstrap";
 
-const YearCollapse = ({ ano_exames, isOpen, toggleCollapse, handleUpdate }) => {
+const YearCollapse = ({ ano_exames, handleUpdate }) => {
     const { data, setData, post, reset } = useForm({
         id: "",
     });
@@ -59,79 +59,51 @@ const YearCollapse = ({ ano_exames, isOpen, toggleCollapse, handleUpdate }) => {
     };
 
     return (
-        <Col xs={12}>
-            <Button
-                variant="primary"
-                aria-expanded={isOpen}
-                aria-controls={`table-${ano_exames.ano}`}
-                className="w-100 d-flex align-items-center"
-                onClick={() => toggleCollapse(ano_exames.ano)}
-            >
-                <span className="mx-auto">{ano_exames.ano}</span>
+        <Accordion.Item eventKey={ano_exames.ano} key={ano_exames.ano}>
+            <Accordion.Header>{ano_exames.ano}</Accordion.Header>
 
-                <span>
-                    {isOpen ? (
-                        <i className="bi bi-arrow-up-square-fill"></i>
-                    ) : (
-                        <i className="bi bi-arrow-down-square-fill"></i>
-                    )}
-                </span>
-            </Button>
+            <Accordion.Body>
+                <Table hover striped bordered responsive className="mt-3 mb-0">
+                    <thead>
+                        <tr>
+                            <th>Nome do Pedido</th>
+                            <th>Data do Pedido</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
 
-            <Collapse in={isOpen}>
-                <div id={`table-${ano_exames.ano}`}>
-                    <Table
-                        hover
-                        striped
-                        bordered
-                        responsive
-                        className="mt-3 mb-0"
-                    >
-                        <thead>
-                            <tr>
-                                <th>Nome do Pedido</th>
-                                <th>Data do Pedido</th>
-                                <th>Ações</th>
+                    <tbody>
+                        {ano_exames.exames.map((exame) => (
+                            <tr key={exame.id}>
+                                <td>{exame.titulo_pedido}</td>
+
+                                <td className="text-center">
+                                    {exame.data_pedido}
+                                </td>
+
+                                <td className="text-center d-grid gap-2 d-md-block">
+                                    <Button
+                                        variant="primary"
+                                        title="Editar Pedido de Exame"
+                                        onClick={() => handleUpdate(exame.id)}
+                                    >
+                                        <i className="bi bi-pencil-square"></i>
+                                    </Button>
+
+                                    <Button
+                                        variant="danger"
+                                        title="Excluir Pedido de Exame"
+                                        onClick={() => handleDelete(exame.id)}
+                                    >
+                                        <i className="bi bi-trash"></i>
+                                    </Button>
+                                </td>
                             </tr>
-                        </thead>
-
-                        <tbody>
-                            {ano_exames.exames.map((exame) => (
-                                <tr key={exame.id}>
-                                    <td>{exame.titulo_pedido}</td>
-
-                                    <td className="text-center">
-                                        {exame.data_pedido}
-                                    </td>
-
-                                    <td className="text-center d-grid gap-2 d-md-block">
-                                        <Button
-                                            variant="primary"
-                                            title="Editar Pedido de Exame"
-                                            onClick={() =>
-                                                handleUpdate(exame.id)
-                                            }
-                                        >
-                                            <i className="bi bi-pencil-square"></i>
-                                        </Button>
-
-                                        <Button
-                                            variant="danger"
-                                            title="Excluir Pedido de Exame"
-                                            onClick={() =>
-                                                handleDelete(exame.id)
-                                            }
-                                        >
-                                            <i className="bi bi-trash"></i>
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </div>
-            </Collapse>
-        </Col>
+                        ))}
+                    </tbody>
+                </Table>
+            </Accordion.Body>
+        </Accordion.Item>
     );
 };
 
@@ -248,15 +220,6 @@ const Editar = ({ paciente, anos_exames, error_visualizacao = "" }) => {
         setValidated(true);
     };
 
-    const [open, setOpen] = useState({});
-
-    const toggleCollapse = (ano) => {
-        setOpen((prevState) => ({
-            ...prevState,
-            [ano]: !prevState[ano],
-        }));
-    };
-
     return (
         <AdminLayout>
             <Head title="Exames Paciente" />
@@ -269,27 +232,25 @@ const Editar = ({ paciente, anos_exames, error_visualizacao = "" }) => {
                         : "Paciente não encontrado"}
                 </PageTopic>
 
-                <Row className="g-3">
-                    {anos_exames && anos_exames.length > 0 ? (
-                        anos_exames.map((ano_exames) => (
-                            <YearCollapse
-                                key={ano_exames.ano}
-                                ano_exames={ano_exames}
-                                isOpen={open[ano_exames.ano] || false}
-                                toggleCollapse={toggleCollapse}
-                                handleUpdate={handleUpdate}
-                            />
-                        ))
-                    ) : (
-                        <Col xs={12}>
+                <Row className="g-3 mb-3">
+                    <Col xs={12}>
+                        {anos_exames && anos_exames.length > 0 ? (
+                            <Accordion>
+                                {anos_exames.map((ano_exames) => (
+                                    <YearCollapse
+                                        key={ano_exames.ano}
+                                        ano_exames={ano_exames}
+                                        handleUpdate={handleUpdate}
+                                    />
+                                ))}
+                            </Accordion>
+                        ) : (
                             <p className="bg-warning-subtle text-center py-3 mb-0">
                                 Nenhum exame encontrado.
                             </p>
-                        </Col>
-                    )}
+                        )}
+                    </Col>
                 </Row>
-
-                <hr />
 
                 <Row>
                     <Col xs={12}>
