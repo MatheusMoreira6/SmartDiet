@@ -1,7 +1,6 @@
 import { Card, Col, Row } from "react-bootstrap";
 
 export default function RenderFotos({ fotos = [] }) {
-    console.log(fotos);
     return (
         <Row>
             {fotos.map((foto) => (

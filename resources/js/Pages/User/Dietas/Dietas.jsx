@@ -1,14 +1,25 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
-import { Table, Button, Modal, Accordion } from "react-bootstrap";
+import {
+    Table,
+    Button,
+    Modal,
+    Accordion,
+    Container,
+    Row,
+    Col,
+} from "react-bootstrap";
 import { useState } from "react";
 import "../../../../css/tableDieta.css";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dietas = ({ dieta, horarios, dias }) => {
     const [showAltModal, setShowAltModal] = useState(false);
     const [altRefeicao, setAltRefeicao] = useState(null);
     const handleOpenAltModal = (refeicao) => {
-        console.log(refeicao);
         setAltRefeicao(refeicao);
         setShowAltModal(true);
     };
@@ -18,11 +29,48 @@ const Dietas = ({ dieta, horarios, dias }) => {
         setShowAltModal(false);
     };
 
+    const getChartData = (dia) => {
+        const refeicoesDias = dieta.refeicoes.filter(
+            (refeicao) => refeicao.dia_semana_id === dia
+        );
+
+        console.log(refeicoesDias);
+
+        let totalCarboidratos = 0;
+        let totalProteinas = 0;
+        let totalGorduras = 0;
+
+        refeicoesDias.forEach((refeicao) => {
+            refeicao.alimentos.forEach((alimento) => {
+                totalCarboidratos += parseFloat(alimento.porcao.carboidratos);
+                totalProteinas += parseFloat(alimento.porcao.proteinas);
+                totalGorduras += parseFloat(alimento.porcao.gorduras);
+            });
+        });
+
+        return {
+            labels: ["Carboidratos", "Proteínas", "Gorduras"],
+            datasets: [
+                {
+                    data: [
+                        totalCarboidratos.toFixed(1),
+                        totalProteinas.toFixed(1),
+                        totalGorduras.toFixed(1),
+                    ],
+                    backgroundColor: ["#36A2EB", "#FFCE56", "#FFA726"],
+                    hoverBackgroundColor: ["#36A2EB", "#FFCE56", "#FFA726"],
+                },
+            ],
+        };
+    };
+
     return (
         <UserLayout>
             <Head title="Dietas" />
             <h3 className="text-center mt-4 mb-3">{dieta.nome_dieta}</h3>
-            <h6 className="text-center mt-4 mb-3">Descrição: {dieta.descricao}</h6>
+            <h6 className="text-center mt-4 mb-3">
+                Descrição: {dieta.descricao}
+            </h6>
             <div style={{ margin: "5%", marginTop: 0 }}>
                 <Accordion defaultActiveKey="0" style={{ width: "100%" }}>
                     {dias.map((dia, index) => (
@@ -123,54 +171,60 @@ const Dietas = ({ dieta, horarios, dias }) => {
                                                                 )}
                                                             </td>
                                                             <td className="meal-cell-itens">
-                                                                {refeicoesHorario[0].alimentos.reduce(
-                                                                    (
-                                                                        acc,
-                                                                        item
-                                                                    ) =>
-                                                                        acc +
-                                                                        parseFloat(
+                                                                {refeicoesHorario[0].alimentos
+                                                                    .reduce(
+                                                                        (
+                                                                            acc,
                                                                             item
-                                                                                .porcao
-                                                                                .carboidratos
-                                                                        ),
-                                                                    0
-                                                                ).toFixed(1)}
+                                                                        ) =>
+                                                                            acc +
+                                                                            parseFloat(
+                                                                                item
+                                                                                    .porcao
+                                                                                    .carboidratos
+                                                                            ),
+                                                                        0
+                                                                    )
+                                                                    .toFixed(1)}
                                                             </td>
                                                             <td className="meal-cell-itens">
-                                                                {refeicoesHorario[0].alimentos.reduce(
-                                                                    (
-                                                                        acc,
-                                                                        item
-                                                                    ) =>
-                                                                        acc +
-                                                                        parseFloat(
+                                                                {refeicoesHorario[0].alimentos
+                                                                    .reduce(
+                                                                        (
+                                                                            acc,
                                                                             item
-                                                                                .porcao
-                                                                                .proteinas
-                                                                        ),
-                                                                    0
-                                                                ).toFixed(1)}
+                                                                        ) =>
+                                                                            acc +
+                                                                            parseFloat(
+                                                                                item
+                                                                                    .porcao
+                                                                                    .proteinas
+                                                                            ),
+                                                                        0
+                                                                    )
+                                                                    .toFixed(1)}
                                                             </td>
                                                             <td className="meal-cell-itens">
-                                                                {refeicoesHorario[0].alimentos.reduce(
-                                                                    (
-                                                                        acc,
-                                                                        item
-                                                                    ) =>
-                                                                        acc +
-                                                                        parseFloat(
+                                                                {refeicoesHorario[0].alimentos
+                                                                    .reduce(
+                                                                        (
+                                                                            acc,
                                                                             item
-                                                                                .porcao
-                                                                                .gorduras
-                                                                        ),
-                                                                    0
-                                                                ).toFixed(1)}
+                                                                        ) =>
+                                                                            acc +
+                                                                            parseFloat(
+                                                                                item
+                                                                                    .porcao
+                                                                                    .gorduras
+                                                                            ),
+                                                                        0
+                                                                    )
+                                                                    .toFixed(1)}
                                                             </td>
                                                             <td className="meal-cell-itens">
                                                                 {refeicoesHorario[0]
                                                                     .refeicao_alternativa ? (
-                                                                    <Button 
+                                                                    <Button
                                                                         variant="primary"
                                                                         size="sm"
                                                                         onClick={() =>
@@ -222,6 +276,27 @@ const Dietas = ({ dieta, horarios, dias }) => {
                 </Accordion>
             </div>
 
+            <div style={{ margin: "5%", marginTop: 0 }}>
+                <h2 className="text-center mt-4 mb-3">Gráficos:</h2>
+                <Row className="mt-4">
+                    {dias.map((dia, index) => (
+                        <Col key={`${dia.id}-${dia.nome_grupo}`} md={3}>
+                            <h5>
+                                Distribuição de Nutrientes - {dia.nome_grupo}
+                            </h5>
+                            <div
+                                style={{
+                                    width: 300,
+                                    height: 300,
+                                }}
+                            >
+                                <Pie data={getChartData(dia.id)} />
+                            </div>
+                        </Col>
+                    ))}
+                </Row>
+            </div>
+
             <Modal show={showAltModal} onHide={handleCloseAltModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Refeição Alternativa</Modal.Title>
@@ -235,11 +310,11 @@ const Dietas = ({ dieta, horarios, dias }) => {
                                     <li key={alimento.id}>
                                         <strong>{alimento.nome}</strong> -{" "}
                                         {alimento.tipo_porcao.find(
-                                                    (porcao) =>
-                                                        porcao?.id ===
-                                                        alimento.pivot.porcao_id
-                                                )?.nome_porcao ||
-                                                    "Porção não especificada"}
+                                            (porcao) =>
+                                                porcao?.id ===
+                                                alimento.pivot.porcao_id
+                                        )?.nome_porcao ||
+                                            "Porção não especificada"}
                                         <ul>
                                             <li>
                                                 Calorias:{" "}
