@@ -1,5 +1,6 @@
 import Form from "react-bootstrap/Form";
 import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/l10n/pt.js";
 
 const FormDate = ({
     id,
@@ -40,6 +41,7 @@ const FormDate = ({
                 options={{
                     dateFormat: "d/m/Y",
                     defaultDate: value,
+                    locale: "pt",
                 }}
             />
 
