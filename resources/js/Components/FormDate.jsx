@@ -1,14 +1,12 @@
 import Form from "react-bootstrap/Form";
-import Flatpickr from "react-flatpickr";
-import "flatpickr/dist/l10n/pt.js";
 
 const FormDate = ({
     id,
     label,
     bold,
     value,
+    autoFocus,
     required,
-    isValid,
     isInvalid,
     onChange,
     textError,
@@ -19,30 +17,13 @@ const FormDate = ({
                 {label}
             </Form.Label>
 
-            <Flatpickr
-                onChange={([selectedDate]) => {
-                    if (selectedDate) {
-                        onChange(selectedDate.toISOString().split("T")[0]);
-                    } else {
-                        onChange("");
-                    }
-                }}
-                render={({ value, ...props }, ref) => (
-                    <Form.Control
-                        ref={ref}
-                        type="text"
-                        value={value}
-                        required={required}
-                        isValid={isValid}
-                        isInvalid={isInvalid}
-                        {...props}
-                    />
-                )}
-                options={{
-                    dateFormat: "d/m/Y",
-                    defaultDate: value,
-                    locale: "pt",
-                }}
+            <Form.Control
+                type={"date"}
+                value={value}
+                autoFocus={autoFocus}
+                required={required}
+                isInvalid={isInvalid}
+                onChange={onChange}
             />
 
             {textError ? (
