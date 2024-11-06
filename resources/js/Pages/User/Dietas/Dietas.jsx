@@ -16,6 +16,8 @@ import { Pie } from "react-chartjs-2";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useEffect } from "react";
+import WrapperContainer from "@/Components/WrapperContainer";
+import PageTopic from "@/Components/PageTopic";
 
 const MySwal = withReactContent(Swal);
 
@@ -79,6 +81,12 @@ const Dietas = ({ dieta, horarios, dias }) => {
         return (
             <UserLayout>
                 <Head title="Dietas" />
+                <WrapperContainer>
+                    <PageTopic>
+                        <i className="bi bi-list"></i>
+                        Dietas
+                    </PageTopic>
+                </WrapperContainer>
             </UserLayout>
         );
     }
