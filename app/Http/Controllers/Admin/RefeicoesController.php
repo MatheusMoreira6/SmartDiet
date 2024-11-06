@@ -102,12 +102,12 @@ class RefeicoesController extends Controller
 
         try {
             DB::table('table_horarios_dietas')
-                ->where('id', $validatedData['id'])
+                ->where('id', $validatedData['id'])->where('grupo_id', $request->dia_id)
                 ->update(['horario' => $validatedData['horario']]);
 
             $horarios = DB::table('table_horarios_dietas')
                 ->select()
-                ->where('dieta_id', $request->dieta_id)->orderBy('horario')
+                ->where('dieta_id', $request->dieta_id)->orderBy('horario')->where('grupo_id', $request->dia_id)
                 ->get();
 
 
@@ -116,6 +116,16 @@ class RefeicoesController extends Controller
             dd($e);
             return response()->json(['message' => 'Erro ao atualizar o horairio.'], 500);
         }
+    }
+
+    public function buscaHorario($dia_id, $dieta_id)
+    {
+        $horarios = DB::table('table_horarios_dietas')
+            ->select()
+            ->where('dieta_id', $dieta_id)->orderBy('horario')->where('grupo_id', $dia_id)
+            ->get();
+
+        return response()->json(['horarios' => $horarios]);
     }
 
     static public function formattedRefeicao($dieta_id, $dia_id)

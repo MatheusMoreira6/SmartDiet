@@ -15,6 +15,11 @@ import { Head } from "@inertiajs/react";
 import ModalRenderRefeicaoAlternativa from "./ModalRenderRefeicaoAlternativa";
 import Api from "@/Api";
 import SweetAlert from "@/Components/SweetAlert";
+import { useEffect } from "react";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 export default function TableRefeicoes({
     refeicoes,
@@ -23,7 +28,7 @@ export default function TableRefeicoes({
     dia_id,
 }) {
     const [dynamincRef, setDynamicRef] = useState(refeicoes);
-    const [dynamicHorarios, setDynamicHorarios] = useState(horarios)
+    const [dynamicHorarios, setDynamicHorarios] = useState([]);
     const [visibleRef, setVisibleRef] = useState(false);
     const [selectedHorario, setSelectedHorario] = useState("");
     const [arraySelectedAlimentos, setArraySelectedAlimentos] = useState([]);
@@ -31,9 +36,42 @@ export default function TableRefeicoes({
     const [visibleRefAltModal, setVisiblerefAltModal] = useState(false);
     const [alimentosRefAlt, setAlimentosRefAlt] = useState([]);
     const [refeicaoSelected, setRefeicaoSelected] = useState(0);
-    const [editingHorario, setEditingHorario] = useState(null); // Estado para o horário sendo editado
+    const [editingHorario, setEditingHorario] = useState(null);
     const [newHorario, setNewHorario] = useState("");
-    
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (loading) {
+            MySwal.fire({
+                title: "Carregando...",
+                text: "Por favor, aguarde.",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+        } else {
+            Swal.close();
+        }
+    }, [loading]);
+
+    useEffect(() => {
+        const fn = async () => {
+            const response = await Api.get(
+                route("busca.horario.dia", {
+                    dia_id: dia_id,
+                    dieta_id: dieta_id,
+                })
+            );
+            setDynamicHorarios(response.data.horarios);
+            setTimeout(() => {
+                setLoading(false);
+            }, 500);
+        };
+
+        fn();
+    }, []);
+
     const handleOpenModal = (horario) => {
         const refeicaoSelected = dynamincRef.filter(
             (ref) => ref.horario_id === horario.id
@@ -121,6 +159,7 @@ export default function TableRefeicoes({
                             <th className="day-header">Gorduras</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {dynamicHorarios.map((horario) => {
                             const refeicoesHorario = dynamincRef.filter(

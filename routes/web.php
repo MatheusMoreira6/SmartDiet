@@ -113,6 +113,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
         Route::post('/salva-refeicao', 'salvarRefeicao')->name('salvar.refeicao');
         Route::post('/edita-refeicao', 'editarRefeicao')->name('editar.refeicao');
         Route::post('/editar-horario', 'editaHorario')->name('horario.editar');
+        Route::get('/busca-horario/{dia_id}/{dieta_id}', 'buscaHorario')->name('busca.horario.dia');
     });
 
     Route::get('/logout', [LoginAdmin::class, 'logout'])->name('logout.admin');

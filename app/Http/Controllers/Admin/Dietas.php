@@ -40,14 +40,6 @@ class Dietas extends Controller
             'paciente_id' => $request->id_paciente,
         ]);
 
-        foreach ($request->horarios as $horario) {
-            DB::table('table_horarios_dietas')->insert([
-                'horario' => $horario['horario'],
-                'dieta_id' => $dieta->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
 
         foreach ($request->grupos_dias as $index => $grupo) {
             DB::table('table_grupo_dias_dieta')->insert([
@@ -57,6 +49,19 @@ class Dietas extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+        }
+
+        $grupos_dias = DB::table('table_grupo_dias_dieta')->where('dieta_id', $dieta->id)->get();
+        foreach ($grupos_dias as $grupo) {
+            foreach ($request->horarios as $horario) {
+                DB::table('table_horarios_dietas')->insert([
+                    'horario' => $horario['horario'],
+                    'dieta_id' => $dieta->id,
+                    'grupo_id' => $grupo->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
 
         $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)

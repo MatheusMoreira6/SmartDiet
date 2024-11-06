@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('horario');
             $table->unsignedBigInteger('dieta_id');
+            $table->unsignedBigInteger('grupo_id');
             $table->timestamps();
 
             $table->foreign('dieta_id')->references('id')->on('dietas')->onDelete('cascade');
+            $table->foreign('grupo_id')->references('id')->on('table_grupo_dias_dieta')->onDelete('cascade');
         });
     }
 
