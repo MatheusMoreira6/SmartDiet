@@ -44,10 +44,10 @@ const NavbarAdmin = () => {
                             </Link>
 
                             <Link
-                                className={classLink("admin.agendamentos")}
-                                href={route("admin.agendamentos")}
+                                className={classLink("admin.consultas")}
+                                href={route("admin.consultas")}
                             >
-                                Agendamentos
+                                Consultas
                             </Link>
 
                             <Link

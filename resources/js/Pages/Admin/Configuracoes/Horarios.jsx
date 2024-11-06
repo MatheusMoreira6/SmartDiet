@@ -172,7 +172,7 @@ const Horarios = () => {
     const handleDelete = (id_horario) => {
         SweetAlert.confirm({
             title: "Deseja realmente excluir o horário?",
-            text: "Essa ação excluirá os agendamentos vinculados!",
+            text: "Essa ação excluirá as consultas vinculadas!",
             confirmButton: "Sim, excluir",
             cancelButton: "Cancelar",
         }).then((result) => {

@@ -48,10 +48,10 @@ const NavbarUser = () => {
                             </Link>
 
                             <Link
-                                className={classLink("user.agendamentos")}
-                                href={route("user.agendamentos")}
+                                className={classLink("user.consultas")}
+                                href={route("user.consultas")}
                             >
-                                Agendamentos
+                                Consultas
                             </Link>
 
                             <Link

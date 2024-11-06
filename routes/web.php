@@ -2,7 +2,7 @@
 
 // Controllers Admin
 use App\Http\Controllers\Admin\Dashboard as DashboardAdmin;
-use App\Http\Controllers\Admin\Agendamentos as AgendamentosAdmin;
+use App\Http\Controllers\Admin\Consultas as ConsultasAdmin;
 use App\Http\Controllers\Admin\Exames as ExamesAdmin;
 use App\Http\Controllers\Admin\Pacientes as PacientesAdmin;
 use App\Http\Controllers\Admin\Questionarios as QuestionariosAdmin;
@@ -17,7 +17,7 @@ use App\Http\Controllers\Auth\LoginUser as LoginUser;
 // Controllers User
 use App\Http\Controllers\User\Dashboard as DashboardUser;
 use App\Http\Controllers\User\Dietas as DietasUser;
-use App\Http\Controllers\User\Agendamentos as AgendamentosUser;
+use App\Http\Controllers\User\Consultas as ConsultasUser;
 use App\Http\Controllers\User\Exames as ExamesUser;
 use App\Http\Controllers\User\Questionario as QuestionarioUser;
 use App\Http\Controllers\User\Perfil as PerfilUser;
@@ -60,7 +60,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
         Route::post('/pacientes', 'cadastrar')->name('admin.pacientes');
     });
 
-    Route::get('/agendamentos', [AgendamentosAdmin::class, 'index'])->name('admin.agendamentos');
+    Route::get('/consultas', [ConsultasAdmin::class, 'index'])->name('admin.consultas');
 
     Route::controller(ExamesAdmin::class)->prefix('exames')->group(function () {
         Route::get('/', 'index')->name('admin.exames');
@@ -106,7 +106,7 @@ Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () 
     Route::middleware([CheckQuestionarioUser::class])->group(function () {
         Route::get('/', [DashboardUser::class, 'index'])->name('user.home');
         Route::get('/dietas', [DietasUser::class, 'index'])->name('user.dietas');
-        Route::get('/agendamentos', [AgendamentosUser::class, 'index'])->name('user.agendamentos');
+        Route::get('/consultas', [ConsultasUser::class, 'index'])->name('user.consultas');
         Route::get('/exames', [ExamesUser::class, 'index'])->name('user.exames');
     });
 

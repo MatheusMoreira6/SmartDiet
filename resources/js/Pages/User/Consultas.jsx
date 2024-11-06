@@ -1,12 +1,12 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
 
-const Agendamentos = () => {
+const Consultas = () => {
     return (
         <UserLayout>
-            <Head title="Agendamentos" />
+            <Head title="Consultas" />
         </UserLayout>
     );
 };
 
-export default Agendamentos;
+export default Consultas;
