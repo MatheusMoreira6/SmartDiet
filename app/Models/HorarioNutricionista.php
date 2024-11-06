@@ -11,9 +11,9 @@ class HorarioNutricionista extends Model
 
     protected $table = 'horarios_nutricionistas';
 
-    protected $fillable = ['nutricionista_id', 'dia_semana_id'];
+    protected $fillable = ['nutricionista_id', 'dia_semana_id', 'inicio', 'fim'];
 
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['nutricionista_id', 'created_at', 'updated_at'];
 
     public function diaSemana()
     {
@@ -23,10 +23,5 @@ class HorarioNutricionista extends Model
     public function nutricionista()
     {
         return $this->belongsTo(Nutricionista::class);
-    }
-
-    public function horarios()
-    {
-        return $this->hasMany(Horario::class);
     }
 }

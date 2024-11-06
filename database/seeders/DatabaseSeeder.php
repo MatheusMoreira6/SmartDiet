@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             GenerosTableSeeder::class,
             ExamesTableSeeder::class,
+            DiasSemanaSeeder::class,
         ]);
     }
 }

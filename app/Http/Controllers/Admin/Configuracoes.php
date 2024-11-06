@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\DiaSemana;
 use App\Models\Exame;
 use App\Models\ExameDefault;
-use App\Models\Horario;
 use App\Models\HorarioNutricionista;
 use App\Models\User;
 use Exception;
@@ -23,24 +22,32 @@ class Configuracoes extends Controller
     {
         $user = Auth::user();
 
-        $exames = $user->nutricionista->exames()
-            ->select('id', 'nome', 'unidade_medida', 'valor_referencia')
-            ->orderBy('nome')
+        $exames = $user->nutricionista->exames()->select([
+            'id',
+            'nome',
+            'unidade_medida',
+            'valor_referencia'
+        ])->orderBy('nome')->get()->toArray();
+
+        $diasSemanas = DiaSemana::select([
+            'id',
+            'nome as descricao'
+        ])->orderBy('ordem')->get()->toArray();
+
+        $horariosNutricionista = $user->nutricionista->horarios()
+            ->orderBy('dia_semana_id')
+            ->orderBy('inicio')
+            ->orderBy('fim')
             ->get()->toArray();
 
-        $diasSemanas = DiaSemana::select(['id', 'nome as descricao'])->orderBy('ordem')->get()->toArray();
-        $horariosNutricionista = $user->nutricionista->horariosNutricionista()->with('horarios')->get()->toArray();
-
         $horarios = [];
-        foreach ($horariosNutricionista as $horarioNutricionista) {
-            foreach ($horarioNutricionista['horarios'] as $horario) {
-                $horarios[$horarioNutricionista['dia_semana_id']][] = [
-                    'id' => $horario['id'],
-                    'dia_semana_id' => $horarioNutricionista['dia_semana_id'],
-                    'hora_inicio' => $horario['inicio'],
-                    'hora_fim' => $horario['fim'],
-                ];
-            }
+        foreach ($horariosNutricionista as $horario) {
+            $horarios[$horario['dia_semana_id']][] = [
+                'id' => $horario['id'],
+                'dia_semana_id' => $horario['dia_semana_id'],
+                'hora_inicio' => $horario['inicio'],
+                'hora_fim' => $horario['fim'],
+            ];
         }
 
         return $this->render('Admin/Configuracoes/Configuracoes', [
@@ -54,7 +61,7 @@ class Configuracoes extends Controller
     public function showHorario(int $id)
     {
         $regras = [
-            'id' => 'required|exists:horarios,id',
+            'id' => 'required|exists:horarios_nutricionistas,id',
         ];
 
         $feedback = [
@@ -69,13 +76,13 @@ class Configuracoes extends Controller
         }
 
         try {
-            $horario = Horario::findOrFail($id);
+            $horarioNutricionista = HorarioNutricionista::findOrFail($id);
 
             $auxHorario = [
-                'id' => $horario->id,
-                'dia_semana_id' => $horario->horarioNutricionista->dia_semana_id,
-                'hora_inicio' => $horario->inicio,
-                'hora_fim' => $horario->fim,
+                'id' => $horarioNutricionista->id,
+                'dia_semana_id' => $horarioNutricionista->dia_semana_id,
+                'hora_inicio' => $horarioNutricionista->inicio,
+                'hora_fim' => $horarioNutricionista->fim,
             ];
 
             return response()->json(['horario' => $auxHorario]);
@@ -171,7 +178,7 @@ class Configuracoes extends Controller
     public function updateHorario(Request $request)
     {
         $regras = [
-            'id' => 'nullable|exists:horarios,id',
+            'id' => 'nullable|exists:horarios_nutricionistas,id',
             'dia_semana_id' => 'required|exists:dias_semana,id',
             'hora_inicio' => 'required|date_format:H:i',
             'hora_fim' => 'required|date_format:H:i|after:hora_inicio',
@@ -196,51 +203,17 @@ class Configuracoes extends Controller
 
         try {
             if ($store_horario) {
-                $horario = new Horario();
-
-                $horarioNutricionista = HorarioNutricionista::where('nutricionista_id', Auth::user()->nutricionista->id)
-                    ->where('dia_semana_id', $request->dia_semana_id)
-                    ->first();
-
-                if (!$horarioNutricionista) {
-                    $horarioNutricionista = new HorarioNutricionista();
-
-                    $horarioNutricionista->nutricionista_id = Auth::user()->nutricionista->id;
-                    $horarioNutricionista->dia_semana_id = $request->dia_semana_id;
-
-                    if (!$horarioNutricionista->save()) {
-                        DB::rollBack();
-
-                        if ($store_horario) {
-                            return $this->responseErrors(['error' => 'Falha ao cadastrar o horário']);
-                        } else {
-                            return $this->responseErrors(['error' => 'Falha ao atualizar o horário']);
-                        }
-                    }
-                }
-
-                $horario->horario_nutricionista_id = $horarioNutricionista->id;
+                $horarioNutricionista = new HorarioNutricionista();
+                $horarioNutricionista->nutricionista_id = Auth::user()->nutricionista->id;
             } else {
-                $horario = Horario::findOrFail($request->id);
-                $horarioNutricionista = HorarioNutricionista::findOrFail($horario->horario_nutricionista_id);
-
-                $horarioNutricionista->dia_semana_id = $request->dia_semana_id;
-
-                if (!$horarioNutricionista->save()) {
-                    DB::rollBack();
-
-                    if ($store_horario) {
-                        return $this->responseErrors(['error' => 'Falha ao cadastrar o horário']);
-                    } else {
-                        return $this->responseErrors(['error' => 'Falha ao atualizar o horário']);
-                    }
-                }
+                $horarioNutricionista = HorarioNutricionista::findOrFail($request->id);
             }
 
-            $horario->inicio = $request->hora_inicio;
-            $horario->fim = $request->hora_fim;
+            $horarioNutricionista->dia_semana_id = $request->dia_semana_id;
+            $horarioNutricionista->inicio = $request->hora_inicio;
+            $horarioNutricionista->fim = $request->hora_fim;
 
-            if (!$horario->save()) {
+            if (!$horarioNutricionista->save()) {
                 DB::rollBack();
 
                 if ($store_horario) {
@@ -273,7 +246,7 @@ class Configuracoes extends Controller
     public function deleteHorario(Request $request)
     {
         $regras = [
-            'id' => 'required|exists:horarios,id',
+            'id' => 'required|exists:horarios_nutricionistas,id',
         ];
 
         $feedback = [
@@ -284,9 +257,9 @@ class Configuracoes extends Controller
         $request->validate($regras, $feedback);
 
         try {
-            $horario = Horario::findOrFail($request->id);
+            $horarioNutricionista = HorarioNutricionista::findOrFail($request->id);
 
-            if (!$horario->delete()) {
+            if (!$horarioNutricionista->delete()) {
                 return $this->responseErrors(['error' => 'Falha ao deletar o horário']);
             }
 
