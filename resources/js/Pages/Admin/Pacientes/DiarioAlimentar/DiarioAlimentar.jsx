@@ -1,6 +1,7 @@
 import { Card, Col, Row } from "react-bootstrap";
 
 export default function RenderFotos({ fotos = [] }) {
+    console.log(fotos);
     return (
         <Row>
             {fotos.map((foto) => (
@@ -16,6 +17,7 @@ export default function RenderFotos({ fotos = [] }) {
                                 Data:{" "}
                                 {new Date(foto.created_at).toLocaleDateString()}
                             </Card.Text>
+                            <p>{foto.notas}</p>
                         </Card.Body>
                     </Card>
                 </Col>
