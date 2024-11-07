@@ -149,6 +149,19 @@ class Nutricionista extends Model
             }
         }
 
+        $horariosAgendados = AgendaConsulta::where('nutricionista_id', $this->id)
+            ->whereDate('data', $dia)
+            ->get(['data', 'hora'])
+            ->toArray();
+
+        foreach ($horariosAgendados as $horario) {
+            foreach ($horariosAtendimento as $key => $value) {
+                if (new DateTime($dia . ' ' . $value['id']) == new DateTime($horario['data'] . ' ' . $horario['hora'])) {
+                    unset($horariosAtendimento[$key]);
+                }
+            }
+        }
+
         return $horariosAtendimento;
     }
 }
