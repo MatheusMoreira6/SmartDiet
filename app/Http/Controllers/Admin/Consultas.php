@@ -22,6 +22,11 @@ class Consultas extends Controller
             ->where('finalizada', false)
             ->get(['id', 'paciente_id', 'data', 'hora'])->toArray();
 
+        $consultasFinalizadas = $nutricionista->consultas()
+            ->with('paciente:id,nome,sobrenome,telefone')
+            ->where('finalizada', true)
+            ->get(['id', 'paciente_id', 'data', 'hora'])->toArray();
+
         $auxConsultas = array_map(function ($consulta) {
             return [
                 'id' => $consulta['id'],
@@ -31,6 +36,16 @@ class Consultas extends Controller
                 'hora' => $consulta['hora'],
             ];
         }, $consultas);
+
+        $auxConsultasFinalizadas = array_map(function ($consulta) {
+            return [
+                'id' => $consulta['id'],
+                'paciente' => $consulta['paciente']['nome'] . ' ' . $consulta['paciente']['sobrenome'],
+                'telefone' => $consulta['paciente']['telefone'],
+                'data' => LibConversion::convertIsoToBr($consulta['data']),
+                'hora' => $consulta['hora'],
+            ];
+        }, $consultasFinalizadas);
 
         $pacientes = $nutricionista->pacientes()->get(['id', 'nome', 'sobrenome'])->toArray();
 
@@ -45,6 +60,7 @@ class Consultas extends Controller
 
         return $this->render('Admin/Consultas/Consultas', [
             'consultas' => $auxConsultas,
+            'consultas_finalizadas' => $auxConsultasFinalizadas,
             'pacientes' => $auxPacientes,
             'dias_semana' => $diaSemanaAtendimento,
         ]);
