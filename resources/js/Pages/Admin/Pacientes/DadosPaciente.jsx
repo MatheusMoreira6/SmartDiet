@@ -24,7 +24,6 @@ export default function DadosPaciente({
     fotos,
     agenda_consultas,
 }) {
-    console.log(agenda_consultas);
 
     return (
         <AdminLayout>
