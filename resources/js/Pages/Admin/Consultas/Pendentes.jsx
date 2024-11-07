@@ -466,7 +466,7 @@ const Pendentes = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={dataFinalizar.peso}
+                                value={dataFinalizar.peso || ""}
                                 isInvalid={
                                     validatedFinalizar && errorsFinalizar.peso
                                 }
@@ -487,7 +487,7 @@ const Pendentes = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={dataFinalizar.altura}
+                                value={dataFinalizar.altura || ""}
                                 isInvalid={
                                     validatedFinalizar && errorsFinalizar.altura
                                 }
@@ -508,7 +508,7 @@ const Pendentes = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={dataFinalizar.imc}
+                                value={dataFinalizar.imc || ""}
                                 isInvalid={
                                     validatedFinalizar && errorsFinalizar.imc
                                 }
@@ -529,7 +529,9 @@ const Pendentes = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={dataFinalizar.circunferencia_cintura}
+                                value={
+                                    dataFinalizar.circunferencia_cintura || ""
+                                }
                                 isInvalid={
                                     validatedFinalizar &&
                                     errorsFinalizar.circunferencia_cintura
@@ -556,7 +558,9 @@ const Pendentes = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={dataFinalizar.circunferencia_quadril}
+                                value={
+                                    dataFinalizar.circunferencia_quadril || ""
+                                }
                                 isInvalid={
                                     validatedFinalizar &&
                                     errorsFinalizar.circunferencia_quadril
@@ -583,7 +587,9 @@ const Pendentes = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={dataFinalizar.circunferencia_pescoco}
+                                value={
+                                    dataFinalizar.circunferencia_pescoco || ""
+                                }
                                 isInvalid={
                                     validatedFinalizar &&
                                     errorsFinalizar.circunferencia_pescoco
@@ -610,7 +616,7 @@ const Pendentes = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={dataFinalizar.percentual_gordura}
+                                value={dataFinalizar.percentual_gordura || ""}
                                 isInvalid={
                                     validatedFinalizar &&
                                     errorsFinalizar.percentual_gordura
@@ -635,7 +641,7 @@ const Pendentes = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={dataFinalizar.massa_muscular}
+                                value={dataFinalizar.massa_muscular || ""}
                                 isInvalid={
                                     validatedFinalizar &&
                                     errorsFinalizar.massa_muscular

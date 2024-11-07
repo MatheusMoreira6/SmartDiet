@@ -229,7 +229,7 @@ const Finalizadas = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={data.peso}
+                                value={data.peso || ""}
                                 isInvalid={validated && errors.peso}
                                 onChange={(e) => {
                                     setData("peso", e.target.value);
@@ -248,7 +248,7 @@ const Finalizadas = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={data.altura}
+                                value={data.altura || ""}
                                 isInvalid={validated && errors.altura}
                                 onChange={(e) => {
                                     setData("altura", e.target.value);
@@ -267,7 +267,7 @@ const Finalizadas = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={data.imc}
+                                value={data.imc || ""}
                                 isInvalid={validated && errors.imc}
                                 onChange={(e) => {
                                     setData("imc", e.target.value);
@@ -286,7 +286,7 @@ const Finalizadas = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={data.circunferencia_cintura}
+                                value={data.circunferencia_cintura || ""}
                                 isInvalid={
                                     validated && errors.circunferencia_cintura
                                 }
@@ -312,7 +312,7 @@ const Finalizadas = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={data.circunferencia_quadril}
+                                value={data.circunferencia_quadril || ""}
                                 isInvalid={
                                     validated && errors.circunferencia_quadril
                                 }
@@ -338,7 +338,7 @@ const Finalizadas = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={data.circunferencia_pescoco}
+                                value={data.circunferencia_pescoco || ""}
                                 isInvalid={
                                     validated && errors.circunferencia_pescoco
                                 }
@@ -364,7 +364,7 @@ const Finalizadas = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={data.percentual_gordura}
+                                value={data.percentual_gordura || ""}
                                 isInvalid={
                                     validated && errors.percentual_gordura
                                 }
@@ -388,7 +388,7 @@ const Finalizadas = () => {
 
                             <Form.Control
                                 type={"text"}
-                                value={data.massa_muscular}
+                                value={data.massa_muscular || ""}
                                 isInvalid={validated && errors.massa_muscular}
                                 onChange={(e) => {
                                     setData("massa_muscular", e.target.value);
