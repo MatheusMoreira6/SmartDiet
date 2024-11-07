@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome')->unique();
             $table->integer('ordem')->unique();
+            $table->integer('iso_8601')->unique();
             $table->timestamps();
         });
     }

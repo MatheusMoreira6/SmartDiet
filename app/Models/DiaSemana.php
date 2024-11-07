@@ -11,7 +11,7 @@ class DiaSemana extends Model
 
     protected $table = 'dias_semana';
 
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome', 'ordem', 'iso_8601'];
 
     protected $hidden = ['created_at', 'updated_at'];
 

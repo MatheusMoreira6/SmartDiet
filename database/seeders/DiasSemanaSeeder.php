@@ -14,13 +14,13 @@ class DiasSemanaSeeder extends Seeder
     public function run(): void
     {
         DB::table('dias_semana')->insert([
-            ['nome' => 'Domingo', 'ordem' => 1],
-            ['nome' => 'Segunda-feira', 'ordem' => 2],
-            ['nome' => 'Terça-feira', 'ordem' => 3],
-            ['nome' => 'Quarta-feira', 'ordem' => 4],
-            ['nome' => 'Quinta-feira', 'ordem' => 5],
-            ['nome' => 'Sexta-feira', 'ordem' => 6],
-            ['nome' => 'Sábado', 'ordem' => 7],
+            ['nome' => 'Domingo', 'ordem' => 1, 'iso_8601' => 7],
+            ['nome' => 'Segunda-feira', 'ordem' => 2, 'iso_8601' => 1],
+            ['nome' => 'Terça-feira', 'ordem' => 3, 'iso_8601' => 2],
+            ['nome' => 'Quarta-feira', 'ordem' => 4, 'iso_8601' => 3],
+            ['nome' => 'Quinta-feira', 'ordem' => 5, 'iso_8601' => 4],
+            ['nome' => 'Sexta-feira', 'ordem' => 6, 'iso_8601' => 5],
+            ['nome' => 'Sábado', 'ordem' => 7, 'iso_8601' => 6],
         ]);
     }
 }
