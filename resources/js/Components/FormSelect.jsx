@@ -12,6 +12,10 @@ const FormSelect = ({
     onChange,
     textError,
 }) => {
+    if (!Array.isArray(options)) {
+        options = Object.values(options);
+    }
+
     const selectOptions = [{ id: "", descricao: "Selecione..." }, ...options];
 
     return (
