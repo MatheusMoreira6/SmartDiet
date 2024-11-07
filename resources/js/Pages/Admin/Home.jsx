@@ -1,7 +1,8 @@
 import { Head } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Table, Row, Col, Container } from "react-bootstrap";
+import { Table, Row, Col } from "react-bootstrap";
 import { Pie, Bar } from "react-chartjs-2";
+import WrapperContainer from "@/Components/WrapperContainer";
 import {
     Chart as ChartJS,
     ArcElement,
@@ -11,7 +12,6 @@ import {
     LinearScale,
     BarElement,
 } from "chart.js";
-import WrapperContainer from "@/Components/WrapperContainer";
 
 ChartJS.register(
     ArcElement,
@@ -104,12 +104,13 @@ const Home = ({ pacientes, agenda_consultas }) => {
         <AdminLayout>
             <Head title="Tela Inicial" />
             <WrapperContainer>
-                <Row>
+                <Row className="g-3">
                     <Col md={4}>
                         <h6>Pacientes por Gênero</h6>
 
                         <Pie data={pieData} options={pieOptions} />
                     </Col>
+
                     <Col md={8}>
                         <h6>Consultas por Mês</h6>
 
@@ -118,7 +119,14 @@ const Home = ({ pacientes, agenda_consultas }) => {
 
                     <Col xs={12}>
                         <h6>Próximas 10 Consultas</h6>
-                        <Table striped bordered hover responsive>
+
+                        <Table
+                            hover
+                            striped
+                            bordered
+                            responsive
+                            className="mb-0"
+                        >
                             <thead>
                                 <tr>
                                     <th>Data</th>
@@ -126,26 +134,37 @@ const Home = ({ pacientes, agenda_consultas }) => {
                                     <th>Nome do Paciente</th>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                {upcomingConsultations.map(
-                                    (consulta, index) => {
-                                        if (consulta.finalizada == true) return;
-                                        return (
-                                            <tr key={index}>
-                                                <td>{consulta.data}</td>
-                                                <td>{consulta.hora}</td>
-                                                <td>
-                                                    {
-                                                        pacientes.find(
-                                                            (paciente) =>
-                                                                paciente.id ===
-                                                                consulta.paciente_id
-                                                        )?.nome
-                                                    }
-                                                </td>
-                                            </tr>
-                                        );
-                                    }
+                                {upcomingConsultations.length > 0 ? (
+                                    upcomingConsultations.map(
+                                        (consulta, index) => {
+                                            if (consulta.finalizada == true)
+                                                return;
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{consulta.data}</td>
+                                                    <td>{consulta.hora}</td>
+
+                                                    <td>
+                                                        {
+                                                            pacientes.find(
+                                                                (paciente) =>
+                                                                    paciente.id ===
+                                                                    consulta.paciente_id
+                                                            )?.nome
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }
+                                    )
+                                ) : (
+                                    <tr>
+                                        <td colSpan="3" className="text-center">
+                                            Nenhuma consulta agendada
+                                        </td>
+                                    </tr>
                                 )}
                             </tbody>
                         </Table>
