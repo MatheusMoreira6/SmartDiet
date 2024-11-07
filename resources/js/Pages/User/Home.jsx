@@ -107,22 +107,22 @@ const Home = ({ consultas }) => {
             <Container>
                 <Row>
                     <Col md={6} sm={12} lg={6}>
-                        <WrapperContainer>
+                        <Container className="rounded shadow-lg my-3 p-3">
                             <h4>Progresso de Peso, Altura e IMC</h4>
                             <Line data={weightHeightImcData} />
-                        </WrapperContainer>
+                        </Container>
                     </Col>
                     <Col md={6} sm={12} lg={6}>
-                        <WrapperContainer>
+                        <Container className="rounded shadow-lg my-3 p-3">
                             <h4>Progresso das Circunferências</h4>
                             <Line data={circumferencesData} />
-                        </WrapperContainer>
+                        </Container>
                     </Col>
                     <Col md={12} sm={12} lg={6}>
-                        <WrapperContainer>
+                        <Container className="rounded shadow-lg my-3 p-3">
                             <h4>Percentual de Gordura e Massa Muscular</h4>
                             <Line data={fatMuscleData} />
-                        </WrapperContainer>
+                        </Container>
                     </Col>
                 </Row>
             </Container>
