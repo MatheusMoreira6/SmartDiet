@@ -1,7 +1,7 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
 
-const Home = () => {
+const Home = ({ consultas }) => {
     return (
         <UserLayout>
             <Head title="Tela Inicial" />

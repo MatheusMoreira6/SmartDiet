@@ -105,29 +105,18 @@ const Home = ({ pacientes, agenda_consultas }) => {
             <Head title="Tela Inicial" />
             <WrapperContainer>
                 <Row>
-                    <Col md={6}>
+                    <Col md={4}>
                         <h6>Pacientes por Gênero</h6>
 
-                        <div
-                            style={{
-                                width: "100%",
-                                height: 250,
-                                marginBottom: 20,
-                                display: "flex",
-                                justifyContent: "center",
-                            }}
-                        >
-                            <Pie data={pieData} options={pieOptions} />
-                        </div>
+                        <Pie data={pieData} options={pieOptions} />
                     </Col>
-                    <Col md={6}>
+                    <Col md={8}>
                         <h6>Consultas por Mês</h6>
 
                         <Bar data={barData} options={barOptions} />
                     </Col>
-                </Row>
-                <Row className="mt-4">
-                    <Col>
+
+                    <Col xs={12}>
                         <h6>Próximas 10 Consultas</h6>
                         <Table striped bordered hover responsive>
                             <thead>
