@@ -17,13 +17,10 @@ import "../../../../css/dadosPaciente.css";
 import DietContainer from "./Dietas/Dietas";
 import RenderFotos from "./DiarioAlimentar/DiarioAlimentar";
 
-export default function DadosPaciente({ dados, dietas, fotos }) {
+export default function DadosPaciente({ dados, dietas, fotos, agenda_consultas }) {
     const [activeTab, setActiveTab] = useState("info");
     const [visibleModal, setVisibleModal] = useState(false);
-    const handleSelect = (selectedKey) => {
-        setActiveTab(selectedKey);
-    };
-
+  
     return (
         <AdminLayout>
             <WrapperContainer>

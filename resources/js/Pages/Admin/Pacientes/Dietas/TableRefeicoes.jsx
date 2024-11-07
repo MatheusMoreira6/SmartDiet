@@ -127,8 +127,7 @@ export default function TableRefeicoes({
                 horario: novoHorario,
                 id: horarioId,
                 dieta_id: dieta_id,
-                dia_id,
-                dia_id,
+                dia_id: dia_id,
             });
 
             const updatedHorarios = response.data.horarios;
