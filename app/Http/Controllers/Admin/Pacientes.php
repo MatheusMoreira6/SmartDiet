@@ -100,7 +100,7 @@ class Pacientes extends Controller
                 return $foto;
             });
 
-        $agenda_consultas =  AgendaConsulta::where('paciente_id', $id)->get();
+        $agenda_consultas =  AgendaConsulta::where('paciente_id', $id)->where('finalizada', true)->get();
 
         return $this->render('Admin/Pacientes/DadosPaciente', [
             'dados' => $dados_paciente,

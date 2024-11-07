@@ -16,11 +16,16 @@ import {
 import "../../../../css/dadosPaciente.css";
 import DietContainer from "./Dietas/Dietas";
 import RenderFotos from "./DiarioAlimentar/DiarioAlimentar";
+import HistoricoConsultas from "./HistoricoConsultas/HistoricoConsultas";
 
-export default function DadosPaciente({ dados, dietas, fotos, agenda_consultas }) {
-    const [activeTab, setActiveTab] = useState("info");
-    const [visibleModal, setVisibleModal] = useState(false);
-  
+export default function DadosPaciente({
+    dados,
+    dietas,
+    fotos,
+    agenda_consultas,
+}) {
+    console.log(agenda_consultas);
+
     return (
         <AdminLayout>
             <WrapperContainer>
@@ -76,14 +81,12 @@ export default function DadosPaciente({ dados, dietas, fotos, agenda_consultas }
                                 Histórico do Paciente
                             </PageTopic>
                             <Row>
-                                <Col md={6}>
-                                    <h5>Consulta</h5>
-                                    <p>{`${dados.nome} ${dados.sobrenome}`}</p>
-                                </Col>
-                                <Col md={6}>
-                                    <h5>Consulta</h5>
-                                    <p>{dados.cpf}</p>
-                                </Col>
+                                {agenda_consultas &&
+                                    agenda_consultas.length > 0 && (
+                                        <HistoricoConsultas
+                                            agenda_consultas={agenda_consultas}
+                                        />
+                                    )}
                             </Row>
                         </Tab>
 
