@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use DateInterval;
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -59,5 +61,94 @@ class Nutricionista extends Model
     public function horarios()
     {
         return $this->hasMany(HorarioNutricionista::class);
+    }
+
+    public function consultas()
+    {
+        return $this->hasMany(AgendaConsulta::class);
+    }
+
+    public function diasAtendimento()
+    {
+        $horarios = $this->horarios()
+            ->with('diaSemana:id,nome')
+            ->orderBy('dia_semana_id')
+            ->orderBy('inicio')
+            ->orderBy('fim')
+            ->get()->toArray();
+
+        $diaSemanaAtendimento = [];
+
+        foreach ($horarios as $horario) {
+            $diaSemana = $horario['dia_semana'];
+
+            if (!isset($diaSemanaAtendimento[$diaSemana['id']])) {
+                $diaSemanaAtendimento[$diaSemana['id']] = [
+                    'id' => $diaSemana['id'],
+                    'descricao' => $diaSemana['nome'],
+                ];
+            }
+        }
+
+        ksort($diaSemanaAtendimento);
+
+        return array_values($diaSemanaAtendimento);
+    }
+
+    public function datasAtendimento(int $diaSemanaId)
+    {
+        $horarios = $this->horarios()->where('dia_semana_id', $diaSemanaId)->get()->toArray();
+
+        if (empty($horarios)) {
+            return [];
+        }
+
+        $diaSemana = DiaSemana::find($diaSemanaId)->iso_8601;
+        $datasAtendimento = [];
+
+        $inicio = new DateTime();
+        $fim = (clone $inicio)->modify("+30 days");
+
+        while ($inicio <= $fim) {
+            if ($inicio->format('N') == $diaSemana) {
+                $datasAtendimento[] = [
+                    'id' => $inicio->format('Y-m-d'),
+                    'descricao' => $inicio->format('d/m/Y'),
+                ];
+            }
+
+            $inicio->modify('+1 day');
+        }
+
+        return $datasAtendimento;
+    }
+
+    public function horariosAtendimento(string $dia)
+    {
+        $diaSemanaId = DiaSemana::where('iso_8601', (new DateTime($dia))->format('N'))->first()->id;
+        $horarios = $this->horarios()->where('dia_semana_id', $diaSemanaId)->get()->toArray();
+
+        if (empty($horarios)) {
+            return [];
+        }
+
+        $horariosAtendimento = [];
+
+        foreach ($horarios as $horario) {
+            $inicio = new DateTime($dia . ' ' . $horario['inicio']);
+            $fim = new DateTime($dia . ' ' . $horario['fim']);
+            $duracaoConsulta = new DateInterval('PT' . (new DateTime($horario['duracao_consulta']))->format('H') . 'H' . (new DateTime($horario['duracao_consulta']))->format('i') . 'M');
+
+            while ($inicio < $fim) {
+                $horariosAtendimento[] = [
+                    'id' => $inicio->format('H:i'),
+                    'descricao' => $inicio->format('H:i'),
+                ];
+
+                $inicio->add($duracaoConsulta);
+            }
+        }
+
+        return $horariosAtendimento;
     }
 }

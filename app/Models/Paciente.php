@@ -55,4 +55,9 @@ class Paciente extends Model
     {
         return $this->hasMany(PedidoExame::class);
     }
+
+    public function consultas()
+    {
+        return $this->hasMany(AgendaConsulta::class);
+    }
 }
