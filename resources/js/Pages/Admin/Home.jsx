@@ -42,6 +42,14 @@ const Home = ({ pacientes, agenda_consultas }) => {
         ],
     };
 
+    const pieOptions = {
+        plugins: {
+            legend: {
+                position: "bottom",
+            },
+        },
+    };
+
     const monthlyConsultations = agenda_consultas.reduce((acc, consulta) => {
         const month = new Date(consulta.data).getMonth();
         acc[month] = (acc[month] || 0) + 1;
@@ -97,10 +105,7 @@ const Home = ({ pacientes, agenda_consultas }) => {
             <Head title="Tela Inicial" />
             <WrapperContainer>
                 <Row>
-                    <Col
-                        md={6}
-                       
-                    >
+                    <Col md={6}>
                         <h6>Pacientes por Gênero</h6>
 
                         <div
@@ -108,11 +113,11 @@ const Home = ({ pacientes, agenda_consultas }) => {
                                 width: "100%",
                                 height: 250,
                                 marginBottom: 20,
-                                display: 'flex',
-                                justifyContent: 'center'
+                                display: "flex",
+                                justifyContent: "center",
                             }}
                         >
-                            <Pie data={pieData} />
+                            <Pie data={pieData} options={pieOptions} />
                         </div>
                     </Col>
                     <Col md={6}>
@@ -135,7 +140,6 @@ const Home = ({ pacientes, agenda_consultas }) => {
                             <tbody>
                                 {upcomingConsultations.map(
                                     (consulta, index) => {
-                                        console.log(consulta);
                                         if (consulta.finalizada == true) return;
                                         return (
                                             <tr key={index}>
