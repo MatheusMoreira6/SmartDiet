@@ -54,7 +54,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     };
 
     return (
-        <>
+        <Row>
             {dietasDynamic.length > 0 ? (
                 <>
                     {diasSemana.map((dia) => (
@@ -132,7 +132,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                 grupo_dia={selectedDia}
                 setUpdate={setUpdate}
             />
-        </>
+        </Row>
     );
 };
 
