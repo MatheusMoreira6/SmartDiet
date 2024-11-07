@@ -14,9 +14,9 @@ class Dashboard extends Controller
     {
         $user = Auth::user();
         $paciente = Paciente::where('user_id', $user->id)->first();
-        
-        $consultas = AgendaConsulta::where('paciente_id', $paciente->id)->get();
 
-        return $this->render('User/Home');
+        $consultas = AgendaConsulta::where('paciente_id', $paciente->id)->where('finalizada', true)->get();
+
+        return $this->render('User/Home', ['consultas' => $consultas]);
     }
 }
