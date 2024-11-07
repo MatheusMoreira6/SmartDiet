@@ -11,7 +11,7 @@ class HorarioNutricionista extends Model
 
     protected $table = 'horarios_nutricionistas';
 
-    protected $fillable = ['nutricionista_id', 'dia_semana_id', 'inicio', 'fim'];
+    protected $fillable = ['nutricionista_id', 'dia_semana_id', 'inicio', 'fim', 'duracao_consulta'];
 
     protected $hidden = ['nutricionista_id', 'created_at', 'updated_at'];
 

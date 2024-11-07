@@ -47,6 +47,7 @@ class Configuracoes extends Controller
                 'dia_semana_id' => $horario['dia_semana_id'],
                 'hora_inicio' => $horario['inicio'],
                 'hora_fim' => $horario['fim'],
+                'duracao_consulta' => $horario['duracao_consulta'],
             ];
         }
 
@@ -83,6 +84,7 @@ class Configuracoes extends Controller
                 'dia_semana_id' => $horarioNutricionista->dia_semana_id,
                 'hora_inicio' => $horarioNutricionista->inicio,
                 'hora_fim' => $horarioNutricionista->fim,
+                'duracao_consulta' => $horarioNutricionista->duracao_consulta,
             ];
 
             return response()->json(['horario' => $auxHorario]);
@@ -182,6 +184,7 @@ class Configuracoes extends Controller
             'dia_semana_id' => 'required|exists:dias_semana,id',
             'hora_inicio' => 'required|date_format:H:i',
             'hora_fim' => 'required|date_format:H:i|after:hora_inicio',
+            'duracao_consulta' => 'required|date_format:H:i',
         ];
 
         $feedback = [
@@ -193,6 +196,8 @@ class Configuracoes extends Controller
             'hora_fim.required' => 'A hora de fim é obrigatória',
             'hora_fim.date_format' => 'A hora de fim precisa ser válida',
             'hora_fim.after' => 'A hora de fim precisa ser maior que a hora de início',
+            'duracao_consulta.required' => 'A duração da consulta é obrigatória',
+            'duracao_consulta.date_format' => 'A duração da consulta precisa ser válida',
         ];
 
         $request->validate($regras, $feedback);
@@ -212,6 +217,7 @@ class Configuracoes extends Controller
             $horarioNutricionista->dia_semana_id = $request->dia_semana_id;
             $horarioNutricionista->inicio = $request->hora_inicio;
             $horarioNutricionista->fim = $request->hora_fim;
+            $horarioNutricionista->duracao_consulta = $request->duracao_consulta;
 
             if (!$horarioNutricionista->save()) {
                 DB::rollBack();

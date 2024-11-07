@@ -15,6 +15,7 @@ const tableHorarios = (horarios, handleShow, handleDelete) => {
                 <tr>
                     <th>Hora de Início</th>
                     <th>Hora de Fim</th>
+                    <th>Duração das Consultas</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -28,6 +29,10 @@ const tableHorarios = (horarios, handleShow, handleDelete) => {
 
                         <td className="text-center">
                             {horario.hora_fim.slice(0, 5)}
+                        </td>
+
+                        <td className="text-center">
+                            {horario.duracao_consulta.slice(0, 5)}
                         </td>
 
                         <td className="text-center d-grid gap-2 d-md-block">
@@ -64,6 +69,7 @@ const Horarios = () => {
         dia_semana_id: "",
         hora_inicio: "",
         hora_fim: "",
+        duracao_consulta: "01:00",
     });
 
     const {
@@ -123,6 +129,7 @@ const Horarios = () => {
                         dia_semana_id: horario.dia_semana_id,
                         hora_inicio: horario.hora_inicio.slice(0, 5),
                         hora_fim: horario.hora_fim.slice(0, 5),
+                        duracao_consulta: horario.duracao_consulta.slice(0, 5),
                     });
                 })
                 .catch((error) => {
@@ -263,7 +270,7 @@ const Horarios = () => {
                         />
                     </Col>
 
-                    <Col xs={12} lg={6}>
+                    <Col xs={12} lg={4}>
                         <FormHours
                             id={"hora_inicio"}
                             label={"Hora de Início"}
@@ -280,7 +287,7 @@ const Horarios = () => {
                         />
                     </Col>
 
-                    <Col xs={12} lg={6}>
+                    <Col xs={12} lg={4}>
                         <FormHours
                             id={"hora_fim"}
                             label={"Hora de Fim"}
@@ -293,6 +300,24 @@ const Horarios = () => {
                             }
                             textError={
                                 errors.hora_fim ?? "Informe a hora de fim"
+                            }
+                        />
+                    </Col>
+
+                    <Col xs={12} lg={4}>
+                        <FormHours
+                            id={"duracao_consulta"}
+                            label={"Duração da Consulta"}
+                            bold={true}
+                            value={data.duracao_consulta ?? ""}
+                            required={true}
+                            isInvalid={validated && errors.duracao_consulta}
+                            onChange={(e) =>
+                                setData("duracao_consulta", e.target.value)
+                            }
+                            textError={
+                                errors.duracao_consulta ??
+                                "Informe a duração da consulta"
                             }
                         />
                     </Col>

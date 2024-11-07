@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('dia_semana_id');
             $table->time('inicio');
             $table->time('fim');
+            $table->time('duracao_consulta')->default('01:00:00');
             $table->timestamps();
 
             $table->foreign('nutricionista_id')->references('id')->on('nutricionistas')->onDelete('cascade');
