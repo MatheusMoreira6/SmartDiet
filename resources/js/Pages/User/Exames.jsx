@@ -11,6 +11,27 @@ import {
     View,
     StyleSheet,
 } from "@react-pdf/renderer";
+import { Line } from "react-chartjs-2";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const styles = StyleSheet.create({
     page: { padding: 30 },
@@ -42,6 +63,23 @@ const ExamesPDF = ({ exames_pedidos }) => (
 );
 
 const Exames = ({ exames_pedidos, exames_resultados }) => {
+    // Agrupar resultados de exames por `exame_id`
+    const groupedResults = exames_resultados.reduce((acc, pedido) => {
+        pedido.itens_pedido_exame.forEach((item) => {
+            if (!acc[item.exame_id]) {
+                acc[item.exame_id] = {
+                    nome: item.exame.nome,
+                    unidade: item.exame.unidade_medida,
+                    datas: [],
+                    resultados: [],
+                };
+            }
+            acc[item.exame_id].datas.push(pedido.data_resultado);
+            acc[item.exame_id].resultados.push(parseFloat(item.resultado));
+        });
+        return acc;
+    }, {});
+
     return (
         <UserLayout>
             <Head title="Exames" />
@@ -66,7 +104,7 @@ const Exames = ({ exames_pedidos, exames_resultados }) => {
                                     loading ? (
                                         "Carregando PDF..."
                                     ) : (
-                                        <Button>Gerar PDF</Button>
+                                        <Button>Gerar PDF de pedidos</Button>
                                     )
                                 }
                             </PDFDownloadLink>
@@ -100,13 +138,54 @@ const Exames = ({ exames_pedidos, exames_resultados }) => {
                             </Table>
                         </Row>
                     </>
-                ) : (
-                    <></>
-                )}
-                {exames_resultados && exames_resultados.length > 0 && (
-                    <>
-                        <Row className="mt-4"></Row>
-                    </>
+                ) : null}
+
+                {Object.keys(groupedResults).length > 0 && (
+                    <div className="mt-4">
+                        {Object.entries(groupedResults).map(
+                            ([exameId, exameData]) => (
+                                <Row key={exameId} className="mb-5">
+                                    <h5>
+                                        {exameData.nome} ({exameData.unidade})
+                                    </h5>
+                                    <div
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                        }}
+                                    >
+                                        <Line 
+                                            data={{
+                                                labels: exameData.datas,
+                                                datasets: [
+                                                    {
+                                                        label: `Resultado do exame ${exameData.nome}`,
+                                                        data: exameData.resultados,
+                                                        borderColor:
+                                                            "rgba(75, 192, 192, 1)",
+                                                        backgroundColor:
+                                                            "rgba(75, 192, 192, 0.2)",
+                                                        fill: true,
+                                                        tension: 0.1,
+                                                    },
+                                                ],
+                                            }}
+                                            options={{
+                                                responsive: true,
+                                                plugins: {
+                                                    legend: { position: "top" },
+                                                    title: {
+                                                        display: true,
+                                                        text: `Evolução dos Resultados: ${exameData.nome}`,
+                                                    },
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Row>
+                            )
+                        )}
+                    </div>
                 )}
             </WrapperContainer>
         </UserLayout>
