@@ -140,6 +140,7 @@ const Dietas = ({ dieta, horarios, dias }) => {
                                     </thead>
                                     <tbody>
                                         {horarios.map((horario) => {
+                                            if(horario.grupo_id !== dia.id) return
                                             if (!dieta.refeicoes) return;
                                             const refeicoesHorario =
                                                 dieta.refeicoes.filter(
