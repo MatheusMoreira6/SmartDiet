@@ -133,7 +133,15 @@ Route::middleware([AuthenticateUser::class])->prefix('user')->group(function () 
     Route::middleware([CheckQuestionarioUser::class])->group(function () {
         Route::get('/', [DashboardUser::class, 'index'])->name('user.home');
         Route::get('/dietas', [DietasUser::class, 'index'])->name('user.dietas');
-        Route::get('/consultas', [ConsultasUser::class, 'index'])->name('user.consultas');
+
+        Route::controller(ConsultasUser::class)->group(function () {
+            Route::get('/consultas', 'index')->name('user.consultas');
+            Route::get('/consultas/data-atendimento/{id}', 'datasAtendimento')->name('user.consultas.data-atendimento');
+            Route::get('/consultas/horario-atendimento/{date}', 'horariosAtendimento')->name('user.consultas.horario-atendimento');
+            Route::post('/consultas/store', 'store')->name('user.consultas.store');
+            Route::post('/consultas/delete', 'delete')->name('user.consultas.delete');
+        });
+
         Route::get('/exames', [ExamesUser::class, 'index'])->name('user.exames');
     });
 
