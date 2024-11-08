@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Libraries\LibConversion;
+use App\Mail\ConsultaCadastradaMail;
 use App\Models\AgendaConsulta;
+use App\Models\Paciente;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class Consultas extends Controller
 {
@@ -131,6 +135,7 @@ class Consultas extends Controller
 
     public function store(Request $request)
     {
+
         $regras = [
             'paciente_id' => 'required|exists:pacientes,id',
             'dia_semana_id' => 'required|exists:dias_semana,id',
@@ -154,8 +159,13 @@ class Consultas extends Controller
         $nutricionista = Auth::user()->nutricionista;
 
         DB::beginTransaction();
+       
+        $paciente = Paciente::where('id', $request->paciente_id)->first();
+        $user = User::where('id', $paciente->id)->first();
 
         try {
+
+
             $consulta = $nutricionista->consultas()->create([
                 'paciente_id' => $request->paciente_id,
                 'dia_semana_id' => $request->dia_semana_id,
@@ -167,6 +177,8 @@ class Consultas extends Controller
                 DB::rollBack();
                 return $this->responseErrors(['error' => 'Erro ao cadastrar a consulta.']);
             }
+
+            Mail::to($user->email)->send(new ConsultaCadastradaMail($consulta));
 
             DB::commit();
             return $this->response('admin.consultas', ['title' => 'Consulta cadastrada com sucesso.']);
@@ -226,6 +238,10 @@ class Consultas extends Controller
                 return $this->responseErrors(['error' => 'Erro ao atualizar a consulta.']);
             }
 
+            $user = User::where('id',);
+
+            Mail::to($consulta->paciente->email)->send(new ConsultaCadastradaMail($consulta));
+
             DB::commit();
             return $this->response('admin.consultas', ['title' => 'Consulta atualizada com sucesso.']);
         } catch (Exception $e) {
@@ -257,6 +273,8 @@ class Consultas extends Controller
                 DB::rollBack();
                 return $this->responseErrors(['error' => 'Erro ao deletar a consulta.']);
             }
+
+
 
             DB::commit();
             return $this->response('admin.consultas', ['title' => 'Consulta deletada com sucesso.']);
