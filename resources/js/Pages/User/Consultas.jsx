@@ -257,7 +257,7 @@ const Consultas = ({ consultas, dias_semana }) => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="4" className="text-center">
+                                        <td colSpan="5" className="text-center">
                                             Nenhuma consulta agendada!
                                         </td>
                                     </tr>
