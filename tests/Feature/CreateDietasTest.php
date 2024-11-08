@@ -16,11 +16,9 @@ class CreateDietas extends TestCase
      */
     public function test_create_dieta(): void
     {
-        // Dados de setup para garantir que Paciente e Nutricionista existam
-        $paciente = Paciente::factory()->create(['id' => 3]);
-        $nutricionista = Nutricionista::factory()->create(['id' => 1]);
+        $paciente = Paciente::factory()->create();
+        $nutricionista = Nutricionista::factory()->create();
 
-        // Dados da dieta para o teste
         $dietaData = [
             "nome" => "Nome teste",
             "descricao" => "1232312",
