@@ -5,15 +5,15 @@ namespace Tests\Feature;
 use App\Models\Paciente;
 use App\Models\Nutricionista;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class CreateDietas extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Testa a criação de uma nova dieta.
-     */
+  
+    #[Test]
     public function test_create_dieta(): void
     {
         $paciente = Paciente::factory()->create();
