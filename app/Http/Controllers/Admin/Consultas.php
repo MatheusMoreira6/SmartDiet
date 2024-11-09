@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Libraries\LibConversion;
+use App\Mail\ConsultaAlterada;
 use App\Mail\ConsultaCadastradaMail;
+use App\Mail\ConsultaDesmarcada;
 use App\Models\AgendaConsulta;
 use App\Models\Paciente;
 use App\Models\User;
@@ -273,6 +275,18 @@ class Consultas extends Controller
 
         try {
             $consulta = AgendaConsulta::findOrFail($request->id);
+
+            $paciente = Paciente::where('id', $consulta->paciente_id)->first();
+            $user = User::where('id', $paciente->user_id)->first();
+
+            Log::info('Iniciando o envio do e-mail para ' . $user->email);
+
+            try {
+                Mail::to($user->email)->send(new ConsultaDesmarcada($consulta));
+                Log::info('E-mail enviado com sucesso para ' . $user->email);
+            } catch (Exception $e) {
+                Log::error('Erro ao enviar e-mail: ' . $e->getMessage());
+            }
 
             if (!$consulta->delete()) {
                 DB::rollBack();
