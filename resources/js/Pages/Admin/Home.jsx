@@ -1,62 +1,47 @@
 import { Head } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Table, Row, Col } from "react-bootstrap";
-import { Pie, Bar } from "react-chartjs-2";
 import WrapperContainer from "@/Components/WrapperContainer";
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-} from "chart.js";
+import { Bar } from "@/Components/ChartJS";
+import { Table, Row, Col } from "react-bootstrap";
 
-ChartJS.register(
-    ArcElement,
-    Tooltip,
-    Legend,
-    CategoryScale,
-    LinearScale,
-    BarElement
-);
-
-const Home = ({ pacientes, agenda_consultas }) => {
-    const genderCounts = pacientes.reduce(
-        (acc, paciente) => {
-            if (paciente.genero.descricao === "Masculino") acc.male++;
-            if (paciente.genero.descricao === "Feminino") acc.female++;
-            return acc;
-        },
-        { male: 0, female: 0 }
-    );
-
-    const pieData = {
-        labels: ["Masculino", "Feminino"],
+const Home = ({
+    consultas,
+    consultas_mes,
+    documentos_pendentes,
+    documentos_concluidos,
+}) => {
+    const dataPendentes = {
+        labels: ["Questionários", "Exames"],
         datasets: [
             {
-                data: [genderCounts.male, genderCounts.female],
-                backgroundColor: ["#36A2EB", "#FF6384"],
+                label: "Pendentes",
+                data: documentos_pendentes,
+            },
+            {
+                label: "Concluídos",
+                data: documentos_concluidos,
             },
         ],
     };
 
-    const pieOptions = {
+    const optionsPendentes = {
+        indexAxis: "y",
         plugins: {
             legend: {
                 position: "bottom",
             },
         },
+        scales: {
+            x: {
+                ticks: {
+                    stepSize: 1,
+                    beginAtZero: true,
+                },
+            },
+        },
     };
 
-    const monthlyConsultations = agenda_consultas.reduce((acc, consulta) => {
-        const month = new Date(consulta.data).getMonth();
-        acc[month] = (acc[month] || 0) + 1;
-        return acc;
-    }, Array(12).fill(0));
-
-    const barData = {
+    const dataConsultas = {
         labels: [
             "Janeiro",
             "Fevereiro",
@@ -74,47 +59,43 @@ const Home = ({ pacientes, agenda_consultas }) => {
         datasets: [
             {
                 label: "Consultas",
-                data: monthlyConsultations,
-                backgroundColor: "#36A2EB",
+                data: consultas_mes,
             },
         ],
     };
 
-    const barOptions = {
+    const optionsConsultas = {
+        indexAxis: "y",
+        plugins: {
+            legend: {
+                position: "bottom",
+            },
+        },
         scales: {
-            y: {
+            x: {
                 ticks: {
                     stepSize: 1,
                     beginAtZero: true,
-                    callback: function (value) {
-                        if (Number.isInteger(value)) {
-                            return value;
-                        }
-                    },
                 },
             },
         },
     };
-
-    const upcomingConsultations = agenda_consultas
-        .sort((a, b) => new Date(a.data) - new Date(b.data))
-        .slice(0, 10);
 
     return (
         <AdminLayout>
             <Head title="Tela Inicial" />
             <WrapperContainer>
                 <Row className="g-3">
-                    <Col md={4}>
-                        <h6>Pacientes por Gênero</h6>
-
-                        <Pie data={pieData} options={pieOptions} />
-                    </Col>
-
-                    <Col md={8}>
+                    <Col xs={12} lg={6}>
                         <h6>Consultas por Mês</h6>
 
-                        <Bar data={barData} options={barOptions} />
+                        <Bar data={dataConsultas} options={optionsConsultas} />
+                    </Col>
+
+                    <Col xs={12} lg={6}>
+                        <h6>Documentos Pendentes</h6>
+
+                        <Bar data={dataPendentes} options={optionsPendentes} />
                     </Col>
 
                     <Col xs={12}>
@@ -129,39 +110,35 @@ const Home = ({ pacientes, agenda_consultas }) => {
                         >
                             <thead>
                                 <tr>
+                                    <th>Paciente</th>
                                     <th>Data</th>
                                     <th>Hora</th>
-                                    <th>Nome do Paciente</th>
+                                    <th>Telefone</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {upcomingConsultations.length > 0 ? (
-                                    upcomingConsultations.map(
-                                        (consulta, index) => {
-                                            if (consulta.finalizada == true)
-                                                return;
-                                            return (
-                                                <tr key={index}>
-                                                    <td>{consulta.data}</td>
-                                                    <td>{consulta.hora}</td>
+                                {consultas.length > 0 ? (
+                                    consultas.map((consulta, index) => (
+                                        <tr key={index}>
+                                            <td>{consulta.paciente}</td>
 
-                                                    <td>
-                                                        {
-                                                            pacientes.find(
-                                                                (paciente) =>
-                                                                    paciente.id ===
-                                                                    consulta.paciente_id
-                                                            )?.nome
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            );
-                                        }
-                                    )
+                                            <td className="text-center">
+                                                {consulta.data}
+                                            </td>
+
+                                            <td className="text-center">
+                                                {consulta.hora.slice(0, 5)}
+                                            </td>
+
+                                            <td className="text-center">
+                                                {consulta.telefone}
+                                            </td>
+                                        </tr>
+                                    ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="3" className="text-center">
+                                        <td colSpan="4" className="text-center">
                                             Nenhuma consulta agendada
                                         </td>
                                     </tr>
