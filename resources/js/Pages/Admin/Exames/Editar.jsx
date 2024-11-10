@@ -142,7 +142,7 @@ const Editar = ({ paciente, error_visualizacao = "" }) => {
                         <Pendentes handleUpdate={handleUpdate} />
                     </Tab>
 
-                    <Tab eventKey="finalizados" title="Finalizados">
+                    <Tab eventKey="concluidos" title="Concluidos">
                         <Concluidos handleUpdate={handleUpdate} />
                     </Tab>
                 </Tabs>
