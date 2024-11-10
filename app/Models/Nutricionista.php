@@ -150,6 +150,7 @@ class Nutricionista extends Model
         }
 
         $horariosAgendados = AgendaConsulta::where('nutricionista_id', $this->id)
+            ->where('finalizada', false)
             ->whereDate('data', $dia)
             ->get(['data', 'hora'])
             ->toArray();
