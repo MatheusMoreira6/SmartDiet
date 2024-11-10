@@ -65,9 +65,13 @@ class UserCreateTest extends TestCase
         ];
 
         $nutricionistaData = [
-            'nome' => 'Carlos Silva',
+            'nome' => 'Carlos',
             'cpf' => '987.654.321-00',
             'telefone' => '(11) 98888-8888',
+            'sobrenome' => 'Silva',
+            'data_nascimento' => '13/10/2005',
+            'genero_id' => Genero::factory()->create()->id,
+            'crn' => '12343P'
         ];
 
         // Cria o usuário
@@ -84,7 +88,7 @@ class UserCreateTest extends TestCase
 
         // Verifica se o nutricionista foi criado e vinculado corretamente
         $this->assertDatabaseHas('nutricionistas', [
-            'nome' => 'Carlos Silva',
+            'nome' => 'Carlos',
             'cpf' => '987.654.321-00',
             'telefone' => '(11) 98888-8888',
             'user_id' => $user->id,
