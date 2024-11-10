@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Factories;
+
 use App\Models\Paciente;
 use App\Models\User;
 use App\Models\Genero;
@@ -22,7 +24,7 @@ class PacienteFactory extends Factory
             'genero_id' => Genero::factory()->create()->id, // Cria um gênero e obtém o ID
             'cpf' => $this->faker->unique()->numerify('###.###.###-##'),
             'telefone' => $this->faker->phoneNumber,
-            'questionario_id' => Questionario::factory()->optional()->create()->id, // Associa um questionário se existir
+            'questionario_id' => null 
         ];
     }
 }

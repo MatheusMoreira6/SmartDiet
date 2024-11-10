@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Factories;
+
 use App\Models\Nutricionista;
 use App\Models\User;
 use App\Models\Genero;
@@ -12,15 +14,15 @@ class NutricionistaFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory()->create()->id, 
+            'user_id' => User::factory()->create()->id,
             'nome' => $this->faker->firstName,
-            'sobrenome' => $this->faker->lastName,
+            'sobrenome' => 'Pires',
             'data_nascimento' => $this->faker->date(),
-            'genero_id' => Genero::factory()->create()->id, 
+            'genero_id' => Genero::factory()->create()->id,
             'cpf' => $this->faker->unique()->numerify('###.###.###-##'),
             'crn' => $this->faker->unique()->numerify('######'),
-            'telefone' => $this->faker->phoneNumber,
-            'telefone_fixo' => $this->faker->optional()->phoneNumber,
+            'telefone' => '67998148523',
+            'telefone_fixo' => '3131124',
         ];
     }
 }
