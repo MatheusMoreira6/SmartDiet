@@ -20,8 +20,11 @@ class Exames extends Controller
         $nutricionista = Auth::user()->nutricionista;
 
         $exames = $nutricionista->exames()->select('id', 'nome')->orderBy('nome')->get()->toArray();
+
+        /**
+         * Pacientes vinculados ao nutricionista
+         */
         $pacientes = $nutricionista->pacientes()->get(['id', 'nome', 'sobrenome'])->toArray();
-        $pacientes_exames = $nutricionista->pedidosExame()->with('paciente:id,nome,sobrenome')->get()->toArray();
 
         $auxPacientes = array_map(function ($paciente) {
             return [
@@ -30,19 +33,20 @@ class Exames extends Controller
             ];
         }, $pacientes);
 
-        $idPacientesExames = [];
-        $auxPacientesExames = [];
+        /**
+         * Pacientes que possuem pedidos de exames
+         */
+        $pacientesExames = PedidoExame::where('nutricionista_id', $nutricionista->id)
+            ->with('paciente:id,nome,sobrenome')
+            ->groupBy('paciente_id')
+            ->get(['paciente_id'])->toArray();
 
-        foreach ($pacientes_exames as $paciente_exame) {
-            if (!in_array($paciente_exame['paciente']['id'], $idPacientesExames)) {
-                $idPacientesExames[] = $paciente_exame['paciente']['id'];
-
-                $auxPacientesExames[] = [
-                    'id' => $paciente_exame['paciente']['id'],
-                    'nome' => "{$paciente_exame['paciente']['nome']} {$paciente_exame['paciente']['sobrenome']}",
-                ];
-            }
-        }
+        $auxPacientesExames = array_map(function ($paciente) {
+            return [
+                'id' => $paciente['paciente_id'],
+                'nome' => "{$paciente['paciente']['nome']} {$paciente['paciente']['sobrenome']}",
+            ];
+        }, $pacientesExames);
 
         return $this->render('Admin/Exames/Exames', [
             'exames' => $exames,
@@ -68,31 +72,56 @@ class Exames extends Controller
 
         try {
             $paciente = Paciente::findOrFail($request->id);
-            $exames = $paciente->pedidosExames()->get(['id', 'titulo_pedido', 'data_pedido'])->sortByDesc('data_pedido')->toArray();
+            $exames = $paciente->pedidosExames()->get([
+                'id',
+                'titulo_pedido',
+                'data_pedido',
+                'data_resultado'
+            ])->sortByDesc('data_pedido')->toArray();
 
-            $auxExames = [];
+            $auxExamesPendentes = [];
+            $auxExamesConcluidos = [];
+
             foreach ($exames as $exame) {
                 $anoPedido = date('Y', strtotime($exame['data_pedido']));
 
-                if (!isset($auxExames[$anoPedido])) {
-                    $auxExames[$anoPedido] = [
-                        'ano' => $anoPedido,
-                        'exames' => [],
+                if ($exame['data_resultado'] == null) {
+                    if (!isset($auxExamesPendentes[$anoPedido])) {
+                        $auxExamesPendentes[$anoPedido] = [
+                            'ano' => $anoPedido,
+                            'exames' => [],
+                        ];
+                    }
+
+                    $auxExamesPendentes[$anoPedido]['exames'][] = [
+                        'id' => $exame['id'],
+                        'titulo_pedido' => $exame['titulo_pedido'],
+                        'data_pedido' => LibConversion::convertIsoToBr($exame['data_pedido']),
+                    ];
+                } else {
+                    if (!isset($auxExamesConcluidos[$anoPedido])) {
+                        $auxExamesConcluidos[$anoPedido] = [
+                            'ano' => $anoPedido,
+                            'exames' => [],
+                        ];
+                    }
+
+                    $auxExamesConcluidos[$anoPedido]['exames'][] = [
+                        'id' => $exame['id'],
+                        'titulo_pedido' => $exame['titulo_pedido'],
+                        'data_pedido' => LibConversion::convertIsoToBr($exame['data_pedido']),
+                        'data_resultado' => LibConversion::convertIsoToBr($exame['data_resultado']),
                     ];
                 }
-
-                $auxExames[$anoPedido]['exames'][] = [
-                    'id' => $exame['id'],
-                    'titulo_pedido' => $exame['titulo_pedido'],
-                    'data_pedido' => LibConversion::convertIsoToBr($exame['data_pedido']),
-                ];
             }
 
-            rsort($auxExames);
+            rsort($auxExamesPendentes);
+            rsort($auxExamesConcluidos);
 
             return $this->render('Admin/Exames/Editar', [
                 'paciente' => $paciente->toArray(),
-                'anos_exames' => $auxExames,
+                'exames_pendente' => $auxExamesPendentes,
+                'exames_concluido' => $auxExamesConcluidos,
             ]);
         } catch (Exception $e) {
             Log::error("Erro ao visualizar os exames do paciente: " . $e->getMessage());

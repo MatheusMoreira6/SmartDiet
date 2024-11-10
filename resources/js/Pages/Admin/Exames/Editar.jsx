@@ -4,110 +4,15 @@ import { Head, router, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import WrapperContainer from "@/Components/WrapperContainer";
 import PageTopic from "@/Components/PageTopic";
+import Pendentes from "./Pendentes";
+import Concluidos from "./Concluidos";
 import FormModal from "@/Components/FormModal";
 import FormInput from "@/Components/FormInput";
 import SweetAlert from "@/Components/SweetAlert";
 import LinkPrimary from "@/Components/LinkPrimary";
-import {
-    Accordion,
-    Button,
-    Col,
-    Form,
-    InputGroup,
-    Row,
-    Table,
-} from "react-bootstrap";
+import { Col, Form, InputGroup, Row, Tab, Tabs } from "react-bootstrap";
 
-const YearCollapse = ({ ano_exames, handleUpdate }) => {
-    const { data, setData, post, reset } = useForm({
-        id: "",
-    });
-
-    useEffect(() => {
-        if (data.id) {
-            post(route("admin.exames.delete"), {
-                onSuccess: (page) => {
-                    SweetAlert.success({
-                        title: page.props.title,
-                        text: page.props.text,
-                    }).then(() => {
-                        if (page.props.nenhum_exame) {
-                            router.visit(route("admin.exames"));
-                        }
-                    });
-                },
-                onFinish: () => {
-                    reset();
-                },
-            });
-        }
-    }, [data.id]);
-
-    const handleDelete = (exame_id) => {
-        SweetAlert.confirm({
-            title: "Excluir Pedido de Exame",
-            text: "Deseja realmente excluir este pedido de exame?",
-            confirmButton: "Sim, excluir",
-            cancelButton: "Cancelar",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                setData("id", exame_id);
-            } else {
-                reset();
-            }
-        });
-    };
-
-    return (
-        <Accordion.Item eventKey={ano_exames.ano} key={ano_exames.ano}>
-            <Accordion.Header>{ano_exames.ano}</Accordion.Header>
-
-            <Accordion.Body>
-                <Table hover striped bordered responsive className="mt-3 mb-0">
-                    <thead>
-                        <tr>
-                            <th>Nome do Pedido</th>
-                            <th>Data do Pedido</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {ano_exames.exames.map((exame) => (
-                            <tr key={exame.id}>
-                                <td>{exame.titulo_pedido}</td>
-
-                                <td className="text-center">
-                                    {exame.data_pedido}
-                                </td>
-
-                                <td className="text-center d-grid gap-2 d-md-block">
-                                    <Button
-                                        variant="primary"
-                                        title="Editar Pedido de Exame"
-                                        onClick={() => handleUpdate(exame.id)}
-                                    >
-                                        <i className="bi bi-pencil-square"></i>
-                                    </Button>
-
-                                    <Button
-                                        variant="danger"
-                                        title="Excluir Pedido de Exame"
-                                        onClick={() => handleDelete(exame.id)}
-                                    >
-                                        <i className="bi bi-trash"></i>
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </Accordion.Body>
-        </Accordion.Item>
-    );
-};
-
-const Editar = ({ paciente, anos_exames, error_visualizacao = "" }) => {
+const Editar = ({ paciente, error_visualizacao = "" }) => {
     if (error_visualizacao) {
         SweetAlert.error({
             title: error_visualizacao,
@@ -228,29 +133,19 @@ const Editar = ({ paciente, anos_exames, error_visualizacao = "" }) => {
                 <PageTopic>
                     <i className="bi bi-activity"></i>
                     {paciente.nome && paciente.sobrenome
-                        ? `${paciente.nome} ${paciente.sobrenome}`
-                        : "Paciente não encontrado"}
+                        ? `Exames - ${paciente.nome} ${paciente.sobrenome}`
+                        : "Exames Paciente"}
                 </PageTopic>
 
-                <Row className="g-3 mb-3">
-                    <Col xs={12}>
-                        {anos_exames && anos_exames.length > 0 ? (
-                            <Accordion>
-                                {anos_exames.map((ano_exames) => (
-                                    <YearCollapse
-                                        key={ano_exames.ano}
-                                        ano_exames={ano_exames}
-                                        handleUpdate={handleUpdate}
-                                    />
-                                ))}
-                            </Accordion>
-                        ) : (
-                            <p className="bg-warning-subtle text-center py-3 mb-0">
-                                Nenhum exame encontrado.
-                            </p>
-                        )}
-                    </Col>
-                </Row>
+                <Tabs id="exames-tabs" defaultActiveKey="pendentes">
+                    <Tab eventKey="pendentes" title="Pendentes">
+                        <Pendentes handleUpdate={handleUpdate} />
+                    </Tab>
+
+                    <Tab eventKey="finalizados" title="Finalizados">
+                        <Concluidos handleUpdate={handleUpdate} />
+                    </Tab>
+                </Tabs>
 
                 <Row>
                     <Col xs={12}>
