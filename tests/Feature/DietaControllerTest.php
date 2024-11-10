@@ -135,4 +135,65 @@ class DietaControllerTest extends TestCase
             }
         }
     }
+
+    public function test_delete_grupo()
+    {
+        $dieta = Dieta::factory()->create();
+        $nutricionista = Nutricionista::factory()->create();
+        $paciente = Paciente::factory()->create();
+
+        $grupoDia = DB::table('table_grupo_dias_dieta')->insertGetId([
+            'nome_grupo' => 'Grupo A',
+            'ordem' => 1,
+            'dieta_id' => $dieta->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $requestData = [
+            'dieta_id' => $dieta->id,
+            'dia_id' => $grupoDia,
+            'id_nutricionista' => $nutricionista->id,
+            'id_paciente' => $paciente->id,
+        ];
+
+        $response = $this->postJson(route('delete.grupo'), $requestData);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseMissing('table_grupo_dias_dieta', [
+            'id' => $grupoDia,
+            'dieta_id' => $dieta->id,
+        ]);
+    }
+
+    public function test_edita_dia()
+    {
+        $dieta = Dieta::factory()->create();
+        $grupoDia = DB::table('table_grupo_dias_dieta')->insertGetId([
+            'nome_grupo' => 'Grupo Original',
+            'ordem' => 1,
+            'dieta_id' => $dieta->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $requestData = [
+            'grupo_dia' => $grupoDia,
+            'newNome' => 'Grupo Editado'
+        ];
+
+        $response = $this->postJson(route('grupo_dia.editar'), $requestData);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('table_grupo_dias_dieta', [
+            'id' => $grupoDia,
+            'nome_grupo' => 'Grupo Editado',
+        ]);
+
+        $response->assertJson([
+            'message' => 'Nome do grupo atualizado com sucesso!'
+        ]);
+    }
 }
