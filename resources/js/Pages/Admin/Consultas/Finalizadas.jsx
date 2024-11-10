@@ -145,7 +145,7 @@ const Finalizadas = () => {
     return (
         <>
             <Row className="g-3">
-                <Col xs={12}>
+                <Col xs={12} className="mt-4">
                     <Table hover striped bordered responsive className="mb-0">
                         <thead>
                             <tr>
