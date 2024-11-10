@@ -7,6 +7,7 @@ import { router } from "@inertiajs/react";
 import ModalEditDia from "./ModalEditDia";
 import { ModalCadastroGrupo } from "./ModalCadastroGrupo";
 import SweetAlert from "@/Components/SweetAlert";
+import { Pie } from "react-chartjs-2";
 
 const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [show, setShow] = useState(false);
@@ -87,6 +88,42 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
         }
     }
 
+    const getChartData = (dia) => {
+        const refeicoesDias = dietasDynamic[0].refeicoes.filter(
+            (refeicao) => refeicao.dia_semana_id === dia
+        );
+
+        let totalCarboidratos = 0;
+        let totalProteinas = 0;
+        let totalGorduras = 0;
+
+        refeicoesDias.forEach((refeicao) => {
+            console.log(refeicao.alimentos);
+            refeicao.alimentos.forEach((alimento) => {
+                totalCarboidratos += parseFloat(
+                    alimento.tipo_porcao[0].carboidratos
+                );
+                totalProteinas += parseFloat(alimento.tipo_porcao[0].proteinas);
+                totalGorduras += parseFloat(alimento.tipo_porcao[0].gorduras);
+            });
+        });
+
+        return {
+            labels: ["Carboidratos", "Proteínas", "Gorduras"],
+            datasets: [
+                {
+                    data: [
+                        totalCarboidratos.toFixed(1),
+                        totalProteinas.toFixed(1),
+                        totalGorduras.toFixed(1),
+                    ],
+                    backgroundColor: ["#e36e6e", "#FFCE56", "#FFA726"],
+                    hoverBackgroundColor: ["#e36e6e ", "#FFCE56", "#FFA726"],
+                },
+            ],
+        };
+    };
+
     return (
         <Row>
             {dietasDynamic.length > 0 ? (
@@ -153,6 +190,29 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                             </Card.Body>
                         </Card>
                     ))}
+
+                    <div style={{ margin: "5%", marginTop: 0 }}>
+                        <h2 className="text-center mt-4 mb-3">Gráficos:</h2>
+                        <Row className="mt-4">
+                            {diasSemana.map((dia, index) => (
+                                <Col key={`${dia.id}-${dia.nome_grupo}`} md={3}>
+                                    <h5>
+                                        Distribuição de Nutrientes -{" "}
+                                        {dia.nome_grupo}
+                                    </h5>
+                                    <div
+                                        style={{
+                                            width: 300,
+                                            height: 300,
+                                        }}
+                                    >
+                                        <Pie data={getChartData(dia.id)} />
+                                    </div>
+                                </Col>
+                            ))}
+                        </Row>
+                    </div>
+
                     <ModalCadastroGrupo
                         visible={addGrupo}
                         setShow={setAddGrupo}
