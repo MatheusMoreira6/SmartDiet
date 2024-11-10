@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Libraries\LibConversion;
+use App\Mail\ConsultaAlterada;
 use App\Mail\ConsultaCadastradaMail;
+use App\Mail\ConsultaDesmarcada;
 use App\Models\AgendaConsulta;
 use App\Models\Paciente;
 use App\Models\User;
@@ -159,9 +161,9 @@ class Consultas extends Controller
         $nutricionista = Auth::user()->nutricionista;
 
         DB::beginTransaction();
-       
+
         $paciente = Paciente::where('id', $request->paciente_id)->first();
-        $user = User::where('id', $paciente->id)->first();
+        $user = User::where('id', $paciente->user_id)->first();
 
         try {
 
@@ -178,7 +180,14 @@ class Consultas extends Controller
                 return $this->responseErrors(['error' => 'Erro ao cadastrar a consulta.']);
             }
 
-            Mail::to($user->email)->send(new ConsultaCadastradaMail($consulta));
+            Log::info('Iniciando o envio do e-mail para ' . $user->email);
+
+            try {
+                Mail::to($user->email)->send(new ConsultaCadastradaMail($consulta));
+                Log::info('E-mail enviado com sucesso para ' . $user->email);
+            } catch (Exception $e) {
+                Log::error('Erro ao enviar e-mail: ' . $e->getMessage());
+            }
 
             DB::commit();
             return $this->response('admin.consultas', ['title' => 'Consulta cadastrada com sucesso.']);
@@ -238,9 +247,7 @@ class Consultas extends Controller
                 return $this->responseErrors(['error' => 'Erro ao atualizar a consulta.']);
             }
 
-            $user = User::where('id',);
 
-            Mail::to($consulta->paciente->email)->send(new ConsultaCadastradaMail($consulta));
 
             DB::commit();
             return $this->response('admin.consultas', ['title' => 'Consulta atualizada com sucesso.']);
@@ -268,6 +275,18 @@ class Consultas extends Controller
 
         try {
             $consulta = AgendaConsulta::findOrFail($request->id);
+
+            $paciente = Paciente::where('id', $consulta->paciente_id)->first();
+            $user = User::where('id', $paciente->user_id)->first();
+
+            Log::info('Iniciando o envio do e-mail para ' . $user->email);
+
+            try {
+                Mail::to($user->email)->send(new ConsultaDesmarcada($consulta));
+                Log::info('E-mail enviado com sucesso para ' . $user->email);
+            } catch (Exception $e) {
+                Log::error('Erro ao enviar e-mail: ' . $e->getMessage());
+            }
 
             if (!$consulta->delete()) {
                 DB::rollBack();

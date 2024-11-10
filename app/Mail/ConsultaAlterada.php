@@ -4,10 +4,13 @@ namespace App\Mail;
 
 use App\Models\AgendaConsulta;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ConsultaCadastradaMail extends Mailable
+class ConsultaAlterada extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -21,6 +24,6 @@ class ConsultaCadastradaMail extends Mailable
     public function build()
     {
         return $this->subject('Consulta Cadastrada com Sucesso')
-            ->view('emails.consulta-cadastrada');
+            ->view('emails.consulta-alterada');
     }
 }

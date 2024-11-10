@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('dia_semana_id')->nullable();
 
             $table->foreign('horario_id')->references('id')->on('table_horarios_dietas')->onDelete('cascade');
-            $table->foreign('dia_semana_id')->references('id')->on('table_horarios_dietas')->onDelete('cascade');
+            $table->foreign('dia_semana_id')->references('id')->on('table_grupo_dias_dieta')->onDelete('cascade');
         });
     }
 

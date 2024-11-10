@@ -7,16 +7,18 @@ use Illuminate\Support\Facades\Mail;
 
 class TestSendEmail extends Command
 {
-    protected $signature = 'email:test';
-    protected $description = 'Envia um e-mail de teste';
+    protected $signature = 'email:test {email}'; // Adiciona um argumento para o e-mail
+    protected $description = 'Envio de e-mail de teste';
 
     public function handle()
     {
-        Mail::raw('Este é um e-mail de teste enviado pelo Laravel usando SendGrid!', function ($message) {
-            $message->to('thiagopiresdovalle@gmail.com') 
-                    ->subject('Teste de Envio de E-mail');
+        $email = $this->argument('email'); // Recebe o e-mail como argumento
+
+        Mail::raw('Este é um e-mail de teste', function ($message) use ($email) {
+            $message->to($email)
+                    ->subject('E-mail de Teste');
         });
 
-        $this->info('E-mail de teste enviado!');
+        $this->info('E-mail enviado para ' . $email);
     }
 }

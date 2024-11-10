@@ -71,6 +71,62 @@ class Dietas extends Controller
         response()->json(["dietas" => $dietas]);
     }
 
+    public function cadastroGrupo(Request $request)
+    {
+        $request->validate([
+            'ordem' => 'required|integer',
+            'dieta_id' => 'required|integer|exists:dietas,id',
+            'horarios' => 'required|array|min:1',
+            'grupos_dias' => 'required|array|min:1',
+            'grupos_dias.*.grupo_dia' => 'required|string',
+        ]);
+
+        foreach ($request->grupos_dias as $index => $grupo) {
+            $index  += 1;
+            DB::table('table_grupo_dias_dieta')->insert([
+                'nome_grupo' => $grupo['grupo_dia'],
+                'ordem' => $index + $request->ordem,
+                'dieta_id' => $request->dieta_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $grupos_dias = DB::table('table_grupo_dias_dieta')->where('ordem', '>', $request->ordem)->get();
+        foreach ($grupos_dias as $grupo) {
+            foreach ($request->horarios as $horario) {
+                DB::table('table_horarios_dietas')->insert([
+                    'horario' => $horario['horario'],
+                    'dieta_id' => $request->dieta_id,
+                    'grupo_id' => $grupo->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
+            ->where("paciente_id", $request->id_paciente)
+            ->get();
+
+        response()->json(["dietas" => $dietas]);
+    }
+
+    public function deleteGrupo(Request $request)
+    {
+        $request->validate([
+            'dieta_id' => 'required|integer|exists:dietas,id',
+            'dia_id' => 'required|integer|exists:table_grupo_dias_dieta,id',
+        ]);
+
+        DB::table('table_grupo_dias_dieta')->where('dieta_id', $request->dieta_id)->where('id', $request->dia_id)->delete();
+        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
+            ->where("paciente_id", $request->id_paciente)
+            ->get();
+
+        return response()->json(["dietas" => $dietas]);
+    }
+
     public function editaDia(Request $request)
     {
         $validatedData = $request->validate([
