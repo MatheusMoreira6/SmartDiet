@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class GruposDietaControllerFactory extends Factory
+class GrupoDietaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,10 +19,9 @@ class GruposDietaControllerFactory extends Factory
     public function definition(): array
     {
         return [
-            'horario' => 'Segunda/Quarta',
+            'nome_grupo' => 'Segunda/Quarta',
             'ordem' => 1,
             'dieta_id' => Dieta::factory()->create()->id,
-            'grupo' => GrupoDieta::factory()->create()->id
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Dieta;
+use App\Models\GrupoDieta;
 use App\Models\Paciente;
 use App\Models\Nutricionista;
 use App\Models\Refeicoes;
@@ -195,5 +196,54 @@ class DietaControllerTest extends TestCase
         $response->assertJson([
             'message' => 'Nome do grupo atualizado com sucesso!'
         ]);
+    }
+
+    public function test_busca_dias_horarios()
+    {
+        $dieta = Dieta::factory()->create();
+
+        DB::table('table_grupo_dias_dieta')->insert([
+            'nome_grupo' => 'Grupo 1',
+            'ordem' => 1,
+            'dieta_id' => $dieta->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('table_horarios_dietas')->insert([
+            'horario' => '08:00',
+            'dieta_id' => $dieta->id,
+            'grupo_id' => GrupoDieta::factory()->create()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $response = $this->getJson(route('dias.horarios', ['id' => $dieta->id]));
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'dias' => [
+                '*' => [
+                    'id',
+                    'nome_grupo',
+                    'ordem',
+                    'dieta_id',
+                    'created_at',
+                    'updated_at'
+                ]
+            ],
+            'horarios' => [
+                '*' => [
+                    'id',
+                    'horario',
+                    'dieta_id',
+                    'created_at',
+                    'updated_at'
+                ]
+            ]
+        ]);
+
+        $response->assertJsonFragment(['nome_grupo' => 'Grupo 1']);
+        $response->assertJsonFragment(['horario' => '08:00']);
     }
 }
