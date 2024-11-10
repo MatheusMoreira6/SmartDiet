@@ -93,7 +93,7 @@ const Home = ({
                     </Col>
 
                     <Col xs={12} lg={6}>
-                        <h6>Documentos Pendentes</h6>
+                        <h6>Documentos</h6>
 
                         <Bar data={dataPendentes} options={optionsPendentes} />
                     </Col>
