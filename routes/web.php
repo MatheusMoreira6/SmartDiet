@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\RefeicoesController;
 use App\Http\Controllers\Auth\CadastroAdmin as CadastroAdmin;
 use App\Http\Controllers\Auth\LoginAdmin as LoginAdmin;
 use App\Http\Controllers\Auth\LoginUser as LoginUser;
+
 // Controllers User
 use App\Http\Controllers\User\Dashboard as DashboardUser;
 use App\Http\Controllers\User\Dietas as DietasUser;
@@ -24,12 +25,13 @@ use App\Http\Controllers\User\Questionario as QuestionarioUser;
 use App\Http\Controllers\User\Perfil as PerfilUser;
 use App\Http\Controllers\User\Configuracoes as ConfiguracoesUser;
 use App\Http\Controllers\User\DiariosAlimentares;
+
 // Middlewares
 use App\Http\Middleware\CheckLogout;
 use App\Http\Middleware\AuthenticateAdmin;
 use App\Http\Middleware\AuthenticateUser;
 use App\Http\Middleware\CheckQuestionarioUser;
-use App\Models\DiarioAlimentar;
+
 // Facades
 use Illuminate\Support\Facades\Route;
 
