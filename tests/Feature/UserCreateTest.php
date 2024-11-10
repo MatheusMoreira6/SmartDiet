@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Genero;
 use App\Models\Nutricionista;
 use App\Models\Paciente;
 use App\Models\User;
@@ -23,9 +24,13 @@ class UserCreateTest extends TestCase
         ];
 
         $pacienteData = [
-            'nome' => 'Maria Silva',
+            'nome' => 'Maria',
             'cpf' => '123.456.789-00',
             'telefone' => '(11) 99999-9999',
+            'nutricionista_id' => Nutricionista::factory()->create()->id,
+            'sobrenome' => 'Silva',
+            'data_nascimento' => '13/10/2005',
+            'genero_id' => Genero::factory()->create()->id
         ];
 
         // Cria o usuário
@@ -42,7 +47,7 @@ class UserCreateTest extends TestCase
 
         // Verifica se o paciente foi criado e vinculado corretamente
         $this->assertDatabaseHas('pacientes', [
-            'nome' => 'Maria Silva',
+            'nome' => 'Maria',
             'cpf' => '123.456.789-00',
             'telefone' => '(11) 99999-9999',
             'user_id' => $user->id,
