@@ -291,7 +291,7 @@ const Pendentes = () => {
                             onClick={() => handleShowCadastro()}
                         >
                             <i className="bi bi-plus-lg"></i>
-                            Cadastrar Consulta
+                            Agendar Consulta
                         </Button>
                     </div>
                 </Col>
