@@ -1,102 +1,56 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
-import { Line } from "react-chartjs-2";
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    LineElement,
-    PointElement,
-    Tooltip,
-    Legend,
-} from "chart.js";
-import { Row, Col, Container } from "react-bootstrap";
 import WrapperContainer from "@/Components/WrapperContainer";
+import { Line } from "@/Components/ChartJS";
+import { Row, Col } from "react-bootstrap";
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    LineElement,
-    PointElement,
-    Tooltip,
-    Legend
-);
-
-const Home = ({ consultas }) => {
-    const dates = consultas.map((consulta) => consulta.data);
-
-    const weightHeightImcData = {
-        labels: dates,
+const Home = ({ datas_consultas, dados_consultas }) => {
+    const dataPesoAlturaIMC = {
+        labels: datas_consultas,
         datasets: [
             {
                 label: "Peso (kg)",
-                data: consultas.map((consulta) => parseFloat(consulta.peso)),
-                borderColor: "#36A2EB",
-                fill: false,
+                data: dados_consultas.peso,
             },
             {
                 label: "Altura (cm)",
-                data: consultas.map((consulta) => parseFloat(consulta.altura)),
-                borderColor: "#FF6384",
-                fill: false,
+                data: dados_consultas.altura,
             },
             {
                 label: "IMC",
-                data: consultas.map((consulta) => parseFloat(consulta.imc)),
-                borderColor: "#FFCE56",
-                fill: false,
+                data: dados_consultas.imc,
             },
         ],
     };
 
-    const circumferencesData = {
-        labels: dates,
+    const dataCinturaPesoQuadril = {
+        labels: datas_consultas,
         datasets: [
             {
                 label: "Cintura (cm)",
-                data: consultas.map((consulta) =>
-                    parseFloat(consulta.circunferencia_cintura)
-                ),
-                borderColor: "#36A2EB",
-                fill: false,
-            },
-            {
-                label: "Pescoço (cm)",
-                data: consultas.map((consulta) =>
-                    parseFloat(consulta.circunferencia_pescoco)
-                ),
-                borderColor: "#FF6384",
-                fill: false,
+                data: dados_consultas.cintura,
             },
             {
                 label: "Quadril (cm)",
-                data: consultas.map((consulta) =>
-                    parseFloat(consulta.circunferencia_quadril)
-                ),
-                borderColor: "#FFCE56",
-                fill: false,
+                data: dados_consultas.quadril,
+            },
+            {
+                label: "Pescoço (cm)",
+                data: dados_consultas.pescoco,
             },
         ],
     };
 
-    const fatMuscleData = {
-        labels: dates,
+    const dataGorduraMassa = {
+        labels: datas_consultas,
         datasets: [
             {
                 label: "Percentual de Gordura (%)",
-                data: consultas.map((consulta) =>
-                    parseFloat(consulta.percentual_gordura)
-                ),
-                borderColor: "#36A2EB",
-                fill: false,
+                data: dados_consultas.percentual_gordura,
             },
             {
                 label: "Massa Muscular (kg)",
-                data: consultas.map((consulta) =>
-                    parseFloat(consulta.massa_muscular)
-                ),
-                borderColor: "#FF6384",
-                fill: false,
+                data: dados_consultas.massa_muscular,
             },
         ],
     };
@@ -104,28 +58,25 @@ const Home = ({ consultas }) => {
     return (
         <UserLayout>
             <Head title="Tela Inicial" />
-            <Container>
-                <Row>
-                    <Col md={6} sm={12} lg={6}>
-                        <Container className="rounded shadow-lg my-3 p-3">
-                            <h4>Progresso de Peso, Altura e IMC</h4>
-                            <Line data={weightHeightImcData} />
-                        </Container>
+
+            <WrapperContainer>
+                <Row className="g-3">
+                    <Col xs={12} lg={6}>
+                        <h6>Progresso de Peso, Altura e IMC</h6>
+                        <Line data={dataPesoAlturaIMC} />
                     </Col>
-                    <Col md={6} sm={12} lg={6}>
-                        <Container className="rounded shadow-lg my-3 p-3">
-                            <h4>Progresso das Circunferências</h4>
-                            <Line data={circumferencesData} />
-                        </Container>
+
+                    <Col xs={12} lg={6}>
+                        <h6>Progresso das Circunferências</h6>
+                        <Line data={dataCinturaPesoQuadril} />
                     </Col>
-                    <Col md={12} sm={12} lg={6}>
-                        <Container className="rounded shadow-lg my-3 p-3">
-                            <h4>Percentual de Gordura e Massa Muscular</h4>
-                            <Line data={fatMuscleData} />
-                        </Container>
+
+                    <Col xs={12} lg={6}>
+                        <h6>Percentual de Gordura e Massa Muscular</h6>
+                        <Line data={dataGorduraMassa} />
                     </Col>
                 </Row>
-            </Container>
+            </WrapperContainer>
         </UserLayout>
     );
 };
