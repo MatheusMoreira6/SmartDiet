@@ -161,7 +161,6 @@ class RefeicoesControllerTest extends TestCase
 
         $horarioRefeicao = HorarioDieta::factory()->create(['grupo_id' => $diaRefeicao->id]);
 
-
         $response = $this->getJson(route('busca.horario.dia', ['dia_id' => $diaRefeicao->id, 'dieta_id' => $dieta->id]));
    
         $response->assertStatus(200);
