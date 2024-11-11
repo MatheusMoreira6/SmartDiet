@@ -199,7 +199,7 @@ const Consultas = ({ consultas, dias_semana }) => {
                                 onClick={() => handleShow()}
                             >
                                 <i className="bi bi-plus-lg"></i>
-                                Cadastrar Consulta
+                                Agendar Consulta
                             </Button>
                         </div>
                     </Col>
