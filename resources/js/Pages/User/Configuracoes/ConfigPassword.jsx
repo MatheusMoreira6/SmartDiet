@@ -63,6 +63,7 @@ const Configuracoes = ({ dados }) => {
                                 id="email"
                                 label="E-mail"
                                 type="email"
+                                bold={true}
                                 value={data.email}
                                 placeHolder={dados.email}
                                 required={true}
@@ -82,6 +83,7 @@ const Configuracoes = ({ dados }) => {
                                 id="password"
                                 label="Nova Senha"
                                 type="password"
+                                bold={true}
                                 value={data.password}
                                 required={false}
                                 isInvalid={errors.password}
@@ -101,6 +103,7 @@ const Configuracoes = ({ dados }) => {
                                 id="password_confirmation"
                                 label="Confirme sua Senha"
                                 type="password"
+                                bold={true}
                                 value={data.password_confirmation}
                                 required={true}
                                 isInvalid={errors.password}
