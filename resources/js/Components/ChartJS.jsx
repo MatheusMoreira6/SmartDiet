@@ -4,6 +4,7 @@ import {
     Chart,
     ArcElement,
     Tooltip,
+    Title,
     Legend,
     Colors,
     CategoryScale,
@@ -16,6 +17,7 @@ import {
 Chart.register(
     ArcElement,
     Tooltip,
+    Title,
     Legend,
     Colors,
     CategoryScale,
