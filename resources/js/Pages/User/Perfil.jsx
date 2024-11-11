@@ -62,6 +62,7 @@ const Perfil = ({ generos, dados }) => {
                                 id={"nome"}
                                 label={"Nome"}
                                 type={"text"}
+                                bold={true}
                                 value={data.nome}
                                 placeHolder={dados.nome}
                                 required={true}
@@ -80,6 +81,7 @@ const Perfil = ({ generos, dados }) => {
                                 id={"sobrenome"}
                                 label={"Sobrenome"}
                                 type={"text"}
+                                bold={true}
                                 value={data.sobrenome}
                                 placeHolder={dados.sobrenome}
                                 required={true}
@@ -100,6 +102,7 @@ const Perfil = ({ generos, dados }) => {
                                 label={"Data de Nascimento"}
                                 type={"text"}
                                 mask={"99/99/9999"}
+                                bold={true}
                                 value={data.data_nascimento}
                                 placeHolder={dados.data_nascimento}
                                 required={true}
@@ -119,6 +122,7 @@ const Perfil = ({ generos, dados }) => {
                                 id={"sexo"}
                                 label={"Sexo"}
                                 options={generos}
+                                bold={true}
                                 value={data.genero_id}
                                 required={true}
                                 isInvalid={errors.genero_id}
@@ -138,6 +142,7 @@ const Perfil = ({ generos, dados }) => {
                                 label={"CPF"}
                                 type={"text"}
                                 mask={"999.999.999-99"}
+                                bold={true}
                                 value={data.cpf}
                                 placeHolder={dados.cpf}
                                 required={true}
@@ -155,6 +160,7 @@ const Perfil = ({ generos, dados }) => {
                                 label={"Telefone"}
                                 type={"text"}
                                 mask={"(99) 99999-9999"}
+                                bold={true}
                                 value={data.telefone}
                                 placeHolder={dados.telefone}
                                 required={true}
