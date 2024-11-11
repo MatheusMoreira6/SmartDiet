@@ -84,6 +84,7 @@ const Home = ({
     return (
         <AdminLayout>
             <Head title="Tela Inicial" />
+
             <WrapperContainer>
                 <Row className="g-3">
                     <Col xs={12} lg={6}>
