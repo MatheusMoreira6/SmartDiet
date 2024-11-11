@@ -7,8 +7,10 @@ import {
     Legend,
     Colors,
     CategoryScale,
-    LinearScale,
     BarElement,
+    LinearScale,
+    LineElement,
+    PointElement,
 } from "chart.js";
 
 Chart.register(
@@ -17,8 +19,10 @@ Chart.register(
     Legend,
     Colors,
     CategoryScale,
+    BarElement,
     LinearScale,
-    BarElement
+    LineElement,
+    PointElement
 );
 
 export { Pie, Bar, Line };
