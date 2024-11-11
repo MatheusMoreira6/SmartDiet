@@ -246,4 +246,12 @@ class DietaControllerTest extends TestCase
         $response->assertJsonFragment(['nome_grupo' => 'Grupo 1']);
         $response->assertJsonFragment(['horario' => '08:00']);
     }
+
+    public function test_busca_alimentso()
+    {
+        $response = $this->getJson(route('busca.alimentos'));
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([]);
+    }
 }
