@@ -133,4 +133,41 @@ class RefeicoesControllerTest extends TestCase
             'porcao_id' => $porcao->id
         ]);
     }
+
+    public function test_edit_horario()
+    {
+        $dieta = Dieta::factory()->create();
+        $diaRefeicao = GrupoDieta::factory()->create(['dieta_id' => $dieta->id]);
+
+        $horarioRefeicao = HorarioDieta::factory()->create(['grupo_id' => $diaRefeicao->id]);
+
+        $response = $this->postJson(route('horario.editar'), [
+            'id' => $horarioRefeicao->id,
+            'horario' => '09:30',
+            'dieta_id' =>  $dieta->id,
+            'dia_id' => $diaRefeicao->id
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('table_horarios_dietas', [
+            'horario' => '09:30',
+        ]);
+    }
+
+    public function test_busca_horario(){
+        $dieta = Dieta::factory()->create();
+        $diaRefeicao = GrupoDieta::factory()->create(['dieta_id' => $dieta->id]);
+
+        $horarioRefeicao = HorarioDieta::factory()->create(['grupo_id' => $diaRefeicao->id]);
+
+
+        $response = $this->getJson(route('busca.horario.dia', ['dia_id' => $diaRefeicao->id, 'dieta_id' => $dieta->id]));
+   
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('table_horarios_dietas', [
+            'horario' => $horarioRefeicao->horario,
+        ]);
+    }
 }
