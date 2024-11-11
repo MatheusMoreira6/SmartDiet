@@ -19,8 +19,7 @@ class HorarioDietaFactory extends Factory
     public function definition(): array
     {
         return [
-            'nome_grupo' => 'Segunda/Quarta',
-            'ordem' => 1,
+            'horario' => '08:00',
             'dieta_id' => Dieta::factory()->create()->id,
             'grupo_id' => GrupoDieta::factory()->create()->id
         ];
