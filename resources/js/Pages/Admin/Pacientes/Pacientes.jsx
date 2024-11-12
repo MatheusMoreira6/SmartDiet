@@ -103,7 +103,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
             <Head title="Pacientes" />
 
             <Container fluid className="py-4">
-                <Row className="mb-4 justify-content-center">
+                <Row className="mt-2 mb-5 justify-content-center">
                     <Col xs={12} md={6} xxl={4} className="p-2 rounded shadow">
                         <InputGroup>
                             <Form.Control
