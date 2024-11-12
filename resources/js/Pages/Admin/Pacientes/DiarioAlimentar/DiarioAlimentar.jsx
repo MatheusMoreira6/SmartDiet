@@ -1,4 +1,4 @@
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Row, Table } from "react-bootstrap";
 
 export default function RenderFotos({ fotos = [] }) {
     return (
@@ -21,6 +21,17 @@ export default function RenderFotos({ fotos = [] }) {
                     </Card>
                 </Col>
             ))}
+            {fotos.length === 0 && (
+                <Table hover striped bordered responsive className="mb-0">
+                    <tbody>
+                        <tr>
+                            <td colSpan="5" className="text-center">
+                                Nenhuma foto encontrada!
+                            </td>
+                        </tr>
+                    </tbody>
+                </Table>
+            )}
         </Row>
     );
 }
