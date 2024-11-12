@@ -23,7 +23,7 @@ class ConsultaDesmarcada extends Mailable
 
     public function build()
     {
-        return $this->subject('Consulta Cadastrada com Sucesso')
+        return $this->subject('Consulta Desmarcada com Sucesso')
             ->view('emails.consulta-desmarcada');
     }
 }
