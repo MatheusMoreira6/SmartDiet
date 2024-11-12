@@ -76,7 +76,10 @@ const Dietas = ({ dieta, horarios, dias }) => {
         <UserLayout>
             <Head title="Dietas" />
             <WrapperContainer>
-                <h3 className="text-center mt-4 mb-3">{dieta.nome_dieta}</h3>
+                <PageTopic>
+                    <i className="bi bi-calendar3"></i>
+                    {dieta.nome_dieta}
+                </PageTopic>
                 <h6 className="text-center mt-4 mb-3">
                     Descrição: {dieta.descricao}
                 </h6>

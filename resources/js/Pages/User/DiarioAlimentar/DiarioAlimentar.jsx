@@ -62,42 +62,53 @@ const DiarioAlimentar = ({ fotosDiario }) => {
             <Head title="Diário Alimentar" />
 
             <WrapperContainer>
-                <h3 className="text-center mb-4">
-                    Adicionar ao Diário Alimentar
-                </h3>
+                <PageTopic>
+                    {" "}
+                    <i class="bi bi-file-earmark-image"></i> Adicionar ao Diário
+                    Alimentar
+                </PageTopic>
 
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="formFile" className="mb-3">
-                        <Form.Label>Foto da Refeição</Form.Label>
-                        <Form.Control
-                            type="file"
-                            ref={fileInputRef} // Referência para o campo de arquivo
-                            onChange={(e) =>
-                                setData("imagem_refeicao", e.target.files[0])
-                            }
-                            required
-                        />
-                    </Form.Group>
+                <Row style={{ marginBottom: 30 }}>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId="formFile" className="mb-3">
+                            <Form.Label>Foto da Refeição</Form.Label>
+                            <Form.Control
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={(e) =>
+                                    setData(
+                                        "imagem_refeicao",
+                                        e.target.files[0]
+                                    )
+                                }
+                                required
+                            />
+                        </Form.Group>
 
-                    <Form.Group controlId="formNotas" className="mb-3">
-                        <Form.Label>Notas</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            value={data.notas}
-                            onChange={(e) => setData("notas", e.target.value)}
-                            placeholder="Adicione comentários sobre a refeição..."
-                        />
-                    </Form.Group>
+                        <Form.Group controlId="formNotas" className="mb-3">
+                            <Form.Label>Notas</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                value={data.notas}
+                                onChange={(e) =>
+                                    setData("notas", e.target.value)
+                                }
+                                placeholder="Adicione comentários sobre a refeição..."
+                            />
+                        </Form.Group>
 
-                    <Button variant="success" type="submit" className="w-100">
-                        Enviar Refeição
-                    </Button>
-                </Form>
-            </WrapperContainer>
+                        <Button variant="primary" type="submit">
+                            <i class="bi bi-file-earmark-image"></i>
+                            Enviar Refeição
+                        </Button>
+                    </Form>
+                </Row>
 
-            <Container>
-                <h3 className="text-center mt-4 mb-4">Diário Alimentar</h3>
+                <PageTopic>
+                    <i className="bi bi-calendar3"></i>
+                    Diário Alimentar
+                </PageTopic>
                 <Row>
                     {dynamicFotos.map((foto) => (
                         <Col md={4} key={foto.id} className="mb-4">
@@ -119,7 +130,7 @@ const DiarioAlimentar = ({ fotosDiario }) => {
                         </Col>
                     ))}
                 </Row>
-            </Container>
+            </WrapperContainer>
         </UserLayout>
     );
 };
