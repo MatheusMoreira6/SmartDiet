@@ -59,10 +59,11 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
 
     Route::get('/', [DashboardAdmin::class, 'index'])->name('admin.home');
 
-    Route::controller(PacientesAdmin::class)->group(function () {
-        Route::get('/pacientes', 'index')->name('admin.pacientes');
-        Route::post('/pacientes', 'cadastrar')->name('admin.pacientes');
-        Route::get('/pacientes/{id}', 'getDados')->name('admin.pacientes.id');
+    Route::controller(PacientesAdmin::class)->prefix('pacientes')->group(function () {
+        Route::get('/', 'index')->name('admin.pacientes');
+        Route::get('/show/{id}', 'show')->name('admin.pacientes.id');
+        Route::get('/search/{nome?}', 'search')->name('admin.pacientes.search');
+        Route::post('/store', 'store')->name('admin.pacientes.store');
     });
 
     Route::controller(ConsultasAdmin::class)->group(function () {

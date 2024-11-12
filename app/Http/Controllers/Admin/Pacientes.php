@@ -9,7 +9,6 @@ use App\Models\DiarioAlimentar;
 use App\Models\Dieta;
 use App\Models\Genero;
 use App\Models\Paciente;
-use App\Models\Refeicoes;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Str;
@@ -36,11 +35,57 @@ class Pacientes extends Controller
         return $this->render('Admin/Pacientes/Pacientes', [
             'generos' => Genero::all()->toArray(),
             'questionarios' => $auxQuestionario,
-            'pacientes' => $nutricionista->pacientes()->get()->toArray(),
+            'pacientes' => $nutricionista->pacientes()->get(['id', 'nome', 'sobrenome'])->toArray(),
         ]);
     }
 
-    public function cadastrar(FormDataUserRequest $request)
+    public function search(string $nome = "")
+    {
+        $nutricionista = Auth::user()->nutricionista;
+
+        $pacientes = Paciente::where(
+            DB::raw("CONCAT(nome, ' ', sobrenome)"),
+            'ilike',
+            '%' . $nome . '%'
+        )->where('nutricionista_id', $nutricionista->id)->get(['id', 'nome', 'sobrenome'])->toArray();
+
+        return $this->response('admin.pacientes', [
+            'pacientes' => $pacientes,
+        ]);
+    }
+
+    public function show(int $id)
+    {
+        $dados_paciente =  Paciente::where('id', $id)->first();
+
+        $dados_paciente['genero'] = Genero::where('id', $dados_paciente['genero_id'])->first();
+        $dietas = Dieta::with(['refeicoes.alimentos'])
+            ->where('paciente_id', $id)
+            ->get();
+
+        $dados_user = User::where('id', $dados_paciente->user_id)->first();
+
+        $dados_paciente['senha_temp'] = $dados_user['password_temp'];
+
+        $fotosDiario = DiarioAlimentar::where('paciente_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($foto) {
+                $foto->foto_url = asset('storage/' . $foto->imagem_refeicao--);
+                return $foto;
+            });
+
+        $agenda_consultas =  AgendaConsulta::where('paciente_id', $id)->where('finalizada', true)->get();
+
+        return $this->render('Admin/Pacientes/DadosPaciente', [
+            'dados' => $dados_paciente,
+            'dietas' =>  $dietas,
+            'fotos' => $fotosDiario,
+            'agenda_consultas' => $agenda_consultas
+        ]);
+    }
+
+    public function store(FormDataUserRequest $request)
     {
         $request->validated();
 
@@ -77,36 +122,5 @@ class Pacientes extends Controller
         } catch (Exception $e) {
             return $this->responseErrors(['error' => 'Falha ao cadastrar o paciente!']);
         }
-    }
-
-    public function getDados($id)
-    {
-        $dados_paciente =  Paciente::where('id', $id)->first();
-
-        $dados_paciente['genero'] = Genero::where('id', $dados_paciente['genero_id'])->first();
-        $dietas = Dieta::with(['refeicoes.alimentos'])
-            ->where('paciente_id', $id)
-            ->get();
-
-        $dados_user = User::where('id', $dados_paciente->user_id)->first();
-
-        $dados_paciente['senha_temp'] = $dados_user['password_temp'];
-
-        $fotosDiario = DiarioAlimentar::where('paciente_id', $id)
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($foto) {
-                $foto->foto_url = asset('storage/' . $foto->imagem_refeicao--);
-                return $foto;
-            });
-
-        $agenda_consultas =  AgendaConsulta::where('paciente_id', $id)->where('finalizada', true)->get();
-
-        return $this->render('Admin/Pacientes/DadosPaciente', [
-            'dados' => $dados_paciente,
-            'dietas' =>  $dietas,
-            'fotos' => $fotosDiario,
-            'agenda_consultas' => $agenda_consultas
-        ]);
     }
 }

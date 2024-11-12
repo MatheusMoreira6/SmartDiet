@@ -6,9 +6,12 @@ import FormInput from "@/Components/FormInput";
 import FormModal from "@/Components/FormModal";
 import FormSelect from "@/Components/FormSelect";
 import SweetAlert from "@/Components/SweetAlert";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 
 const Pacientes = ({ generos, questionarios, pacientes }) => {
+    /**
+     * Cadastrar pacientes
+     */
     const { data, setData, post, processing, errors, reset } = useForm({
         nome: "",
         sobrenome: "",
@@ -37,7 +40,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
         const form = e.currentTarget;
 
         if (form.checkValidity()) {
-            post(route("admin.pacientes"), {
+            post(route("admin.pacientes.store"), {
                 onSuccess: (page) => {
                     const title = page.props.title;
                     const text = page.props.text;
@@ -57,13 +60,36 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
         setValidated(true);
     };
 
+    /**
+     * Buscar pacientes
+     */
+    const handleSearch = () => {
+        const nome_paciente = document.getElementById("nome_paciente").value;
+
+        router.visit(
+            route("admin.pacientes.search", {
+                nome: nome_paciente,
+            }),
+            {
+                only: ['pacientes'],
+                preserveScroll: true,
+                preserveState: true,
+            }
+        );
+    };
+
+    /**
+     * Renderizar pacientes
+     */
     const renderPacientes = (pacientes) => {
         return pacientes.map((paciente) => (
             <Col key={paciente.id}>
                 <ActionCard
                     footer={`${paciente.nome} ${paciente.sobrenome}`}
                     onClick={() => {
-                        router.visit(`pacientes/${paciente.id}`);
+                        router.visit(
+                            route("admin.pacientes.id", { id: paciente.id })
+                        );
                     }}
                 >
                     <img src="..." className="card-img-top" alt="..." />
@@ -77,6 +103,30 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
             <Head title="Pacientes" />
 
             <Container fluid className="py-4">
+                <Row className="mb-4 justify-content-center">
+                    <Col xs={12} md={6} xxl={4} className="p-2 rounded shadow">
+                        <InputGroup>
+                            <Form.Control
+                                id="nome_paciente"
+                                type="text"
+                                placeholder="Nome do Paciente"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        handleSearch();
+                                    }
+                                }}
+                            />
+
+                            <Button
+                                variant="primary"
+                                onClick={() => handleSearch()}
+                            >
+                                <i className="bi bi-search"></i>
+                            </Button>
+                        </InputGroup>
+                    </Col>
+                </Row>
+
                 <Row xs={1} md={2} lg={3} xl={4} xxl={5} className="g-3">
                     <Col>
                         <ActionCard onClick={handleShow}>
