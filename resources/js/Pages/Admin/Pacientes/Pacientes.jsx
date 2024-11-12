@@ -83,7 +83,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
      */
     const renderPacientes = (pacientes) => {
         return pacientes.map((paciente) => (
-            <Col key={paciente.id}>
+            <Col key={paciente.id} className="mb-4">
                 <ActionCard
                     footer={`${paciente.nome} ${paciente.sobrenome}`}
                     onClick={() => {
@@ -103,7 +103,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
             <Head title="Pacientes" />
 
             <Container fluid className="py-4">
-                <Row className="mt-2 mb-5 justify-content-center">
+                <Row className="mb-4 justify-content-center">
                     <Col xs={12} md={6} xxl={4} className="p-2 rounded shadow">
                         <InputGroup>
                             <Form.Control
@@ -127,8 +127,8 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                     </Col>
                 </Row>
 
-                <Row xs={1} md={2} lg={3} xl={4} xxl={5} className="g-3">
-                    <Col>
+                <Row xs={1} md={2} lg={3} xl={4} xxl={5}>
+                    <Col className="mb-4">
                         <ActionCard onClick={handleShow}>
                             <i
                                 className="bi bi-person-fill-add m-auto"
