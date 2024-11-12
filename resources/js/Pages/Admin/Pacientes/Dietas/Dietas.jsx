@@ -122,7 +122,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     };
 
     return (
-        <Row>
+        <>
             {dietasDynamic.length > 0 ? (
                 <>
                     <Col md={12} style={{ marginBottom: 15 }}>
@@ -233,19 +233,20 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                     />
                 </>
             ) : (
-                <>
-                    <Row className="g-3 mb-3" md={6}>
-                        <Col md={6}>
-                            <Button variant="primary" onClick={handleShow}>
-                                <i className="bi bi-plus-lg"></i>
-                                Cadastrar dieta
-                            </Button>
-                        </Col>
-                    </Row>
-                    <Row className="g-3 mb-3">
-                        <Col>Nenhuma dieta cadastrada</Col>
-                    </Row>
-                </>
+                <Row className="g-3">
+                    <Col xs={12} className="mt-4">
+                        <Button variant="primary" onClick={handleShow}>
+                            <i className="bi bi-plus-lg"></i>
+                            Cadastrar dieta
+                        </Button>
+                    </Col>
+
+                    <Col xs={12}>
+                        <p className="bg-warning-subtle text-center py-3 mb-0">
+                            Nenhuma dieta cadastrada.
+                        </p>
+                    </Col>
+                </Row>
             )}
 
             <ModalCadastroDieta
@@ -265,7 +266,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                 grupo_dia={selectedDia}
                 setUpdate={setUpdate}
             />
-        </Row>
+        </>
     );
 };
 

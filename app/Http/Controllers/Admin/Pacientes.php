@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FormDataUserRequest;
+use App\Libraries\LibConversion;
 use App\Models\AgendaConsulta;
 use App\Models\DiarioAlimentar;
 use App\Models\Dieta;
@@ -56,21 +57,25 @@ class Pacientes extends Controller
 
     public function show(int $id)
     {
-        $dados_paciente =  Paciente::where('id', $id)->first();
+        $dadosPaciente = Paciente::with(['genero:id,descricao', 'user:id,password_temp'])->find($id)->toArray();
 
-        $dados_paciente['genero'] = Genero::where('id', $dados_paciente['genero_id'])->first();
-        $dietas = Dieta::where('paciente_id', $id)
-            ->get();
+        $auxDadosPaciente = [
+            'id' => $dadosPaciente['id'],
+            'nome' => $dadosPaciente['nome'],
+            'sobrenome' => $dadosPaciente['sobrenome'],
+            'data_nascimento' => LibConversion::convertIsoToBr($dadosPaciente['data_nascimento']),
+            'genero' => $dadosPaciente['genero']['descricao'],
+            'cpf' => $dadosPaciente['cpf'],
+            'telefone' => $dadosPaciente['telefone'],
+            'password_temp' => $dadosPaciente['user']['password_temp'],
+        ];
+
+        $dietas = Dieta::where('paciente_id', $id)->get();
 
         foreach ($dietas as $dieta) {
             $refeicoes = Dietas::formattedRefeicoesDietas($dieta->id);
-
             $dieta['refeicoes'] = $refeicoes;
         }
-
-        $dados_user = User::where('id', $dados_paciente->user_id)->first();
-
-        $dados_paciente['senha_temp'] = $dados_user['password_temp'];
 
         $fotosDiario = DiarioAlimentar::where('paciente_id', $id)
             ->orderBy('created_at', 'desc')
@@ -80,10 +85,10 @@ class Pacientes extends Controller
                 return $foto;
             });
 
-        $agenda_consultas =  AgendaConsulta::where('paciente_id', $id)->where('finalizada', true)->get();
+        $agenda_consultas = AgendaConsulta::where('paciente_id', $id)->where('finalizada', true)->get();
 
         return $this->render('Admin/Pacientes/DadosPaciente', [
-            'dados' => $dados_paciente,
+            'dados' => $auxDadosPaciente,
             'dietas' =>  $dietas,
             'fotos' => $fotosDiario,
             'agenda_consultas' => $agenda_consultas

@@ -18,6 +18,7 @@ export default function HistoricoConsultas({ agenda_consultas }) {
                     <th>Circunferência Quadril</th>
                 </tr>
             </thead>
+
             <tbody>
                 {agenda_consultas.length == 0 ? (
                     <tr>
@@ -26,45 +27,47 @@ export default function HistoricoConsultas({ agenda_consultas }) {
                         </td>
                     </tr>
                 ) : (
-                    <>
-                        {agenda_consultas.map((consulta, index) => (
-                            <tr key={index}>
-                                <td className="text-center d-grid">
-                                    {consulta.data}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.hora}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.dia_semana_id}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.altura}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.peso}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.imc}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.massa_muscular}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.percentual_gordura}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.circunferencia_cintura}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.circunferencia_pescoco}
-                                </td>
-                                <td className="text-center d-grid">
-                                    {consulta.circunferencia_quadril}
-                                </td>
-                            </tr>
-                        ))}
-                    </>
+                    agenda_consultas.map((consulta, index) => (
+                        <tr key={index}>
+                            <td className="text-center">
+                                {new Date(consulta.data).toLocaleDateString(
+                                    "pt-BR"
+                                )}
+                            </td>
+
+                            <td className="text-center">
+                                {consulta.hora.slice(0, 5)}
+                            </td>
+
+                            <td className="text-center">
+                                {consulta.dia_semana_id}
+                            </td>
+
+                            <td className="text-center">{consulta.altura}</td>
+                            <td className="text-center">{consulta.peso}</td>
+                            <td className="text-center">{consulta.imc}</td>
+
+                            <td className="text-center">
+                                {consulta.massa_muscular}
+                            </td>
+
+                            <td className="text-center">
+                                {consulta.percentual_gordura}
+                            </td>
+
+                            <td className="text-center">
+                                {consulta.circunferencia_cintura}
+                            </td>
+
+                            <td className="text-center">
+                                {consulta.circunferencia_pescoco}
+                            </td>
+
+                            <td className="text-center">
+                                {consulta.circunferencia_quadril}
+                            </td>
+                        </tr>
+                    ))
                 )}
             </tbody>
         </Table>
