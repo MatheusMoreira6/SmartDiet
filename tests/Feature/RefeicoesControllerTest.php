@@ -55,7 +55,7 @@ class RefeicoesControllerTest extends TestCase
         $horarioRefeicao = HorarioDieta::factory()->create(['grupo_id' => $diaRefeicao->id]);
         $response = $this->postJson(route('salvar.refeicao'), [
             'alimentos' => [
-                ['id' =>  $alimento1->id, 'tipo_porcao' => ['id' => $porcao->id]]
+                ['id' =>  $alimento1->id, 'tipo_porcao' => ['id' => $porcao->id], 'gramas' => 80]
             ],
             'dia' => $diaRefeicao->id,
             'horario' => $horarioRefeicao->id,
@@ -116,8 +116,8 @@ class RefeicoesControllerTest extends TestCase
 
         $response = $this->postJson(route('editar.refeicao'), [
             'alimentos' => [
-                ['id' => $alimento1->id, 'tipo_porcao' => ['id' => $porcao->id]],
-                ['id' =>  $alimento2->id, 'tipo_porcao' => ['id' => $porcao2->id]],
+                ['id' => $alimento1->id, 'tipo_porcao' => ['id' => $porcao->id], 'gramas' => 80],
+                ['id' =>  $alimento2->id, 'tipo_porcao' => ['id' => $porcao2->id], 'gramas' => 80],
             ],
             'dia' => $diaRefeicao->id,
             'horario' =>  $horarioRefeicao->id,
@@ -155,14 +155,15 @@ class RefeicoesControllerTest extends TestCase
         ]);
     }
 
-    public function test_busca_horario(){
+    public function test_busca_horario()
+    {
         $dieta = Dieta::factory()->create();
         $diaRefeicao = GrupoDieta::factory()->create(['dieta_id' => $dieta->id]);
 
         $horarioRefeicao = HorarioDieta::factory()->create(['grupo_id' => $diaRefeicao->id]);
 
         $response = $this->getJson(route('busca.horario.dia', ['dia_id' => $diaRefeicao->id, 'dieta_id' => $dieta->id]));
-   
+
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('table_horarios_dietas', [
