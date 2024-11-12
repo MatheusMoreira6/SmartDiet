@@ -189,7 +189,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                                                     })
                                                 }
                                             >
-                                                <i className="bi bi-trash"></i>
+                                                <i className="bi-trash"></i>
                                             </Button>
                                         </div>
                                     </Col>
