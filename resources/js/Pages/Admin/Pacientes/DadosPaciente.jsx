@@ -24,17 +24,12 @@ export default function DadosPaciente({
     fotos,
     agenda_consultas,
 }) {
-
     return (
         <AdminLayout>
             <WrapperContainer>
                 <Row>
                     <Tabs id="configuracoes-tabs" defaultActiveKey="info">
                         <Tab eventKey="info" title="Informações">
-                            <PageTopic>
-                                <i className="bi bi-list"></i>
-                                Informações do Paciente
-                            </PageTopic>
                             <Row>
                                 <Col md={6}>
                                     <h5>Nome:</h5>
@@ -66,19 +61,17 @@ export default function DadosPaciente({
                                 </Col>
                             </Row>
 
-                            <Row className="g-3 mb-3">
-                                <Col md={6}>
-                                    <h5>Senha:</h5>
-                                    <p>{dados.senha_temp}</p>
-                                </Col>
-                            </Row>
+                            {dados.senha_temp && (
+                                <Row className="g-3 mb-3">
+                                    <Col md={6}>
+                                        <h5>Senha Temporária:</h5>
+                                        <p>{dados.senha_temp}</p>
+                                    </Col>
+                                </Row>
+                            )}
                         </Tab>
 
                         <Tab eventKey="history" title="Histórico do Paciente">
-                            <PageTopic>
-                                <i className="bi bi-list"></i>
-                                Histórico do Paciente
-                            </PageTopic>
                             <Row>
                                 {agenda_consultas &&
                                     agenda_consultas.length > 0 && (
@@ -90,10 +83,6 @@ export default function DadosPaciente({
                         </Tab>
 
                         <Tab eventKey="diet" title="Dietas">
-                            <PageTopic>
-                                <i className="bi bi-list"></i>
-                                Dietas do Paciente
-                            </PageTopic>
                             <DietContainer
                                 dietas={dietas}
                                 id_paciente={dados.id}
@@ -101,10 +90,6 @@ export default function DadosPaciente({
                             />
                         </Tab>
                         <Tab eventKey="day" title="Diário alimentar">
-                            <PageTopic>
-                                <i className="bi bi-list"></i>
-                                Diário alimentar
-                            </PageTopic>
                             <RenderFotos fotos={fotos} />
                         </Tab>
                     </Tabs>

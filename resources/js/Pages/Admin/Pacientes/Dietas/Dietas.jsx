@@ -75,7 +75,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                     id_paciente,
                     id_nutricionista,
                 });
-
+                console.log(response);
                 setDietas(response.data.dietas);
                 SweetAlert.success({
                     title: "Dieta removida com sucesso!",
@@ -89,6 +89,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     }
 
     const getChartData = (dia) => {
+        console.log;
         const refeicoesDias = dietasDynamic[0].refeicoes.filter(
             (refeicao) => refeicao.dia_semana_id === dia
         );
@@ -129,13 +130,15 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
             {dietasDynamic.length > 0 ? (
                 <>
                     <Col md={12} style={{ marginBottom: 15 }}>
-                        <Button
-                            variant="primary"
-                            onClick={() => setAddGrupo(true)}
-                        >
-                            <i className="bi bi-plus-lg"></i>
-                            Cadastrar grupo
-                        </Button>
+                        <div className="d-grid gap-2 d-md-block">
+                            <Button
+                                variant="primary"
+                                onClick={() => setAddGrupo(true)}
+                            >
+                                <i className="bi bi-plus-lg"></i>
+                                Cadastrar grupo
+                            </Button>
+                        </div>
                     </Col>
                     {diasSemana.map((dia) => (
                         <Card key={dia.id} className="mb-2 card-hover">
@@ -155,36 +158,42 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                                         </Button>
                                     </Col>
                                     <Col className="text-end">
-                                        <Button
-                                            variant="outline-primary"
-                                            style={{
-                                                textDecoration: "none",
-                                            }}
-                                            onClick={() => {
-                                                router.visit(
-                                                    route("admin.refeicoes", {
+                                        <div className="d-grid gap-2 d-md-block">
+                                            <Button
+                                                variant="outline-primary"
+                                                style={{
+                                                    textDecoration: "none",
+                                                }}
+                                                onClick={() => {
+                                                    router.visit(
+                                                        route(
+                                                            "admin.refeicoes",
+                                                            {
+                                                                dieta_id:
+                                                                    dietasDynamic[0]
+                                                                        .id,
+                                                                dia_id: dia.id,
+                                                            }
+                                                        )
+                                                    );
+                                                }}
+                                            >
+                                                <span>Ver Dieta </span>
+                                                <i className="bi bi-arrow-right-circle"></i>
+                                            </Button>
+                                            <Button
+                                                variant="danger"
+                                                onClick={() =>
+                                                    handleDelete({
                                                         dieta_id:
                                                             dietasDynamic[0].id,
                                                         dia_id: dia.id,
                                                     })
-                                                );
-                                            }}
-                                        >
-                                            <span>Ver Dieta </span>
-                                            <i className="bi bi-arrow-right-circle"></i>
-                                        </Button>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() =>
-                                                handleDelete({
-                                                    dieta_id:
-                                                        dietasDynamic[0].id,
-                                                    dia_id: dia.id,
-                                                })
-                                            }
-                                        >
-                                            <i className="bi bi-trash"></i>
-                                        </Button>
+                                                }
+                                            >
+                                                <i className="bi bi-trash"></i>
+                                            </Button>
+                                        </div>
                                     </Col>
                                 </Row>
                             </Card.Body>

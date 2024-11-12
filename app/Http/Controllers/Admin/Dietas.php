@@ -120,7 +120,7 @@ class Dietas extends Controller
         ]);
 
         DB::table('table_grupo_dias_dieta')->where('dieta_id', $request->dieta_id)->where('id', $request->dia_id)->delete();
-        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
+        $dietas = ModelDietas::with(['refeicoes.alimentos'])->where("nutricionista_id", $request->id_nutricionista)
             ->where("paciente_id", $request->id_paciente)
             ->get();
 
