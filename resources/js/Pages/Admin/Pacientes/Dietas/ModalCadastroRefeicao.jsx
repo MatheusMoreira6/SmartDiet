@@ -27,7 +27,7 @@ const ModalCadastroRefeicao = ({
         setSelectedAlimentos([]);
         setArraySelectedAlimentos([]);
         setRefAlt(null);
-        setRefeicaoSelected(0)
+        setRefeicaoSelected(0);
     };
 
     useEffect(() => {
@@ -37,36 +37,10 @@ const ModalCadastroRefeicao = ({
                 try {
                     const response = await Api.get(route("busca.alimentos"));
                     const newAlimentos = response.data.alimentos;
-                    for (const i in newAlimentos) {
-                        newAlimentos[i].forEach((element) => {
-                            element.tipo_porcao.forEach((porcao, id) => {
-                                element.tipo_porcao[porcao.id] = porcao;
-                                delete element.tipo_porcao[id];
-                            });
-                        });
-                    }
-
-                    const updatedArraySelectedAlimentos =
-                        arraySelectedAlimentos.map((selectedAlimento) => {
-                            const tipoAlimento =
-                                newAlimentos[selectedAlimento.tipo_alimento] ||
-                                [];
-                            const matchingAlimento = tipoAlimento.find(
-                                (alimento) =>
-                                    alimento.id === selectedAlimento.id
-                            );
-
-                            if (matchingAlimento) {
-                                selectedAlimento.tipo_porcao =
-                                    matchingAlimento.tipo_porcao;
-                            }
-
-                            return selectedAlimento;
-                        });
 
                     setAlimentos(newAlimentos);
 
-                    setSelectedAlimentos(updatedArraySelectedAlimentos);
+                    setSelectedAlimentos(arraySelectedAlimentos);
                 } catch (error) {
                     console.error("Erro ao buscar alimentos:", error);
                 }
@@ -95,17 +69,26 @@ const ModalCadastroRefeicao = ({
         });
     };
 
-    const handlePorcaoId = (alimentoId, porcao_id) => {
+    const handlePorcaoId = (alimentoId, porcao) => {
+        console.log(alimentoId, porcao);
         setSelectedAlimentos((prevSelected) => {
             const alreadySelected = prevSelected.some(
                 (item) => item.id === alimentoId
             );
 
+            if (!parseFloat(porcao)) {
+                SweetAlert.warning({
+                    title: "Insira um numero!",
+                });
+
+                return prevSelected;
+            }
+
             if (alreadySelected) {
                 return prevSelected.map((item) => {
                     if (item.id === alimentoId) {
                         const updatedItem = { ...item };
-                        updatedItem.tipo_porcao = item.tipo_porcao[porcao_id];
+                        updatedItem.gramas = parseFloat(porcao);
 
                         return updatedItem;
                     }
@@ -124,13 +107,12 @@ const ModalCadastroRefeicao = ({
     async function handleSave() {
         const missingPorcao = selectedAlimentos.some((item) => {
             const key = Object.keys(item.tipo_porcao);
-            if (!item.tipo_porcao || item.tipo_porcao[key] !== undefined)
-                return true;
+            if (!item.tipo_porcao || !item.gramas) return true;
         });
         if (missingPorcao) {
             SweetAlert.warning({
                 title: "Porções faltando!",
-                text: "Certifique-se de selecionar uma porção para todos os alimentos.",
+                text: "Certifique-se de declarar uma porção para todos os alimentos.",
             });
             return;
         }

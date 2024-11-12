@@ -1,27 +1,11 @@
 import { Head } from "@inertiajs/react";
 import UserLayout from "@/Layouts/UserLayout";
-import {
-    Table,
-    Button,
-    Modal,
-    Accordion,
-    Container,
-    Row,
-    Col,
-} from "react-bootstrap";
+import { Table, Button, Modal, Accordion, Row, Col } from "react-bootstrap";
 import { useState } from "react";
 import "../../../../css/tableDieta.css";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import { useEffect } from "react";
 import WrapperContainer from "@/Components/WrapperContainer";
 import PageTopic from "@/Components/PageTopic";
-
-const MySwal = withReactContent(Swal);
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dietas = ({ dieta, horarios, dias }) => {
     const [showAltModal, setShowAltModal] = useState(false);
@@ -70,14 +54,6 @@ const Dietas = ({ dieta, horarios, dias }) => {
     };
 
     if (!dieta || dieta.length > 0) {
-        useEffect(() => {
-            MySwal.fire({
-                icon: "warning",
-                title: "Você ainda não possui dietas",
-                text: "Entre em contato com seu nutricionista.",
-                allowOutsideClick: false,
-            });
-        }, [dieta]);
         return (
             <UserLayout>
                 <Head title="Dietas" />
@@ -86,6 +62,11 @@ const Dietas = ({ dieta, horarios, dias }) => {
                         <i className="bi bi-list"></i>
                         Dietas
                     </PageTopic>
+                    <tr>
+                        <td colSpan="5" className="text-center">
+                            Nenhuma consulta encontrada!
+                        </td>
+                    </tr>
                 </WrapperContainer>
             </UserLayout>
         );
@@ -140,7 +121,8 @@ const Dietas = ({ dieta, horarios, dias }) => {
                                     </thead>
                                     <tbody>
                                         {horarios.map((horario) => {
-                                            if(horario.grupo_id !== dia.id) return
+                                            if (horario.grupo_id !== dia.id)
+                                                return;
                                             if (!dieta.refeicoes) return;
                                             const refeicoesHorario =
                                                 dieta.refeicoes.filter(
@@ -338,47 +320,27 @@ const Dietas = ({ dieta, horarios, dias }) => {
                                 {altRefeicao.alimentos.map((alimento) => (
                                     <li key={alimento.id}>
                                         <strong>{alimento.nome}</strong> -{" "}
-                                        {alimento.tipo_porcao.find(
-                                            (porcao) =>
-                                                porcao?.id ===
-                                                alimento.pivot.porcao_id
-                                        )?.nome_porcao ||
+                                        {alimento.porcao.nome_porcao ||
                                             "Porção não especificada"}
                                         <ul>
                                             <li>
                                                 Calorias:{" "}
-                                                {alimento.tipo_porcao.find(
-                                                    (porcao) =>
-                                                        porcao?.id ===
-                                                        alimento.pivot.porcao_id
-                                                )?.calorias ||
+                                                {alimento.porcao.calorias.toFixed(1) ||
                                                     "Porção não especificada"}
                                             </li>
                                             <li>
                                                 Carboidratos:{" "}
-                                                {alimento.tipo_porcao.find(
-                                                    (porcao) =>
-                                                        porcao?.id ===
-                                                        alimento.pivot.porcao_id
-                                                )?.carboidratos ||
+                                                {alimento.porcao.carboidratos.toFixed(1) ||
                                                     "Porção não especificada"}
                                             </li>
                                             <li>
                                                 Proteínas:{" "}
-                                                {alimento.tipo_porcao.find(
-                                                    (porcao) =>
-                                                        porcao?.id ===
-                                                        alimento.pivot.porcao_id
-                                                )?.proteinas ||
+                                                {alimento.porcao.proteinas.toFixed(1) ||
                                                     "Porção não especificada"}
                                             </li>
                                             <li>
                                                 Gorduras:{" "}
-                                                {alimento.tipo_porcao.find(
-                                                    (porcao) =>
-                                                        porcao?.id ===
-                                                        alimento.pivot.porcao_id
-                                                )?.gorduras ||
+                                                {alimento.porcao.gorduras.toFixed(1) ||
                                                     "Porção não especificada"}
                                             </li>
                                         </ul>

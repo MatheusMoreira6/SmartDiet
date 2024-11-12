@@ -84,9 +84,14 @@ class Pacientes extends Controller
         $dados_paciente =  Paciente::where('id', $id)->first();
 
         $dados_paciente['genero'] = Genero::where('id', $dados_paciente['genero_id'])->first();
-        $dietas = Dieta::with(['refeicoes.alimentos'])
-            ->where('paciente_id', $id)
+        $dietas = Dieta::where('paciente_id', $id)
             ->get();
+
+        foreach ($dietas as $dieta) {
+            $refeicoes = Dietas::formattedRefeicoesDietas($dieta->id);
+
+            $dieta['refeicoes'] = $refeicoes;
+        }
 
         $dados_user = User::where('id', $dados_paciente->user_id)->first();
 

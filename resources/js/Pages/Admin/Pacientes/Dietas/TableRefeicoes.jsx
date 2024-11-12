@@ -121,7 +121,6 @@ export default function TableRefeicoes({
     };
 
     const updateHorario = async (horarioId, novoHorario) => {
-        console.log(novoHorario, console.log(horarioId));
         try {
             const response = await Api.post(route("horario.editar"), {
                 horario: novoHorario,
@@ -164,6 +163,7 @@ export default function TableRefeicoes({
                             const refeicoesHorario = dynamincRef.filter(
                                 (ref) => ref.horario_id === horario.id
                             );
+                            
                             return (
                                 <tr
                                     key={horario.id}

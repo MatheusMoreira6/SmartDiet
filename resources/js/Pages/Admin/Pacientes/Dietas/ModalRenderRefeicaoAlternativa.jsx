@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button, ListGroup } from "react-bootstrap";
 
 const ModalRenderRefeicaoAlternativa = ({ show, handleClose, refeicao, handleEdit }) => {
+    console.log(refeicao)
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
@@ -20,17 +21,9 @@ const ModalRenderRefeicaoAlternativa = ({ show, handleClose, refeicao, handleEdi
                             >
                                 <span>{alimento.nome}</span>
                                 <span>
-                                    {alimento.tipo_porcao.find(
-                                        (porcao) =>
-                                            porcao?.id ===
-                                            alimento.pivot.porcao_id
-                                    )?.nome_porcao || "Porção não especificada"}
+                                    {alimento.porcao.nome_porcao || "Porção não especificada"}
                                     {"  | "}
-                                    {alimento.tipo_porcao.find(
-                                        (porcao) =>
-                                            porcao?.id ===
-                                            alimento.pivot.porcao_id
-                                    )?.calorias || "Porção não especificada"}
+                                    {alimento.porcao.calorias.toFixed(1) || "Porção não especificada"}
                                     {"Kcal"}
                                 </span>
                             </div>
