@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Alimento;
 use App\Models\Dieta as ModelDietas;
+use App\Models\Refeicoes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,11 +16,53 @@ class Dietas extends Controller
 
     public function buscaDieta($id)
     {
-        $dietas = ModelDietas::with(['refeicoes.alimentos'])
-            ->where('paciente_id', $id)
+        $dietas = ModelDietas::where('paciente_id', $id)
             ->get();
 
+        foreach ($dietas as $dieta) {
+            $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
+
+            $dieta['refeicoes'] = $refeicoes;
+        }
+
         return response()->json(['dietas' => $dietas]);
+    }
+
+    static public function formattedRefeicoesDietas($dieta_id)
+    {
+        $refeicoes = Refeicoes::with(['alimentos' => function ($query) {
+
+            $query->with('tipoPorcao');
+        }])
+            ->where('dieta_id', $dieta_id)
+            ->where('id_ref_alt', null)
+            ->get();
+
+        $refeicoes->each(function ($refeicao) {
+            $refeicao->alimentos->each(function ($alimento) {
+                if (isset($alimento->pivot)) {
+
+                    $gramas = $alimento->pivot->gramas;
+
+                    $porcaoId = $alimento->pivot->porcao_id;
+
+                    $porcao = $alimento->tipoPorcao->firstWhere('id', $porcaoId);
+                    $proporcao = $gramas / 100;
+
+                    $alimento->porcao = [
+                        'id' => $porcaoId,
+                        'nome_porcao' => $gramas ?? null,
+                        'calorias' => ($porcao->calorias ?? 0) * $proporcao,
+                        'proteinas' => ($porcao->proteinas ?? 0) * $proporcao,
+                        'carboidratos' => ($porcao->carboidratos ?? 0) * $proporcao,
+                        'gorduras' => ($porcao->gorduras ?? 0) * $proporcao,
+                    ];
+                    $alimento->makeHidden('pivot');
+                }
+            });
+        });
+
+        return $refeicoes;
     }
 
     public function salvar(Request $request)
@@ -68,6 +111,12 @@ class Dietas extends Controller
             ->where("paciente_id", $request->id_paciente)
             ->get();
 
+        foreach ($dietas as $dieta) {
+            $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
+
+            $dieta['refeicoes'] = $refeicoes;
+        }
+
         response()->json(["dietas" => $dietas]);
     }
 
@@ -109,6 +158,12 @@ class Dietas extends Controller
             ->where("paciente_id", $request->id_paciente)
             ->get();
 
+        foreach ($dietas as $dieta) {
+            $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
+
+            $dieta['refeicoes'] = $refeicoes;
+        }
+
         response()->json(["dietas" => $dietas]);
     }
 
@@ -120,9 +175,15 @@ class Dietas extends Controller
         ]);
 
         DB::table('table_grupo_dias_dieta')->where('dieta_id', $request->dieta_id)->where('id', $request->dia_id)->delete();
-        $dietas = ModelDietas::with(['refeicoes.alimentos'])->where("nutricionista_id", $request->id_nutricionista)
+        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
             ->where("paciente_id", $request->id_paciente)
             ->get();
+
+        foreach ($dietas as $dieta) {
+            $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
+
+            $dieta['refeicoes'] = $refeicoes;
+        }
 
         return response()->json(["dietas" => $dietas]);
     }

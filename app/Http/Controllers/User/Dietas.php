@@ -16,8 +16,7 @@ class Dietas extends Controller
     {
         $user = Auth::user();
         $paciente = Paciente::where('user_id', $user->id)->first();
-        $dieta = Dieta::with(['refeicoes.alimentos'])
-            ->where('paciente_id', $paciente->id)
+        $dieta = Dieta::where('paciente_id', $paciente->id)
             ->first();
 
 
@@ -37,6 +36,27 @@ class Dietas extends Controller
                 foreach ($refeicoesAlternativas as $refAlt) {
                     if ($ref['id'] == $refAlt['id_ref_alt'] && $ref['dia_semana_id'] == $refAlt['dia_semana_id']) {
                         $ref['refeicao_alternativa'] = $refAlt;
+                        $ref['refeicao_alternativa']->alimentos->each(function ($alimento) {
+                            if (isset($alimento->pivot)) {
+
+                                $gramas = $alimento->pivot->gramas;
+
+                                $porcaoId = $alimento->pivot->porcao_id;
+
+                                $porcao = $alimento->tipoPorcao->firstWhere('id', $porcaoId);
+                                $proporcao = $gramas / 100;
+
+                                $alimento->porcao = [
+                                    'id' => $porcaoId,
+                                    'nome_porcao' => $gramas ?? null,
+                                    'calorias' => ($porcao->calorias ?? 0) * $proporcao,
+                                    'proteinas' => ($porcao->proteinas ?? 0) * $proporcao,
+                                    'carboidratos' => ($porcao->carboidratos ?? 0) * $proporcao,
+                                    'gorduras' => ($porcao->gorduras ?? 0) * $proporcao,
+                                ];
+                                $alimento->makeHidden('pivot');
+                            }
+                        });
                     }
                 }
             }
@@ -44,19 +64,22 @@ class Dietas extends Controller
             $refeicoes->each(function ($refeicao) {
                 $refeicao->alimentos->each(function ($alimento) {
                     if (isset($alimento->pivot)) {
+
+                        $gramas = $alimento->pivot->gramas;
+
                         $porcaoId = $alimento->pivot->porcao_id;
 
                         $porcao = $alimento->tipoPorcao->firstWhere('id', $porcaoId);
+                        $proporcao = $gramas / 100;
 
                         $alimento->porcao = [
                             'id' => $porcaoId,
-                            'nome_porcao' => $porcao->nome_porcao ?? null,
-                            'calorias' => $porcao->calorias ?? null,
-                            'proteinas' => $porcao->proteinas ?? null,
-                            'carboidratos' => $porcao->carboidratos ?? null,
-                            'gorduras' => $porcao->gorduras ?? null,
+                            'nome_porcao' => $gramas ?? null,
+                            'calorias' => ($porcao->calorias ?? 0) * $proporcao,
+                            'proteinas' => ($porcao->proteinas ?? 0) * $proporcao,
+                            'carboidratos' => ($porcao->carboidratos ?? 0) * $proporcao,
+                            'gorduras' => ($porcao->gorduras ?? 0) * $proporcao,
                         ];
-
                         $alimento->makeHidden('pivot');
                     }
                 });

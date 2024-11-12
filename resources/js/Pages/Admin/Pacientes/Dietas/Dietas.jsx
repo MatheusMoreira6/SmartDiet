@@ -1,4 +1,4 @@
-import { Row, Col, Button, Table, Spinner, Card } from "react-bootstrap";
+import { Row, Col, Button, Card } from "react-bootstrap";
 import { ModalCadastroDieta } from "./ModalCadastroDieta";
 import { useState, useEffect } from "react";
 import Api from "@/Api";
@@ -7,7 +7,7 @@ import { router } from "@inertiajs/react";
 import ModalEditDia from "./ModalEditDia";
 import { ModalCadastroGrupo } from "./ModalCadastroGrupo";
 import SweetAlert from "@/Components/SweetAlert";
-import { Pie } from "react-chartjs-2";
+import { Pie } from "@/Components/ChartJS";
 
 const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     const [show, setShow] = useState(false);
@@ -75,7 +75,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                     id_paciente,
                     id_nutricionista,
                 });
-                
+
                 setDietas(response.data.dietas);
                 SweetAlert.success({
                     title: "Dieta removida com sucesso!",
@@ -99,11 +99,9 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
 
         refeicoesDias.forEach((refeicao) => {
             refeicao.alimentos.forEach((alimento) => {
-                totalCarboidratos += parseFloat(
-                    alimento.tipo_porcao[0].carboidratos
-                );
-                totalProteinas += parseFloat(alimento.tipo_porcao[0].proteinas);
-                totalGorduras += parseFloat(alimento.tipo_porcao[0].gorduras);
+                totalCarboidratos += parseFloat(alimento.porcao.carboidratos);
+                totalProteinas += parseFloat(alimento.porcao.proteinas);
+                totalGorduras += parseFloat(alimento.porcao.gorduras);
             });
         });
 
@@ -202,7 +200,11 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                         <h2 className="text-center mt-4 mb-3">Gráficos:</h2>
                         <Row className="mt-4">
                             {diasSemana.map((dia, index) => (
-                                <Col key={`${dia.id}-${dia.nome_grupo}`} xs={12} lg={4}>
+                                <Col
+                                    key={`${dia.id}-${dia.nome_grupo}`}
+                                    xs={12}
+                                    lg={4}
+                                >
                                     <h5>
                                         Distribuição de Nutrientes -{" "}
                                         {dia.nome_grupo}

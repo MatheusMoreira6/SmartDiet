@@ -49,7 +49,8 @@ class RefeicoesController extends Controller
             DB::table('alimento_refeicao')->insert([
                 'alimento_id' => $alimento['id'],
                 'refeicao_id' => $refeicao->id,
-                'porcao_id' => $id_porcao
+                'porcao_id' => $id_porcao,
+                'gramas' => $alimento['gramas']
             ]);
         }
 
@@ -81,7 +82,8 @@ class RefeicoesController extends Controller
             DB::table('alimento_refeicao')->insert([
                 'alimento_id' => $alimento['id'],
                 'refeicao_id' => $refeicao->id,
-                'porcao_id' => $id_porcao
+                'porcao_id' => $id_porcao,
+                'gramas' => $alimento['gramas']
             ]);
         }
 
@@ -151,6 +153,27 @@ class RefeicoesController extends Controller
             foreach ($refeicoesAlternativas as $refAlt) {
                 if ($ref['id'] == $refAlt['id_ref_alt']) {
                     $ref['refeicao_alternativa'] = $refAlt;
+                    $ref['refeicao_alternativa']->alimentos->each(function ($alimento) {
+                        if (isset($alimento->pivot)) {
+
+                            $gramas = $alimento->pivot->gramas;
+
+                            $porcaoId = $alimento->pivot->porcao_id;
+
+                            $porcao = $alimento->tipoPorcao->firstWhere('id', $porcaoId);
+                            $proporcao = $gramas / 100;
+
+                            $alimento->porcao = [
+                                'id' => $porcaoId,
+                                'nome_porcao' => $gramas ?? null,
+                                'calorias' => ($porcao->calorias ?? 0) * $proporcao,
+                                'proteinas' => ($porcao->proteinas ?? 0) * $proporcao,
+                                'carboidratos' => ($porcao->carboidratos ?? 0) * $proporcao,
+                                'gorduras' => ($porcao->gorduras ?? 0) * $proporcao,
+                            ];
+                            $alimento->makeHidden('pivot');
+                        }
+                    });
                 }
             }
         }
@@ -158,19 +181,22 @@ class RefeicoesController extends Controller
         $refeicoes->each(function ($refeicao) {
             $refeicao->alimentos->each(function ($alimento) {
                 if (isset($alimento->pivot)) {
+
+                    $gramas = $alimento->pivot->gramas;
+
                     $porcaoId = $alimento->pivot->porcao_id;
 
                     $porcao = $alimento->tipoPorcao->firstWhere('id', $porcaoId);
+                    $proporcao = $gramas / 100;
 
                     $alimento->porcao = [
                         'id' => $porcaoId,
-                        'nome_porcao' => $porcao->nome_porcao ?? null,
-                        'calorias' => $porcao->calorias ?? null,
-                        'proteinas' => $porcao->proteinas ?? null,
-                        'carboidratos' => $porcao->carboidratos ?? null,
-                        'gorduras' => $porcao->gorduras ?? null,
+                        'nome_porcao' => $gramas ?? null,
+                        'calorias' => ($porcao->calorias ?? 0) * $proporcao,
+                        'proteinas' => ($porcao->proteinas ?? 0) * $proporcao,
+                        'carboidratos' => ($porcao->carboidratos ?? 0) * $proporcao,
+                        'gorduras' => ($porcao->gorduras ?? 0) * $proporcao,
                     ];
-
                     $alimento->makeHidden('pivot');
                 }
             });

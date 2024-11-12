@@ -1,4 +1,12 @@
-import { Accordion, ListGroup, Badge, Form } from "react-bootstrap";
+import {
+    Accordion,
+    ListGroup,
+    Badge,
+    Form,
+    InputGroup,
+    Row,
+    Col,
+} from "react-bootstrap";
 import { Apple } from "react-bootstrap-icons";
 import { LuLeaf } from "react-icons/lu";
 import { RiSeedlingFill } from "react-icons/ri";
@@ -77,33 +85,23 @@ const RenderAlimentos = ({
                                             width: "100%",
                                         }}
                                     >
-                                        <span>
-                                            {alimento.nome} -{" "}
-                                            <Badge bg="info">porções</Badge>
-                                        </span>
+                                        <span>{alimento.nome}</span>
                                     </div>
-                                    <Form.Select
-                                        className="mt-2"
-                                        onChange={(e) => {
-                                            handlePorcaoId(
-                                                alimento.id,
-                                                e.target.value
-                                            );
-                                        }}
-                                    >
-                                        <option value="">
-                                            Selecione o tipo de porção
-                                        </option>
-                                        {alimento.tipo_porcao.map((porcao) => (
-                                            <option
-                                                key={porcao.id}
-                                                value={porcao.id}
-                                            >
-                                                {porcao.nome_porcao} -{" "}
-                                                {porcao.calorias} kcal
-                                            </option>
-                                        ))}
-                                    </Form.Select>
+                                    <InputGroup className="mb-3">
+                                        <InputGroup.Text>
+                                            Gramas
+                                        </InputGroup.Text>
+                                        <Form.Control
+                                            type="text"
+                                            onChange={(e) => {
+                                                handlePorcaoId(
+                                                    alimento.id,
+                                                    e.target.value
+                                                );
+                                            }}
+                                        ></Form.Control>
+                                        <InputGroup.Text>G</InputGroup.Text>
+                                    </InputGroup>
                                 </ListGroup.Item>
                             ))}
                         </ListGroup>

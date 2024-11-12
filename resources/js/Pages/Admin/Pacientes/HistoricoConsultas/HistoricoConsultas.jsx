@@ -2,7 +2,7 @@ import { Table } from "react-bootstrap";
 
 export default function HistoricoConsultas({ agenda_consultas }) {
     return (
-        <Table striped bordered hover responsive>
+        <Table hover striped bordered responsive className="mb-0">
             <thead>
                 <tr>
                     <th>Data</th>
@@ -19,21 +19,53 @@ export default function HistoricoConsultas({ agenda_consultas }) {
                 </tr>
             </thead>
             <tbody>
-                {agenda_consultas.map((consulta, index) => (
-                    <tr key={index}>
-                        <td>{consulta.data}</td>
-                        <td>{consulta.hora}</td>
-                        <td>{consulta.dia_semana_id}</td>
-                        <td>{consulta.altura}</td>
-                        <td>{consulta.peso}</td>
-                        <td>{consulta.imc}</td>
-                        <td>{consulta.massa_muscular}</td>
-                        <td>{consulta.percentual_gordura}</td>
-                        <td>{consulta.circunferencia_cintura}</td>
-                        <td>{consulta.circunferencia_pescoco}</td>
-                        <td>{consulta.circunferencia_quadril}</td>
+                {agenda_consultas.length == 0 ? (
+                    <tr>
+                        <td colSpan="12" className="text-center">
+                            Nenhuma consulta encontrada!
+                        </td>
                     </tr>
-                ))}
+                ) : (
+                    <>
+                        {agenda_consultas.map((consulta, index) => (
+                            <tr key={index}>
+                                <td className="text-center d-grid">
+                                    {consulta.data}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.hora}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.dia_semana_id}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.altura}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.peso}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.imc}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.massa_muscular}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.percentual_gordura}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.circunferencia_cintura}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.circunferencia_pescoco}
+                                </td>
+                                <td className="text-center d-grid">
+                                    {consulta.circunferencia_quadril}
+                                </td>
+                            </tr>
+                        ))}
+                    </>
+                )}
             </tbody>
         </Table>
     );

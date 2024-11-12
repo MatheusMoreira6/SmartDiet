@@ -22,11 +22,6 @@ class Alimento extends Model
 
     public function tipoPorcao()
     {
-        return $this->hasMany(TipoPorcao::class, 'alimento_id', 'id'); // Definindo o relacionamento
-    }
-
-    public function porcao()
-    {
-        return $this->belongsTo(Porcao::class, 'porcao_id');
+        return $this->hasOne(TipoPorcao::class, 'alimento_id', 'id'); // Definindo o relacionamento
     }
 }
