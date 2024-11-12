@@ -30,12 +30,20 @@
     cursor: pointer;
 }
 
+.card-pointer:hover {
+    box-shadow: var(--bs-box-shadow) !important;
+}
+
 /**
 * Icon CSS
 */
 .btn > .bi,
 h3 > .bi {
     margin-right: 0.5rem !important;
+}
+
+.input-group > button > .bi {
+    margin-right: 0 !important;
 }
 
 /**
