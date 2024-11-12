@@ -62,11 +62,15 @@ const Dietas = ({ dieta, horarios, dias }) => {
                         <i className="bi bi-list"></i>
                         Dietas
                     </PageTopic>
-                    <tr>
-                        <td colSpan="5" className="text-center">
-                            Nenhuma consulta encontrada!
-                        </td>
-                    </tr>
+                    <Table hover striped bordered responsive className="mb-0">
+                        <tbody>
+                            <tr>
+                                <td colSpan="5" className="text-center">
+                                    Nenhuma dieta encontrada!
+                                </td>
+                            </tr>
+                        </tbody>
+                    </Table>
                 </WrapperContainer>
             </UserLayout>
         );
