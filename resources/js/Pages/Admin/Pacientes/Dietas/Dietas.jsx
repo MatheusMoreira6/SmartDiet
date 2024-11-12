@@ -75,7 +75,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                     id_paciente,
                     id_nutricionista,
                 });
-                console.log(response);
+                
                 setDietas(response.data.dietas);
                 SweetAlert.success({
                     title: "Dieta removida com sucesso!",
@@ -89,7 +89,6 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
     }
 
     const getChartData = (dia) => {
-        console.log;
         const refeicoesDias = dietasDynamic[0].refeicoes.filter(
             (refeicao) => refeicao.dia_semana_id === dia
         );
@@ -99,7 +98,6 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
         let totalGorduras = 0;
 
         refeicoesDias.forEach((refeicao) => {
-            console.log(refeicao.alimentos);
             refeicao.alimentos.forEach((alimento) => {
                 totalCarboidratos += parseFloat(
                     alimento.tipo_porcao[0].carboidratos
@@ -204,7 +202,7 @@ const DietContainer = ({ dietas, id_paciente, id_nutricionista }) => {
                         <h2 className="text-center mt-4 mb-3">Gráficos:</h2>
                         <Row className="mt-4">
                             {diasSemana.map((dia, index) => (
-                                <Col key={`${dia.id}-${dia.nome_grupo}`} md={3}>
+                                <Col key={`${dia.id}-${dia.nome_grupo}`} xs={12} lg={4}>
                                     <h5>
                                         Distribuição de Nutrientes -{" "}
                                         {dia.nome_grupo}
