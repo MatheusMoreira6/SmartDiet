@@ -73,12 +73,9 @@ export default function DadosPaciente({
 
                         <Tab eventKey="history" title="Histórico do Paciente">
                             <Row>
-                                {agenda_consultas &&
-                                    agenda_consultas.length > 0 && (
-                                        <HistoricoConsultas
-                                            agenda_consultas={agenda_consultas}
-                                        />
-                                    )}
+                                <HistoricoConsultas
+                                    agenda_consultas={agenda_consultas}
+                                />
                             </Row>
                         </Tab>
 
