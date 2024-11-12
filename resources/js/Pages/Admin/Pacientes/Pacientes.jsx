@@ -71,7 +71,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                 nome: nome_paciente,
             }),
             {
-                only: ['pacientes'],
+                only: ["pacientes"],
                 preserveScroll: true,
                 preserveState: true,
             }
