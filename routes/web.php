@@ -66,14 +66,14 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
         Route::post('/store', 'store')->name('admin.pacientes.store');
     });
 
-    Route::controller(ConsultasAdmin::class)->group(function () {
-        Route::get('/consultas', 'index')->name('admin.consultas');
-        Route::get('/consultas/show/{id}', 'show')->name('admin.consultas.show');
-        Route::get('/consultas/data-atendimento/{id}', 'datasAtendimento')->name('admin.consultas.data-atendimento');
-        Route::get('/consultas/horario-atendimento/{date}', 'horariosAtendimento')->name('admin.consultas.horario-atendimento');
-        Route::post('/consultas/store', 'store')->name('admin.consultas.store');
-        Route::post('/consultas/update', 'update')->name('admin.consultas.update');
-        Route::post('/consultas/delete', 'delete')->name('admin.consultas.delete');
+    Route::controller(ConsultasAdmin::class)->prefix('consultas')->group(function () {
+        Route::get('/', 'index')->name('admin.consultas');
+        Route::get('/show/{id}', 'show')->name('admin.consultas.show');
+        Route::get('/data-atendimento/{id}', 'datasAtendimento')->name('admin.consultas.data-atendimento');
+        Route::get('/horario-atendimento/{date}', 'horariosAtendimento')->name('admin.consultas.horario-atendimento');
+        Route::post('/store', 'store')->name('admin.consultas.store');
+        Route::post('/update', 'update')->name('admin.consultas.update');
+        Route::post('/delete', 'delete')->name('admin.consultas.delete');
     });
 
     Route::controller(ExamesAdmin::class)->prefix('exames')->group(function () {
