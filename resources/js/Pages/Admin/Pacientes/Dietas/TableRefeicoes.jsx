@@ -10,16 +10,10 @@ import { Eye, Plus } from "react-bootstrap-icons";
 import "../../../../../css/tableDieta.css";
 import ModalCadastroRefeicao from "./ModalCadastroRefeicao";
 import { useState } from "react";
-import AdminLayout from "@/Layouts/AdminLayout";
-import { Head } from "@inertiajs/react";
 import ModalRenderRefeicaoAlternativa from "./ModalRenderRefeicaoAlternativa";
 import Api from "@/Api";
 import SweetAlert from "@/Components/SweetAlert";
 import { useEffect } from "react";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-
-const MySwal = withReactContent(Swal);
 
 export default function TableRefeicoes({ refeicoes, dieta_id, dia_id }) {
     const [dynamincRef, setDynamicRef] = useState(refeicoes);
@@ -33,22 +27,6 @@ export default function TableRefeicoes({ refeicoes, dieta_id, dia_id }) {
     const [refeicaoSelected, setRefeicaoSelected] = useState(0);
     const [editingHorario, setEditingHorario] = useState(null);
     const [newHorario, setNewHorario] = useState("");
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (loading) {
-            MySwal.fire({
-                title: "Carregando...",
-                text: "Por favor, aguarde.",
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-        } else {
-            Swal.close();
-        }
-    }, [loading]);
 
     useEffect(() => {
         const fn = async () => {
@@ -59,9 +37,6 @@ export default function TableRefeicoes({ refeicoes, dieta_id, dia_id }) {
                 })
             );
             setDynamicHorarios(response.data.horarios);
-            setTimeout(() => {
-                setLoading(false);
-            }, 500);
         };
 
         fn();

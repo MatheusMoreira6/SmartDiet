@@ -247,26 +247,36 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                 <div style={{ margin: "5%", marginTop: 0 }}>
                     <h2 className="text-center mt-4 mb-3">Gráficos:</h2>
                     <Row className="mt-4">
-                        {diasSemana.map((dia, index) => (
-                            <Col
-                                key={`${dia.id}-${dia.nome_grupo}`}
-                                xs={12}
-                                lg={4}
-                            >
-                                <h5>
-                                    Distribuição de Nutrientes -{" "}
-                                    {dia.nome_grupo}
-                                </h5>
-                                <div
-                                    style={{
-                                        width: 300,
-                                        height: 300,
-                                    }}
+                        {diasSemana.map((dia, index) => {
+                            const refReturn = dietaDynamic.refeicoes.filter(
+                                (refeicao) =>
+                                    refeicao.dia_semana_id === dia &&
+                                    refeicao.alimentos.length > 0
+                            );
+
+                            if (refReturn) return;
+
+                            return (
+                                <Col
+                                    key={`${dia.id}-${dia.nome_grupo}`}
+                                    xs={12}
+                                    lg={4}
                                 >
-                                    <Pie data={getChartData(dia.id)} />
-                                </div>
-                            </Col>
-                        ))}
+                                    <h5>
+                                        Distribuição de Nutrientes -{" "}
+                                        {dia.nome_grupo}
+                                    </h5>
+                                    <div
+                                        style={{
+                                            width: 300,
+                                            height: 300,
+                                        }}
+                                    >
+                                        <Pie data={getChartData(dia.id)} />
+                                    </div>
+                                </Col>
+                            );
+                        })}
                     </Row>
                 </div>
             )}

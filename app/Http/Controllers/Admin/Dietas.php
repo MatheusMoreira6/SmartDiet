@@ -20,6 +20,7 @@ class Dietas extends Controller
     public function buscaDieta($id)
     {
         $dietas = ModelDietas::where('paciente_id', $id)
+            ->orderBy('created_at')
             ->get();
 
         foreach ($dietas as $dieta) {
@@ -122,7 +123,7 @@ class Dietas extends Controller
             DB::commit();
             $dietas = ModelDietas::where("nutricionista_id", $nutricionista->id)
                 ->where("paciente_id", $request->id_paciente)
-                ->get();
+                ->orderBy('created_at')->get();
 
             foreach ($dietas as $dieta) {
                 $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
@@ -178,7 +179,7 @@ class Dietas extends Controller
 
             DB::commit();
             $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
-                ->where("paciente_id", $request->id_paciente)
+                ->where("paciente_id", $request->id_paciente)->orderBy('created_at')
                 ->get();
 
             foreach ($dietas as $dieta) {
@@ -205,7 +206,7 @@ class Dietas extends Controller
         DB::table('table_grupo_dias_dieta')->where('dieta_id', $request->dieta_id)->where('id', $request->dia_id)->delete();
         $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
             ->where("paciente_id", $request->id_paciente)
-            ->get();
+            ->orderBy('created_at')->get();
 
         foreach ($dietas as $dieta) {
             $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
