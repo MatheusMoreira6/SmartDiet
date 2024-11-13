@@ -33,24 +33,31 @@ export const ModalCadastroDieta = ({
 
         const form = e.currentTarget;
         if (form.checkValidity()) {
-            post(route("dietas.salvar"), {
-                onSuccess: (response) => {
-                    handleClose();
-                    const novasDietas = response.props.dietas;
-                    setvalidate(true);
-                    setDietas(novasDietas);
-                    reset();
-                },
-                onError: (error) => {
-                    setvalidate(false);
+            try {
+                post(route("dietas.salvar"), {
+                    onSuccess: (response) => {
+                        handleClose();
+                        const novasDietas = response.props.dietas;
+                        setvalidate(true);
+                        setDietas(novasDietas);
+                        reset();
+                    },
+                    onError: (error) => {
+                        setvalidate(false);
 
-                    errors
-                        ? {}
-                        : SweetAlert.error({
-                              title: "Ocorreu um erro, verifique se adicionou os itens corretamente",
-                          });
-                },
-            });
+                        errors
+                            ? {}
+                            : SweetAlert.error({
+                                  title: "Ocorreu um erro, verifique se adicionou os itens corretamente",
+                              });
+                    },
+                });
+            } catch (error) {
+                SweetAlert.error({
+                    title: "Ocorreu um erro, verifique se adicionou os itens corretamente",
+                });
+                reset();
+            }
         }
     };
 

@@ -148,42 +148,51 @@ class Dietas extends Controller
             'grupos_dias' => 'required|array|min:1',
             'grupos_dias.*.grupo_dia' => 'required|string',
         ]);
+        DB::beginTransaction();
 
-        foreach ($request->grupos_dias as $index => $grupo) {
-            $index  += 1;
-            DB::table('table_grupo_dias_dieta')->insert([
-                'nome_grupo' => $grupo['grupo_dia'],
-                'ordem' => $index + $request->ordem,
-                'dieta_id' => $request->dieta_id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        try {
 
-        $grupos_dias = DB::table('table_grupo_dias_dieta')->where('ordem', '>', $request->ordem)->get();
-        foreach ($grupos_dias as $grupo) {
-            foreach ($request->horarios as $horario) {
-                DB::table('table_horarios_dietas')->insert([
-                    'horario' => $horario['horario'],
+            foreach ($request->grupos_dias as $index => $grupo) {
+                $index  += 1;
+                DB::table('table_grupo_dias_dieta')->insert([
+                    'nome_grupo' => $grupo['grupo_dia'],
+                    'ordem' => $index + $request->ordem,
                     'dieta_id' => $request->dieta_id,
-                    'grupo_id' => $grupo->id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
+
+            $grupos_dias = DB::table('table_grupo_dias_dieta')->where('ordem', '>', $request->ordem)->get();
+            foreach ($grupos_dias as $grupo) {
+                foreach ($request->horarios as $horario) {
+                    DB::table('table_horarios_dietas')->insert([
+                        'horario' => $horario['horario'],
+                        'dieta_id' => $request->dieta_id,
+                        'grupo_id' => $grupo->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+
+            DB::commit();
+            $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
+                ->where("paciente_id", $request->id_paciente)
+                ->get();
+
+            foreach ($dietas as $dieta) {
+                $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
+
+                $dieta['refeicoes'] = $refeicoes;
+            }
+
+            response()->json(["dietas" => $dietas]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Erro ao cadastrar a grupo:' . $e->getMessage());
+            response()->json(['erro' => 'erro ao cadastrar grupo']);
         }
-
-        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
-            ->where("paciente_id", $request->id_paciente)
-            ->get();
-
-        foreach ($dietas as $dieta) {
-            $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
-
-            $dieta['refeicoes'] = $refeicoes;
-        }
-
-        response()->json(["dietas" => $dietas]);
     }
 
     public function deleteGrupo(Request $request)
