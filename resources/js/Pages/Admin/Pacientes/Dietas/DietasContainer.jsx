@@ -20,8 +20,8 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
     const [showEditModal, setShowEditModal] = useState(false);
 
     useEffect(() => {
-        setDietaDynamic(dieta)
-    }, [dieta])
+        setDietaDynamic(dieta);
+    }, [dieta]);
 
     useEffect(() => {
         if (dietaDynamic) {
@@ -157,21 +157,23 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                 </Alert>
             )}
             <Col md={12}>
-                {!dietaDynamic.ativa ? (
-                    <Button
-                        variant={"primary"}
-                        onClick={() => updateStatus(true)}
-                    >
-                        <i className="bi bi-patch-check"></i> Ativar dieta!
-                    </Button>
-                ) : (
-                    <Button
-                        variant={"danger"}
-                        onClick={() => updateStatus(false)}
-                    >
-                        <i className="bi bi-x-circle"></i> Desativar dieta!
-                    </Button>
-                )}
+                <div className="d-grid gap-2 d-md-block">
+                    {!dietaDynamic.ativa ? (
+                        <Button
+                            variant={"success"}
+                            onClick={() => updateStatus(true)}
+                        >
+                            <i className="bi bi-patch-check"></i> Ativar dieta!
+                        </Button>
+                    ) : (
+                        <Button
+                            variant={"danger"}
+                            onClick={() => updateStatus(false)}
+                        >
+                            <i className="bi bi-x-circle"></i> Desativar dieta!
+                        </Button>
+                    )}
+                </div>
             </Col>
             <Col md={12} style={{ marginBottom: 15 }}>
                 <div className="d-grid gap-2 d-md-block">
