@@ -7,12 +7,11 @@ export default function HistoricoConsultas({ agenda_consultas }) {
                 <tr>
                     <th>Data</th>
                     <th>Hora</th>
-                    <th>Dia da Semana</th>
-                    <th>Altura</th>
-                    <th>Peso</th>
+                    <th>Altura (cm)</th>
+                    <th>Peso (kg)</th>
                     <th>IMC</th>
                     <th>Massa Muscular</th>
-                    <th>% Gordura</th>
+                    <th>Gordura (%)</th>
                     <th>Circunferência Cintura</th>
                     <th>Circunferência Pescoço</th>
                     <th>Circunferência Quadril</th>

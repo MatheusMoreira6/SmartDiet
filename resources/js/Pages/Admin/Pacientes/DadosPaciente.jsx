@@ -7,8 +7,19 @@ import "../../../../css/dadosPaciente.css";
 import DietContainer from "./Dietas/Dietas";
 import RenderFotos from "./DiarioAlimentar/DiarioAlimentar";
 import HistoricoConsultas from "./HistoricoConsultas/HistoricoConsultas";
+import GraficoConsultas from "./HistoricoConsultas/GraficoConsultasa";
+import Exames from "./Exames/Exames";
 
-const DadosPaciente = ({ dados, dietas, fotos, agenda_consultas }) => {
+const DadosPaciente = ({
+    dados,
+    dietas,
+    fotos,
+    agenda_consultas,
+    datas_consultas,
+    dados_consultas,
+    exames_finalizados,
+    exames_pendentes,
+}) => {
     return (
         <AdminLayout>
             <Head title="Paciente" />
@@ -57,11 +68,26 @@ const DadosPaciente = ({ dados, dietas, fotos, agenda_consultas }) => {
                     </Tab>
 
                     <Tab eventKey="history" title="Histórico do Paciente">
-                        <Row>
-                            <HistoricoConsultas
-                                agenda_consultas={agenda_consultas}
-                            />
+                        <Row className="g-3">
+                            <Col md={12}>
+                                <HistoricoConsultas
+                                    agenda_consultas={agenda_consultas}
+                                />
+                            </Col>
+                            <Col md={12}>
+                                <GraficoConsultas
+                                    datas_consultas={datas_consultas}
+                                    dados_consultas={dados_consultas}
+                                />
+                            </Col>
                         </Row>
+                    </Tab>
+
+                    <Tab eventKey="exames" title="Exames">
+                        <Exames
+                            exames_finalizados={exames_finalizados}
+                            pendentes={exames_pendentes}
+                        />
                     </Tab>
 
                     <Tab eventKey="diet" title="Dietas">

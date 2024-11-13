@@ -57,7 +57,9 @@ class Pacientes extends Controller
 
     public function show(int $id)
     {
-        $dadosPaciente = Paciente::with(['genero:id,descricao', 'user:id,password_temp'])->find($id)->toArray();
+        $paciente =  Paciente::where('id', $id)->first();
+
+        $dadosPaciente = $paciente->with(['genero:id,descricao', 'user:id,password_temp'])->find($id)->toArray();
 
         $auxDadosPaciente = [
             'id' => $dadosPaciente['id'],
@@ -85,13 +87,123 @@ class Pacientes extends Controller
                 return $foto;
             });
 
-        $agenda_consultas = AgendaConsulta::where('paciente_id', $id)->where('finalizada', true)->get();
+
+        $consultas = $paciente->consultas()
+            ->where('finalizada', true)
+            ->orderBy('data', 'desc')
+            ->orderBy('id', 'desc')
+            ->limit(10)->get()
+            ->reverse()->toArray();
+
+        $datas_consultas = [];
+
+        $dados_consultas = [
+            'peso' => [],
+            'altura' => [],
+            'imc' => [],
+            'cintura' => [],
+            'pescoco' => [],
+            'quadril' => [],
+            'percentual_gordura' => [],
+            'massa_muscular' => [],
+        ];
+
+        foreach ($consultas as $consulta) {
+            $datas_consultas[] = LibConversion::convertIsoToBr($consulta['data']);
+
+            $dados_consultas['peso'][] = $consulta['peso'] ?? 0;
+            $dados_consultas['altura'][] = $consulta['altura'] ?? 0;
+            $dados_consultas['imc'][] = $consulta['imc'] ?? 0;
+            $dados_consultas['cintura'][] = $consulta['circunferencia_cintura'] ?? 0;
+            $dados_consultas['quadril'][] = $consulta['circunferencia_quadril'] ?? 0;
+            $dados_consultas['pescoco'][] = $consulta['circunferencia_pescoco'] ?? 0;
+            $dados_consultas['percentual_gordura'][] = $consulta['percentual_gordura'] ?? 0;
+            $dados_consultas['massa_muscular'][] = $consulta['massa_muscular'] ?? 0;
+        }
+
+        $agenda_consultas = $paciente->consultas()->where('finalizada', true)->get();
+
+        $agenda_consultas->each(function ($consulta) {
+            $consulta['data'] = LibConversion::convertIsoToBr($consulta['data']);
+        });
+
+        $examesPendentes = $paciente->pedidosExames()
+            ->where('data_resultado', null)
+            ->with('paciente.genero')
+            ->with('nutricionista.genero')
+            ->with('itensPedidoExame.exame')
+            ->orderBy('data_pedido', 'asc')
+            ->get()->toArray();
+
+        $auxExamesPendentes = array_map(function ($exame) {
+            return [
+                'id' => $exame['id'],
+                'titulo_pedido' => $exame['titulo_pedido'],
+                'data_pedido' => LibConversion::convertIsoToBr($exame['data_pedido']),
+                'total_exames' => count($exame['itens_pedido_exame']),
+                'paciente' => [
+                    'nome' => $exame['paciente']['nome'] . ' ' . $exame['paciente']['sobrenome'],
+                    'genero' => $exame['paciente']['genero']['descricao'],
+                    'data_nascimento' => LibConversion::convertIsoToBr($exame['paciente']['data_nascimento']),
+                    'cpf' => $exame['paciente']['cpf'],
+                    'telefone' => $exame['paciente']['telefone'],
+                ],
+                'nutricionista' => [
+                    'nome' => $exame['nutricionista']['nome'] . ' ' . $exame['nutricionista']['sobrenome'],
+                    'genero' => $exame['nutricionista']['genero']['descricao'],
+                    'data_nascimento' => LibConversion::convertIsoToBr($exame['nutricionista']['data_nascimento']),
+                    'cpf' => $exame['nutricionista']['cpf'],
+                    'crn' => $exame['nutricionista']['crn'],
+                    'telefone' => $exame['nutricionista']['telefone'],
+                    'telefone_fixo' => $exame['nutricionista']['telefone_fixo'],
+                ],
+                'itens_pedido_exame' => array_map(function ($item) {
+                    return [
+                        'id' => $item['exame']['id'],
+                        'nome' => $item['exame']['nome'],
+                        'unidade_medida' => $item['exame']['unidade_medida'],
+                    ];
+                }, $exame['itens_pedido_exame']),
+            ];
+        }, $examesPendentes);
+
+        $examesFinalizados = $paciente->pedidosExames()
+            ->where('data_resultado', '!=', null)
+            ->with('itensPedidoExame.exame')
+            ->orderBy('data_resultado', 'desc')
+            ->orderBy('id', 'desc')
+            ->limit(10)->get()
+            ->reverse()->toArray();
+
+        $dadosExamesFinalizados = [];
+        foreach ($examesFinalizados as $exame) {
+            $data = LibConversion::convertIsoToBr($exame['data_resultado']);
+
+            foreach ($exame['itens_pedido_exame'] as $item) {
+                if (!isset($dadosExamesFinalizados[$item['exame']['id']])) {
+                    $dadosExamesFinalizados[$item['exame']['id']] = [
+                        'id' => $item['exame']['id'],
+                        'nome' => $item['exame']['nome'],
+                        'unidade_medida' => $item['exame']['unidade_medida'],
+                        'datas_resultados' => [],
+                        'resultados' => [],
+                    ];
+                }
+
+                $dadosExamesFinalizados[$item['exame']['id']]['datas_resultados'][] = $data;
+                $dadosExamesFinalizados[$item['exame']['id']]['resultados'][] = $item['resultado'];
+            }
+        }
 
         return $this->render('Admin/Pacientes/DadosPaciente', [
             'dados' => $auxDadosPaciente,
             'dietas' =>  $dietas,
             'fotos' => $fotosDiario,
-            'agenda_consultas' => $agenda_consultas
+            'agenda_consultas' => $agenda_consultas,
+            'datas_consultas' => $datas_consultas,
+            'dados_consultas' => $dados_consultas,
+            'exames_pendentes' => $auxExamesPendentes,
+            'exames_finalizados' => array_values($dadosExamesFinalizados),
         ]);
     }
 
