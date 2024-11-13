@@ -21,12 +21,7 @@ import withReactContent from "sweetalert2-react-content";
 
 const MySwal = withReactContent(Swal);
 
-export default function TableRefeicoes({
-    refeicoes,
-    horarios,
-    dieta_id,
-    dia_id,
-}) {
+export default function TableRefeicoes({ refeicoes, dieta_id, dia_id }) {
     const [dynamincRef, setDynamicRef] = useState(refeicoes);
     const [dynamicHorarios, setDynamicHorarios] = useState([]);
     const [visibleRef, setVisibleRef] = useState(false);
@@ -140,116 +135,82 @@ export default function TableRefeicoes({
     };
 
     return (
-        <AdminLayout>
-            <Head title="Cadastro de Refeições" />
-            <Container>
-                <h3 className="text-center mt-4 mb-3">
-                    Horários e Refeições da Dieta
-                </h3>
-                <Table bordered hover responsive className="diet-table mt-3">
-                    <thead>
-                        <tr>
-                            <th className="time-header">Horário</th>
-                            <th className="day-header">Refeição</th>
-                            <th className="day-header">Kcal</th>
-                            <th className="day-header">Carbs</th>
-                            <th className="day-header">Proteínas</th>
-                            <th className="day-header">Gorduras</th>
-                        </tr>
-                    </thead>
+        <Container>
+            <h3 className="text-center mt-4 mb-3">
+                Horários e Refeições da Dieta
+            </h3>
+            <Table bordered hover responsive className="diet-table mt-3">
+                <thead>
+                    <tr>
+                        <th className="time-header">Horário</th>
+                        <th className="day-header">Refeição</th>
+                        <th className="day-header">Kcal</th>
+                        <th className="day-header">Carbs</th>
+                        <th className="day-header">Proteínas</th>
+                        <th className="day-header">Gorduras</th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        {dynamicHorarios.map((horario) => {
-                            const refeicoesHorario = dynamincRef.filter(
-                                (ref) => ref.horario_id === horario.id
-                            );
-                            
-                            return (
-                                <tr
-                                    key={horario.id}
-                                    style={{ borderColor: "black" }}
+                <tbody>
+                    {dynamicHorarios.map((horario) => {
+                        const refeicoesHorario = dynamincRef.filter(
+                            (ref) => ref.horario_id === horario.id
+                        );
+
+                        return (
+                            <tr
+                                key={horario.id}
+                                style={{ borderColor: "black" }}
+                            >
+                                <td className="time-cell">
+                                    {editingHorario === horario.id ? (
+                                        <Form.Control
+                                            type="time"
+                                            value={newHorario}
+                                            onChange={handleHorarioChange}
+                                            onBlur={() =>
+                                                handleHorarioBlur(horario.id)
+                                            }
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        <span
+                                            onClick={() =>
+                                                handleHorarioEdit(horario)
+                                            }
+                                        >
+                                            {horario.horario}
+                                        </span>
+                                    )}
+                                </td>
+                                <td
+                                    onClick={() => handleOpenModal(horario)}
+                                    className="meal-cell"
+                                    style={{ position: "relative" }}
                                 >
-                                    <td className="time-cell">
-                                        {editingHorario === horario.id ? (
-                                            <Form.Control
-                                                type="time"
-                                                value={newHorario}
-                                                onChange={handleHorarioChange}
-                                                onBlur={() =>
-                                                    handleHorarioBlur(
-                                                        horario.id
-                                                    )
-                                                }
-                                                autoFocus
-                                            />
-                                        ) : (
-                                            <span
-                                                onClick={() =>
-                                                    handleHorarioEdit(horario)
-                                                }
-                                            >
-                                                {horario.horario}
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td
-                                        onClick={() => handleOpenModal(horario)}
-                                        className="meal-cell"
-                                        style={{ position: "relative" }}
-                                    >
-                                        {refeicoesHorario.length > 0 ? (
-                                            <>
-                                                {refeicoesHorario[0]
-                                                    .refeicao_alternativa ? (
-                                                    <>
-                                                        <div className="add-refeicao-btn">
-                                                            <Button
-                                                                variant="primary"
-                                                                size="sm"
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.stopPropagation();
-                                                                    vizualizeRefAlt(
-                                                                        {
-                                                                            alimentos:
-                                                                                refeicoesHorario[0]
-                                                                                    .refeicao_alternativa
-                                                                                    .alimentos,
-                                                                            refeicao_id:
-                                                                                refeicoesHorario[0]
-                                                                                    .refeicao_alternativa
-                                                                                    .id,
-                                                                            horario:
-                                                                                horario.id,
-                                                                        }
-                                                                    );
-                                                                }}
-                                                                style={{
-                                                                    fontSize: 10,
-                                                                }}
-                                                            >
-                                                                <Eye />{" "}
-                                                                <span className="d-none d-md-inline">
-                                                                    Ver ref.
-                                                                    alt.
-                                                                </span>
-                                                            </Button>
-                                                        </div>
-                                                    </>
-                                                ) : (
+                                    {refeicoesHorario.length > 0 ? (
+                                        <>
+                                            {refeicoesHorario[0]
+                                                .refeicao_alternativa ? (
+                                                <>
                                                     <div className="add-refeicao-btn">
                                                         <Button
                                                             variant="primary"
                                                             size="sm"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                handleAddRefeicao(
+                                                                vizualizeRefAlt(
                                                                     {
-                                                                        refeicao:
-                                                                            refeicoesHorario[0],
+                                                                        alimentos:
+                                                                            refeicoesHorario[0]
+                                                                                .refeicao_alternativa
+                                                                                .alimentos,
+                                                                        refeicao_id:
+                                                                            refeicoesHorario[0]
+                                                                                .refeicao_alternativa
+                                                                                .id,
                                                                         horario:
-                                                                            horario,
+                                                                            horario.id,
                                                                     }
                                                                 );
                                                             }}
@@ -257,141 +218,157 @@ export default function TableRefeicoes({
                                                                 fontSize: 10,
                                                             }}
                                                         >
-                                                            <Plus />{" "}
+                                                            <Eye />{" "}
                                                             <span className="d-none d-md-inline">
-                                                                Refeição Alt
+                                                                Ver ref. alt.
                                                             </span>
                                                         </Button>
                                                     </div>
+                                                </>
+                                            ) : (
+                                                <div className="add-refeicao-btn">
+                                                    <Button
+                                                        variant="primary"
+                                                        size="sm"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleAddRefeicao({
+                                                                refeicao:
+                                                                    refeicoesHorario[0],
+                                                                horario:
+                                                                    horario,
+                                                            });
+                                                        }}
+                                                        style={{
+                                                            fontSize: 10,
+                                                        }}
+                                                    >
+                                                        <Plus />{" "}
+                                                        <span className="d-none d-md-inline">
+                                                            Refeição Alt
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            )}
+                                            <ul className="list-unstyled">
+                                                {refeicoesHorario.map(
+                                                    (refeicao) => (
+                                                        <li key={refeicao.id}>
+                                                            <ul>
+                                                                {refeicao.alimentos.map(
+                                                                    (
+                                                                        alimento
+                                                                    ) => (
+                                                                        <li
+                                                                            key={
+                                                                                alimento.id
+                                                                            }
+                                                                            style={{
+                                                                                fontSize:
+                                                                                    "0.85em",
+                                                                                color: "#333",
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                alimento.nome
+                                                                            }{" "}
+                                                                            -{" "}
+                                                                            {
+                                                                                alimento
+                                                                                    .porcao
+                                                                                    .nome_porcao
+                                                                            }
+                                                                        </li>
+                                                                    )
+                                                                )}
+                                                            </ul>
+                                                        </li>
+                                                    )
                                                 )}
-                                                <ul className="list-unstyled">
-                                                    {refeicoesHorario.map(
-                                                        (refeicao) => (
-                                                            <li
-                                                                key={
-                                                                    refeicao.id
-                                                                }
-                                                            >
-                                                                <ul>
-                                                                    {refeicao.alimentos.map(
-                                                                        (
-                                                                            alimento
-                                                                        ) => (
-                                                                            <li
-                                                                                key={
-                                                                                    alimento.id
-                                                                                }
-                                                                                style={{
-                                                                                    fontSize:
-                                                                                        "0.85em",
-                                                                                    color: "#333",
-                                                                                }}
-                                                                            >
-                                                                                {
-                                                                                    alimento.nome
-                                                                                }{" "}
-                                                                                -{" "}
-                                                                                {
-                                                                                    alimento
-                                                                                        .porcao
-                                                                                        .nome_porcao
-                                                                                }
-                                                                            </li>
-                                                                        )
-                                                                    )}
-                                                                </ul>
-                                                            </li>
-                                                        )
-                                                    )}
-                                                </ul>
-                                            </>
-                                        ) : (
-                                            <span
-                                                style={{
-                                                    color: "#888",
-                                                    fontStyle: "italic",
-                                                }}
+                                            </ul>
+                                        </>
+                                    ) : (
+                                        <span
+                                            style={{
+                                                color: "#888",
+                                                fontStyle: "italic",
+                                            }}
+                                        >
+                                            Sem refeição cadastrada
+                                        </span>
+                                    )}
+                                </td>
+                                {[
+                                    "calorias",
+                                    "carboidratos",
+                                    "proteinas",
+                                    "gorduras",
+                                ].map((attr, index) => {
+                                    if (refeicoesHorario.length > 0) {
+                                        const arrayAlimentos =
+                                            refeicoesHorario[0].alimentos;
+                                        const arrayNumeros = [];
+
+                                        arrayAlimentos.forEach((element) => {
+                                            arrayNumeros.push(
+                                                parseFloat(element.porcao[attr])
+                                            );
+                                        });
+                                        return (
+                                            <td
+                                                key={index}
+                                                className="text-center meal-cell-itens"
                                             >
-                                                Sem refeição cadastrada
-                                            </span>
-                                        )}
-                                    </td>
-                                    {[
-                                        "calorias",
-                                        "carboidratos",
-                                        "proteinas",
-                                        "gorduras",
-                                    ].map((attr, index) => {
-                                        if (refeicoesHorario.length > 0) {
-                                            const arrayAlimentos =
-                                                refeicoesHorario[0].alimentos;
-                                            const arrayNumeros = [];
+                                                <span>
+                                                    {somaNutriente(
+                                                        arrayNumeros
+                                                    )}
+                                                </span>
+                                            </td>
+                                        );
+                                    } else {
+                                        return (
+                                            <td
+                                                key={index}
+                                                className="text-center meal-cell-itens"
+                                            >
+                                                <span>0</span>
+                                            </td>
+                                        );
+                                    }
+                                })}
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </Table>
 
-                                            arrayAlimentos.forEach(
-                                                (element) => {
-                                                    arrayNumeros.push(
-                                                        parseFloat(
-                                                            element.porcao[attr]
-                                                        )
-                                                    );
-                                                }
-                                            );
-                                            return (
-                                                <td
-                                                    key={index}
-                                                    className="text-center meal-cell-itens"
-                                                >
-                                                    <span>
-                                                        {somaNutriente(
-                                                            arrayNumeros
-                                                        )}
-                                                    </span>
-                                                </td>
-                                            );
-                                        } else {
-                                            return (
-                                                <td
-                                                    key={index}
-                                                    className="text-center meal-cell-itens"
-                                                >
-                                                    <span>0</span>
-                                                </td>
-                                            );
-                                        }
-                                    })}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
-
-                <ModalCadastroRefeicao
-                    show={visibleRef}
-                    setShow={setVisibleRef}
-                    selectedDia={dia_id}
-                    selectedHorario={selectedHorario}
-                    onUpdateRefeicao={(param) => setDynamicRef(param)}
-                    arraySelectedAlimentos={arraySelectedAlimentos}
-                    dieta_id={dieta_id}
-                    setArraySelectedAlimentos={setArraySelectedAlimentos}
-                    refAlt={refAlt}
-                    setRefAlt={setRefAlt}
-                    refeicaoSelected={refeicaoSelected}
-                    setRefeicaoSelected={setRefeicaoSelected}
-                />
-                <ModalRenderRefeicaoAlternativa
-                    show={visibleRefAltModal}
-                    refeicao={alimentosRefAlt}
-                    handleClose={() => {
-                        setVisiblerefAltModal(false);
-                        setAlimentosRefAlt([]);
-                    }}
-                    handleEdit={() => {
-                        setVisiblerefAltModal(false);
-                        setVisibleRef(true);
-                    }}
-                />
-            </Container>
-        </AdminLayout>
+            <ModalCadastroRefeicao
+                show={visibleRef}
+                setShow={setVisibleRef}
+                selectedDia={dia_id}
+                selectedHorario={selectedHorario}
+                onUpdateRefeicao={(param) => setDynamicRef(param)}
+                arraySelectedAlimentos={arraySelectedAlimentos}
+                dieta_id={dieta_id}
+                setArraySelectedAlimentos={setArraySelectedAlimentos}
+                refAlt={refAlt}
+                setRefAlt={setRefAlt}
+                refeicaoSelected={refeicaoSelected}
+                setRefeicaoSelected={setRefeicaoSelected}
+            />
+            <ModalRenderRefeicaoAlternativa
+                show={visibleRefAltModal}
+                refeicao={alimentosRefAlt}
+                handleClose={() => {
+                    setVisiblerefAltModal(false);
+                    setAlimentosRefAlt([]);
+                }}
+                handleEdit={() => {
+                    setVisiblerefAltModal(false);
+                    setVisibleRef(true);
+                }}
+            />
+        </Container>
     );
 }

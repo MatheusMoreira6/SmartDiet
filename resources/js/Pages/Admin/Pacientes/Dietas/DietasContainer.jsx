@@ -1,5 +1,12 @@
-import { Row, Col, Button, Card, Alert } from "react-bootstrap";
-import { ModalCadastroDieta } from "./ModalCadastroDieta";
+import {
+    Row,
+    Col,
+    Button,
+    Card,
+    Alert,
+    ButtonGroup,
+    Accordion,
+} from "react-bootstrap";
 import { useState, useEffect } from "react";
 import Api from "@/Api";
 import "../../../../../css/tableDieta.css";
@@ -8,6 +15,7 @@ import ModalEditDia from "./ModalEditDia";
 import { ModalCadastroGrupo } from "./ModalCadastroGrupo";
 import SweetAlert from "@/Components/SweetAlert";
 import { Pie } from "@/Components/ChartJS";
+import TableRefeicoes from "./TableRefeicoes";
 
 const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
     const [addGrupo, setAddGrupo] = useState(false);
@@ -146,52 +154,64 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
 
     return (
         <Row className="g-3">
-            {dietaDynamic.ativa ? (
-                <Alert variant={"success"}>
-                    <i className="bi bi-patch-check"></i> Essa dieta está ativa!
-                </Alert>
-            ) : (
-                <Alert variant={"warning"}>
-                    <i className="bi bi-exclamation-triangle"></i> Essa dieta
-                    está desativada!
-                </Alert>
-            )}
-            <Col md={12}>
-                <div className="d-grid gap-2 d-md-block">
-                    {!dietaDynamic.ativa ? (
-                        <Button
-                            variant={"success"}
-                            onClick={() => updateStatus(true)}
-                        >
-                            <i className="bi bi-patch-check"></i> Ativar dieta!
-                        </Button>
-                    ) : (
-                        <Button
-                            variant={"danger"}
-                            onClick={() => updateStatus(false)}
-                        >
-                            <i className="bi bi-x-circle"></i> Desativar dieta!
-                        </Button>
-                    )}
-                </div>
+            <Col xs={12}>
+                {dietaDynamic.ativa ? (
+                    <Alert variant={"success"}>
+                        <i className="bi bi-patch-check"></i> Essa dieta está
+                        ativa!
+                    </Alert>
+                ) : (
+                    <Alert variant={"warning"}>
+                        <i className="bi bi-exclamation-triangle"></i> Essa
+                        dieta está desativada!
+                    </Alert>
+                )}
             </Col>
-            <Col md={12} style={{ marginBottom: 15 }}>
-                <div className="d-grid gap-2 d-md-block">
-                    <Button variant="primary" onClick={() => setAddGrupo(true)}>
-                        <i className="bi bi-plus-lg"></i>
-                        Cadastrar grupo
-                    </Button>
-                </div>
-            </Col>
-            {diasSemana.map((dia) => (
-                <Card key={dia.id} className="mb-2 card-hover">
-                    <Card.Body>
-                        <Row>
-                            <Col>
-                                <strong>{dia.nome_grupo}</strong>
+
+            <Row className="my-3">
+                <Col>
+                    <div className="d-grid gap-2 d-md-block">
+                        <ButtonGroup>
+                            <Button
+                                variant="primary"
+                                onClick={() => setAddGrupo(true)}
+                            >
+                                <i className="bi bi-plus-lg"></i> Cadastrar
+                                grupo
+                            </Button>
+                            {!dietaDynamic.ativa ? (
+                                <Button
+                                    variant="success"
+                                    onClick={() => updateStatus(true)}
+                                >
+                                    <i className="bi bi-patch-check"></i> Ativar
+                                    dieta!
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="danger"
+                                    onClick={() => updateStatus(false)}
+                                >
+                                    <i className="bi bi-x-circle"></i> Desativar
+                                    dieta!
+                                </Button>
+                            )}
+                        </ButtonGroup>
+                    </div>
+                </Col>
+            </Row>
+
+            <Col xs={12}>
+                <Accordion defaultActiveKey="0">
+                    {diasSemana.map((dia, index) => (
+                        <Accordion.Item eventKey={index} key={dia.id}>
+                            <Accordion.Header>
+                                {dia.nome_grupo}
                                 <Button
                                     variant="link"
+                                    className="p-0 ms-2"
                                     onClick={(e) => {
+                                        e.stopPropagation();
                                         handleEditDia({
                                             grupo_dia: dia,
                                         });
@@ -199,64 +219,57 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                                 >
                                     <i className="bi bi-pencil"></i>
                                 </Button>
-                            </Col>
-                            <Col className="text-end">
-                                <div className="d-grid gap-2 d-md-block">
-                                    <Button
-                                        variant="outline-primary"
-                                        style={{
-                                            textDecoration: "none",
-                                        }}
-                                        onClick={() => {
-                                            router.visit(
-                                                route("admin.refeicoes", {
-                                                    dieta_id: dietaDynamic.id,
-                                                    dia_id: dia.id,
-                                                })
-                                            );
-                                        }}
-                                    >
-                                        <span>Ver Dieta </span>
-                                        <i className="bi bi-arrow-right-circle"></i>
-                                    </Button>
-                                    <Button
-                                        variant="danger"
-                                        onClick={() =>
-                                            handleDelete({
-                                                dieta_id: dietaDynamic.id,
-                                                dia_id: dia.id,
-                                            })
-                                        }
-                                    >
-                                        <i className="bi-trash"></i>
-                                    </Button>
+                                <Button
+                                    variant="danger"
+                                    onClick={() =>
+                                        handleDelete({
+                                            dieta_id: dietaDynamic.id,
+                                            dia_id: dia.id,
+                                        })
+                                    }
+                                >
+                                    <i className="bi-trash"></i>
+                                </Button>
+                            </Accordion.Header>
+                            <Accordion.Body>
+                                <TableRefeicoes
+                                    dia_id={dia.id}
+                                    dieta_id={dieta.id}
+                                    refeicoes={dieta.refeicoes}
+                                />
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    ))}
+                </Accordion>
+            </Col>
+
+            {dietaDynamic.refeicoes.length > 0 && (
+                <div style={{ margin: "5%", marginTop: 0 }}>
+                    <h2 className="text-center mt-4 mb-3">Gráficos:</h2>
+                    <Row className="mt-4">
+                        {diasSemana.map((dia, index) => (
+                            <Col
+                                key={`${dia.id}-${dia.nome_grupo}`}
+                                xs={12}
+                                lg={4}
+                            >
+                                <h5>
+                                    Distribuição de Nutrientes -{" "}
+                                    {dia.nome_grupo}
+                                </h5>
+                                <div
+                                    style={{
+                                        width: 300,
+                                        height: 300,
+                                    }}
+                                >
+                                    <Pie data={getChartData(dia.id)} />
                                 </div>
                             </Col>
-                        </Row>
-                    </Card.Body>
-                </Card>
-            ))}
-
-            <div style={{ margin: "5%", marginTop: 0 }}>
-                <h2 className="text-center mt-4 mb-3">Gráficos:</h2>
-                <Row className="mt-4">
-                    {diasSemana.map((dia, index) => (
-                        <Col key={`${dia.id}-${dia.nome_grupo}`} xs={12} lg={4}>
-                            <h5>
-                                Distribuição de Nutrientes - {dia.nome_grupo}
-                            </h5>
-                            <div
-                                style={{
-                                    width: 300,
-                                    height: 300,
-                                }}
-                            >
-                                <Pie data={getChartData(dia.id)} />
-                            </div>
-                        </Col>
-                    ))}
-                </Row>
-            </div>
+                        ))}
+                    </Row>
+                </div>
+            )}
 
             <ModalCadastroGrupo
                 visible={addGrupo}

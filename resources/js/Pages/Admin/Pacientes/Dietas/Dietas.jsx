@@ -33,7 +33,7 @@ const Dietas = ({ dietas = [], id_paciente, id_nutricionista }) => {
                     </Col>
                 )}
                 {DietasDynaminc.length > 0 && (
-                    <>
+                    <Col xs={12}>
                         <Tabs id="ditas-tabs">
                             {DietasDynaminc.map((dieta) => {
                                 return (
@@ -51,7 +51,7 @@ const Dietas = ({ dietas = [], id_paciente, id_nutricionista }) => {
                                 );
                             })}
                         </Tabs>
-                    </>
+                    </Col>
                 )}
             </Row>
 

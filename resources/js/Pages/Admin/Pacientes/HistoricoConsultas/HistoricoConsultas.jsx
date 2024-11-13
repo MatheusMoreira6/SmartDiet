@@ -28,11 +28,7 @@ export default function HistoricoConsultas({ agenda_consultas }) {
                 ) : (
                     agenda_consultas.map((consulta, index) => (
                         <tr key={index}>
-                            <td className="text-center">
-                                {new Date(consulta.data).toLocaleDateString(
-                                    "pt-BR"
-                                )}
-                            </td>
+                            <td className="text-center">{consulta.data}</td>
 
                             <td className="text-center">
                                 {consulta.hora.slice(0, 5)}
