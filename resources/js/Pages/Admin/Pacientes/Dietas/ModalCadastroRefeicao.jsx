@@ -70,7 +70,6 @@ const ModalCadastroRefeicao = ({
     };
 
     const handlePorcaoId = (alimentoId, porcao) => {
-        console.log(alimentoId, porcao);
         setSelectedAlimentos((prevSelected) => {
             const alreadySelected = prevSelected.some(
                 (item) => item.id === alimentoId

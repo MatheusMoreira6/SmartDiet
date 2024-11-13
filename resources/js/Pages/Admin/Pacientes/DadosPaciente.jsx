@@ -4,11 +4,11 @@ import WrapperContainer from "@/Components/WrapperContainer";
 import PageTopic from "@/Components/PageTopic";
 import { Row, Col, Tabs, Tab } from "react-bootstrap";
 import "../../../../css/dadosPaciente.css";
-import DietContainer from "./Dietas/Dietas";
 import RenderFotos from "./DiarioAlimentar/DiarioAlimentar";
 import HistoricoConsultas from "./HistoricoConsultas/HistoricoConsultas";
 import GraficoConsultas from "./HistoricoConsultas/GraficoConsultasa";
 import Exames from "./Exames/Exames";
+import Dietas from "./Dietas/Dietas";
 
 const DadosPaciente = ({
     dados,
@@ -30,7 +30,7 @@ const DadosPaciente = ({
                     Dados do Paciente
                 </PageTopic>
 
-                <Tabs id="configuracoes-tabs" defaultActiveKey="info">
+                <Tabs id="paciente-tabs" defaultActiveKey="info">
                     <Tab eventKey="info" title="Informações">
                         <Row className="g-3">
                             <Col md={6} className="mt-4">
@@ -91,7 +91,7 @@ const DadosPaciente = ({
                     </Tab>
 
                     <Tab eventKey="diet" title="Dietas">
-                        <DietContainer
+                        <Dietas
                             dietas={dietas}
                             id_paciente={dados.id}
                             id_nutricionista={dados.nutricionista_id}

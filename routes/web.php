@@ -119,6 +119,7 @@ Route::middleware([AuthenticateAdmin::class])->prefix('admin')->group(function (
         Route::get('/busca-alimentos', 'buscaAlimentos')->name('busca.alimentos');
         Route::get('/busca-dieta/{id}', 'buscaDieta')->name('busca.dieta');
         Route::post('/editar-dia', 'editaDia')->name('grupo_dia.editar');
+        Route::post('/edit-status-dieta', 'editaStatus')->name('edita.status.dieta');
     });
 
     Route::controller(RefeicoesController::class)->group(function () {

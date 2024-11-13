@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Alimento;
 use App\Models\Dieta as ModelDietas;
 use App\Models\Refeicoes;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 use function Laravel\Prompts\select;
 
@@ -76,48 +79,64 @@ class Dietas extends Controller
             'grupos_dias.*.grupo_dia' => 'required|string',
         ]);
 
-        $dieta = ModelDietas::create([
-            'nome_dieta' => $request->nome,
-            'descricao' => $request->descricao,
-            'nutricionista_id' => $request->id_nutricionista,
-            'paciente_id' => $request->id_paciente,
-        ]);
+        $nutricionista = Auth::user()->nutricionista;
 
+        DB::beginTransaction();
 
-        foreach ($request->grupos_dias as $index => $grupo) {
-            DB::table('table_grupo_dias_dieta')->insert([
-                'nome_grupo' => $grupo['grupo_dia'],
-                'ordem' => $index + 1,
-                'dieta_id' => $dieta->id,
-                'created_at' => now(),
-                'updated_at' => now(),
+        try {
+
+            $dieta = ModelDietas::create([
+                'nome_dieta' => $request->nome,
+                'descricao' => $request->descricao,
+                'nutricionista_id' => $nutricionista->id,
+                'paciente_id' => $request->id_paciente,
             ]);
-        }
 
-        $grupos_dias = DB::table('table_grupo_dias_dieta')->where('dieta_id', $dieta->id)->get();
-        foreach ($grupos_dias as $grupo) {
-            foreach ($request->horarios as $horario) {
-                DB::table('table_horarios_dietas')->insert([
-                    'horario' => $horario['horario'],
+            if (!$dieta) {
+                DB::rollBack();
+                response()->json(['erro' => 'erro ao cadastrar dieta']);
+            }
+            foreach ($request->grupos_dias as $index => $grupo) {
+                DB::table('table_grupo_dias_dieta')->insert([
+                    'nome_grupo' => $grupo['grupo_dia'],
+                    'ordem' => $index + 1,
                     'dieta_id' => $dieta->id,
-                    'grupo_id' => $grupo->id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
+
+            $grupos_dias = DB::table('table_grupo_dias_dieta')->where('dieta_id', $dieta->id)->get();
+            foreach ($grupos_dias as $grupo) {
+                foreach ($request->horarios as $horario) {
+                    DB::table('table_horarios_dietas')->insert([
+                        'horario' => $horario['horario'],
+                        'dieta_id' => $dieta->id,
+                        'grupo_id' => $grupo->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+
+            DB::commit();
+            $dietas = ModelDietas::where("nutricionista_id", $nutricionista->id)
+                ->where("paciente_id", $request->id_paciente)
+                ->get();
+
+            foreach ($dietas as $dieta) {
+                $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
+
+                $dieta['refeicoes'] = $refeicoes;
+            }
+
+
+            response()->json(["dietas" => $dietas]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Erro ao cadastrar a dieta:' . $e->getMessage());
+            response()->json(['erro' => 'erro ao cadastrar dieta']);
         }
-
-        $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
-            ->where("paciente_id", $request->id_paciente)
-            ->get();
-
-        foreach ($dietas as $dieta) {
-            $refeicoes = $this->formattedRefeicoesDietas($dieta->id);
-
-            $dieta['refeicoes'] = $refeicoes;
-        }
-
-        response()->json(["dietas" => $dietas]);
     }
 
     public function cadastroGrupo(Request $request)
@@ -225,5 +244,21 @@ class Dietas extends Controller
         $alimentos = Alimento::with('tipoPorcao')->get()->groupBy('tipo_alimento');
 
         return response()->json(['alimentos' => $alimentos]);
+    }
+
+    public function editaStatus(Request $request)
+    {
+        try {
+            $request->validate([
+                'dieta_id' => 'required|integer|exists:dietas,id',
+                'status' => 'boolean',
+            ]);
+
+            $dieta = ModelDietas::where('id', $request->dieta_id);
+
+            $dieta->update(['ativa' => $request->status]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao atualizar status da dieta.'], 500);
+        }
     }
 }

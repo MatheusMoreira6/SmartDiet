@@ -64,7 +64,7 @@ const DiarioAlimentar = ({ fotosDiario }) => {
             <WrapperContainer>
                 <PageTopic>
                     {" "}
-                    <i class="bi bi-file-earmark-image"></i> Adicionar ao Diário
+                    <i className="bi bi-file-earmark-image"></i> Adicionar ao Diário
                     Alimentar
                 </PageTopic>
 
@@ -99,7 +99,7 @@ const DiarioAlimentar = ({ fotosDiario }) => {
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
-                            <i class="bi bi-file-earmark-image"></i>
+                            <i className="bi bi-file-earmark-image"></i>
                             Enviar Refeição
                         </Button>
                     </Form>

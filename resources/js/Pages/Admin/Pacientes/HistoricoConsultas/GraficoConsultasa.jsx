@@ -1,8 +1,7 @@
 import { Line } from "@/Components/ChartJS";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 const GraficoConsultas = ({ datas_consultas, dados_consultas }) => {
-    console.log(dados_consultas, dados_consultas);
     const dataPesoAlturaIMC = {
         labels: datas_consultas,
         datasets: [
