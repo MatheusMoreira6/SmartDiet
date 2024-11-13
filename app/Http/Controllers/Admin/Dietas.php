@@ -155,25 +155,32 @@ class Dietas extends Controller
 
             foreach ($request->grupos_dias as $index => $grupo) {
                 $index  += 1;
-                DB::table('table_grupo_dias_dieta')->insert([
+                $grupo = DB::table('table_grupo_dias_dieta')->insert([
                     'nome_grupo' => $grupo['grupo_dia'],
                     'ordem' => $index + $request->ordem,
                     'dieta_id' => $request->dieta_id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
+                if (!$grupo) {
+                    DB::rollBack();
+                }
             }
 
             $grupos_dias = DB::table('table_grupo_dias_dieta')->where('ordem', '>', $request->ordem)->get();
             foreach ($grupos_dias as $grupo) {
                 foreach ($request->horarios as $horario) {
-                    DB::table('table_horarios_dietas')->insert([
+                   $horario = DB::table('table_horarios_dietas')->insert([
                         'horario' => $horario['horario'],
                         'dieta_id' => $request->dieta_id,
                         'grupo_id' => $grupo->id,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+
+                    if (!$horario) {
+                        DB::rollBack();
+                    }
                 }
             }
 

@@ -111,9 +111,6 @@ export default function TableRefeicoes({ refeicoes, dieta_id, dia_id }) {
 
     return (
         <Container>
-            <h3 className="text-center mt-4 mb-3">
-                Horários e Refeições da Dieta
-            </h3>
             <Table bordered hover responsive className="diet-table mt-3">
                 <thead>
                     <tr>

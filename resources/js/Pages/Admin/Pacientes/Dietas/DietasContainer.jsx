@@ -155,6 +155,26 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
     return (
         <Row className="g-3">
             <Col xs={12}>
+                <Card className="mb-3">
+                    <Card.Body>
+                        <Card.Text>
+                            Descrição da Dieta:
+                            {dietaDynamic.descricao ||
+                                "Nenhuma descrição fornecida."}
+                        </Card.Text>
+                        <Card.Text>
+                            <small className="text-muted">
+                                Criado em:{" "}
+                                {new Date(
+                                    dietaDynamic.created_at
+                                ).toLocaleDateString()}
+                            </small>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+            </Col>
+
+            <Col xs={12}>
                 {dietaDynamic.ativa ? (
                     <Alert variant={"success"}>
                         <i className="bi bi-patch-check"></i> Essa dieta está
@@ -185,7 +205,7 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                                     onClick={() => updateStatus(true)}
                                 >
                                     <i className="bi bi-patch-check"></i> Ativar
-                                    dieta!
+                                    dieta
                                 </Button>
                             ) : (
                                 <Button
@@ -193,7 +213,7 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                                     onClick={() => updateStatus(false)}
                                 >
                                     <i className="bi bi-x-circle"></i> Desativar
-                                    dieta!
+                                    dieta
                                 </Button>
                             )}
                         </ButtonGroup>
@@ -249,12 +269,9 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                     <Row className="mt-4">
                         {diasSemana.map((dia, index) => {
                             const refReturn = dietaDynamic.refeicoes.filter(
-                                (refeicao) =>
-                                    refeicao.dia_semana_id === dia &&
-                                    refeicao.alimentos.length > 0
+                                (refeicao) => refeicao.dia_semana_id === dia.id
                             );
-
-                            if (refReturn) return;
+                            if (refReturn.length === 0) return;
 
                             return (
                                 <Col
