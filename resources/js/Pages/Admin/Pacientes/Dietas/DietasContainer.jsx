@@ -227,29 +227,34 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                         <Accordion.Item eventKey={index} key={dia.id}>
                             <Accordion.Header>
                                 {dia.nome_grupo}
-                                <Button
-                                    variant="link"
-                                    className="p-0 ms-2"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleEditDia({
-                                            grupo_dia: dia,
-                                        });
-                                    }}
-                                >
-                                    <i className="bi bi-pencil"></i>
-                                </Button>
-                                <Button
-                                    variant="danger"
-                                    onClick={() =>
-                                        handleDelete({
-                                            dieta_id: dietaDynamic.id,
-                                            dia_id: dia.id,
-                                        })
-                                    }
-                                >
-                                    <i className="bi-trash"></i>
-                                </Button>
+                                <ButtonGroup>
+                                    <Button
+                                        variant="link"
+                                        className="p-0 ms-2"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleEditDia({
+                                                grupo_dia: dia,
+                                            });
+                                        }}
+                                    >
+                                        <i className="bi bi-pencil"></i>
+                                    </Button>
+                                    <Button
+                                        variant="link"
+                                        className="p-0"
+                                        style={{color: 'red'}}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDelete({
+                                                dieta_id: dietaDynamic.id,
+                                                dia_id: dia.id,
+                                            });
+                                        }}
+                                    >
+                                        <i className="bi-trash"></i>
+                                    </Button>
+                                </ButtonGroup>
                             </Accordion.Header>
                             <Accordion.Body>
                                 <TableRefeicoes
