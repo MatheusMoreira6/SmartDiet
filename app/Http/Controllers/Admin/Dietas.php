@@ -252,7 +252,6 @@ class Dietas extends Controller
             ->get();
 
         $horarios = DB::table('table_horarios_dietas')->select()->where('dieta_id', $id)->get();
-
         return response()->json(['dias' => $dias, 'horarios' => $horarios]);
     }
 

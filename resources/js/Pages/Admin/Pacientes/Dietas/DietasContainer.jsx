@@ -16,6 +16,8 @@ import { ModalCadastroGrupo } from "./ModalCadastroGrupo";
 import SweetAlert from "@/Components/SweetAlert";
 import { Pie } from "@/Components/ChartJS";
 import TableRefeicoes from "./TableRefeicoes";
+import DietaPDF from "./DietaPDF";
+import { pdf } from "@react-pdf/renderer";
 
 const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
     const [addGrupo, setAddGrupo] = useState(false);
@@ -152,6 +154,24 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
         });
     };
 
+    const handleDownload = async (dieta) => {
+        const blob = await pdf(
+            <DietaPDF
+                dieta={dieta}
+                diasSemana={diasSemana}
+                horarios={horarios}
+            />
+        ).toBlob();
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Dietas.pdf";
+        link.click();
+
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <Row className="g-3">
             <Col xs={12}>
@@ -199,6 +219,12 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                                 <i className="bi bi-plus-lg"></i> Cadastrar
                                 grupo
                             </Button>
+                            <Button
+                                variant="primary"
+                                onClick={() => handleDownload(dieta)}
+                            >
+                                <i className="bi bi-printer"></i> Imprimir
+                            </Button>
                             {!dietaDynamic.ativa ? (
                                 <Button
                                     variant="success"
@@ -243,7 +269,7 @@ const DietContainer = ({ dieta, id_paciente, id_nutricionista, setDietas }) => {
                                     <Button
                                         variant="link"
                                         className="p-0"
-                                        style={{color: 'red'}}
+                                        style={{ color: "red" }}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleDelete({
