@@ -28,6 +28,7 @@ Para rodar o Laravel corretamente, você deve garantir que as seguintes extensõ
 - **PDO_PGSQL** (extension=pdo_pgsql)
 - **PGSQL** (extension=pgsql)
 - **Zip** (extension=zip)
+- **MB_String** (extension=mbstring)
 
 ## Instalação
 
