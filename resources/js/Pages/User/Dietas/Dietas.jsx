@@ -15,6 +15,8 @@ import "../../../../css/tableDieta.css";
 import { Pie } from "@/Components/ChartJS";
 import WrapperContainer from "@/Components/WrapperContainer";
 import PageTopic from "@/Components/PageTopic";
+import { pdf } from "@react-pdf/renderer";
+import DietaPDF from "./DietaPDF";
 
 const Dietas = ({ dietas }) => {
     const [showAltModal, setShowAltModal] = useState(false);
@@ -60,6 +62,24 @@ const Dietas = ({ dietas }) => {
                 },
             ],
         };
+    };
+
+    const handleDownload = async (dieta) => {
+        const blob = await pdf(
+            <DietaPDF
+                dieta={dieta}
+                diasSemana={dieta.dias}
+                horarios={dieta.horarios}
+            />
+        ).toBlob();
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Dietas.pdf";
+        link.click();
+
+        URL.revokeObjectURL(url);
     };
 
     if (!dietas || dietas.length == 0) {
@@ -122,6 +142,17 @@ const Dietas = ({ dietas }) => {
                                             >
                                                 <Accordion.Header>
                                                     {dia.nome_grupo}
+                                                    <Button
+                                                        variant="link"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDownload(
+                                                                dieta
+                                                            );
+                                                        }}
+                                                    >
+                                                        <i className="bi bi-printer"></i>
+                                                    </Button>
                                                 </Accordion.Header>
                                                 <Accordion.Body>
                                                     <Table
