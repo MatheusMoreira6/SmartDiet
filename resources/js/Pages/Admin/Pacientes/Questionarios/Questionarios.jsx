@@ -32,12 +32,10 @@ const Questionarios = ({ respostas }) => {
                                     size={20}
                                 />
                                 <h5 className="text-dark fw-bold mb-0">
-                                    Pergunta #{index + 1}
+                                    {item.pergunta.pergunta}{" - "}Pergunta #{index + 1}
                                 </h5>
                             </div>
-                            <p className="text-dark fw-bold mb-0">
-                                {item.pergunta.pergunta}
-                            </p>
+                           
                             <hr />
                             <div className="d-flex align-items-center mb-3">
                                 <FaRegCommentDots
