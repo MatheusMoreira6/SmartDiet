@@ -34,10 +34,6 @@ export default function HistoricoConsultas({ agenda_consultas }) {
                                 {consulta.hora.slice(0, 5)}
                             </td>
 
-                            <td className="text-center">
-                                {consulta.dia_semana_id}
-                            </td>
-
                             <td className="text-center">{consulta.altura}</td>
                             <td className="text-center">{consulta.peso}</td>
                             <td className="text-center">{consulta.imc}</td>
