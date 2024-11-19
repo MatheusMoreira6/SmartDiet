@@ -9,6 +9,7 @@ import HistoricoConsultas from "./HistoricoConsultas/HistoricoConsultas";
 import GraficoConsultas from "./HistoricoConsultas/GraficoConsultasa";
 import Exames from "./Exames/Exames";
 import Dietas from "./Dietas/Dietas";
+import Questionarios from "./Questionarios/Questionarios";
 
 const DadosPaciente = ({
     dados,
@@ -19,7 +20,9 @@ const DadosPaciente = ({
     dados_consultas,
     exames_finalizados,
     exames_pendentes,
+    respostas,
 }) => {
+    console.log(respostas);
     return (
         <AdminLayout>
             <Head title="Paciente" />
@@ -96,6 +99,10 @@ const DadosPaciente = ({
                             id_paciente={dados.id}
                             id_nutricionista={dados.nutricionista_id}
                         />
+                    </Tab>
+
+                    <Tab eventKey="quest" title="Resposta questionário">
+                        <Questionarios respostas={respostas} />
                     </Tab>
 
                     <Tab eventKey="day" title="Diário alimentar">

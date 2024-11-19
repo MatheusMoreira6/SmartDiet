@@ -195,6 +195,8 @@ class Pacientes extends Controller
             }
         }
 
+        $respostasQuestionarios = $paciente->respostas()->with('pergunta')->get();
+
         return $this->render('Admin/Pacientes/DadosPaciente', [
             'dados' => $auxDadosPaciente,
             'dietas' =>  $dietas,
@@ -204,6 +206,7 @@ class Pacientes extends Controller
             'dados_consultas' => $dados_consultas,
             'exames_pendentes' => $auxExamesPendentes,
             'exames_finalizados' => array_values($dadosExamesFinalizados),
+            'respostas' => $respostasQuestionarios
         ]);
     }
 
