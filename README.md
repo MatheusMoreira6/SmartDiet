@@ -103,6 +103,12 @@ npm run dev
 
 Acesse o sistema no seu navegador em `http://localhost:8000`.
 
+### Passo 5: Compilar para produção
+
+```
+NODE_OPTIONS="--max-old-space-size=2048" npm run build
+```
+
 ## Desenvolvedores
 
 - **Danilo Silva de Lima**
