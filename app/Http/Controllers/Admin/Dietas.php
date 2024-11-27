@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Alimento;
 use App\Models\Dieta as ModelDietas;
+use App\Models\Nutricionista;
 use App\Models\Refeicoes;
 use Exception;
 use Illuminate\Http\Request;
@@ -80,11 +81,14 @@ class Dietas extends Controller
             'grupos_dias.*.grupo_dia' => 'required|string',
         ]);
 
-        $nutricionista = Auth::user()->nutricionista;
-
         DB::beginTransaction();
 
         try {
+            if (isset($request['id_nutricionista'])) {
+                $nutricionista = Nutricionista::findOrFail($request['id_nutricionista']);
+            } else {
+                $nutricionista = Auth::user()->nutricionista;
+            }
 
             $dieta = ModelDietas::create([
                 'nome_dieta' => $request->nome,
@@ -97,6 +101,7 @@ class Dietas extends Controller
                 DB::rollBack();
                 response()->json(['erro' => 'erro ao cadastrar dieta']);
             }
+
             foreach ($request->grupos_dias as $index => $grupo) {
                 DB::table('table_grupo_dias_dieta')->insert([
                     'nome_grupo' => $grupo['grupo_dia'],
@@ -121,6 +126,7 @@ class Dietas extends Controller
             }
 
             DB::commit();
+
             $dietas = ModelDietas::where("nutricionista_id", $nutricionista->id)
                 ->where("paciente_id", $request->id_paciente)
                 ->orderBy('created_at')->get();
@@ -130,7 +136,6 @@ class Dietas extends Controller
 
                 $dieta['refeicoes'] = $refeicoes;
             }
-
 
             response()->json(["dietas" => $dietas]);
         } catch (Exception $e) {
@@ -149,10 +154,10 @@ class Dietas extends Controller
             'grupos_dias' => 'required|array|min:1',
             'grupos_dias.*.grupo_dia' => 'required|string',
         ]);
+
         DB::beginTransaction();
 
         try {
-
             foreach ($request->grupos_dias as $index => $grupo) {
                 $index  += 1;
                 $grupo = DB::table('table_grupo_dias_dieta')->insert([
@@ -168,6 +173,7 @@ class Dietas extends Controller
             }
 
             $grupos_dias = DB::table('table_grupo_dias_dieta')->where('ordem', '>', $request->ordem)->get();
+
             foreach ($grupos_dias as $grupo) {
                 foreach ($request->horarios as $horario) {
                    $horario = DB::table('table_horarios_dietas')->insert([
@@ -185,6 +191,7 @@ class Dietas extends Controller
             }
 
             DB::commit();
+
             $dietas = ModelDietas::where("nutricionista_id", $request->id_nutricionista)
                 ->where("paciente_id", $request->id_paciente)->orderBy('created_at')
                 ->get();
@@ -252,6 +259,7 @@ class Dietas extends Controller
             ->get();
 
         $horarios = DB::table('table_horarios_dietas')->select()->where('dieta_id', $id)->get();
+
         return response()->json(['dias' => $dias, 'horarios' => $horarios]);
     }
 
