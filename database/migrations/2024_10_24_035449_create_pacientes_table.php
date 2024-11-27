@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('genero_id');
             $table->string('cpf', 14)->unique();
             $table->string('telefone', 15);
+            $table->string('foto_perfil')->nullable();
             $table->unsignedBigInteger('questionario_id')->nullable();
             $table->timestamps();
 

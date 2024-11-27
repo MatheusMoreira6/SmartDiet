@@ -32,10 +32,28 @@ class Pacientes extends Controller
             ];
         }
 
+        $pacientes = $nutricionista->pacientes()->get(['id', 'nome', 'sobrenome', 'genero_id', 'foto_perfil'])->toArray();
+
+        $auxPacientes = array_map(function ($paciente) {
+            if (!empty($paciente['foto_perfil'])) {
+                $paciente['foto_perfil'] = asset('storage/' . $paciente['foto_perfil']);
+            } else {
+                if ($paciente['genero_id'] == 1) {
+                    $paciente['foto_perfil'] = asset('assets/imagens/default-perfil-homem.png');
+                } else if ($paciente['genero_id'] == 2) {
+                    $paciente['foto_perfil'] = asset('assets/imagens/default-perfil-mulher.png');
+                } else {
+                    $paciente['foto_perfil'] = asset('assets/imagens/default-perfil-outros.png');
+                }
+            }
+        
+            return $paciente;
+        }, $pacientes);
+
         return $this->render('Admin/Pacientes/Pacientes', [
             'generos' => Genero::all()->toArray(),
             'questionarios' => $auxQuestionario,
-            'pacientes' => $nutricionista->pacientes()->get(['id', 'nome', 'sobrenome'])->toArray(),
+            'pacientes' => $auxPacientes,
         ]);
     }
 
@@ -226,6 +244,12 @@ class Pacientes extends Controller
                     'administrador' => false,
                 ]);
 
+                if ($request->hasFile('foto_perfil')) {
+                    $imagePath = $request->file('foto_perfil')->store('pacientes', 'public');
+                } else {
+                    $imagePath = null;
+                }
+
                 Paciente::create([
                     'user_id' => $user->id,
                     'nutricionista_id' => Auth::user()->nutricionista->id,
@@ -235,6 +259,7 @@ class Pacientes extends Controller
                     'genero_id' => $request->genero_id,
                     'cpf' => $request->cpf,
                     'telefone' => $request->telefone,
+                    'foto_perfil' => $imagePath,
                     'questionario_id' => $request->questionario_id,
                 ]);
             });

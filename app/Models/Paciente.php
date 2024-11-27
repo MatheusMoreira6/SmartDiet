@@ -18,6 +18,7 @@ class Paciente extends Model
         'genero_id',
         'cpf',
         'telefone',
+        'foto_perfil',
         'questionario_id'
     ];
 

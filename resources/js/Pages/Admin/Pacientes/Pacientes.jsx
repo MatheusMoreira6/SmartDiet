@@ -19,6 +19,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
         genero_id: "",
         cpf: "",
         telefone: "",
+        foto_perfil: "",
         questionario_id: "",
         email: "",
     });
@@ -92,7 +93,11 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                         );
                     }}
                 >
-                    <img src="..." className="card-img-top" alt="..." />
+                    <img
+                        src={paciente.foto_perfil}
+                        className="card-img-top"
+                        alt="Foto de Perfil"
+                    />
                 </ActionCard>
             </Col>
         ));
@@ -155,6 +160,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                             id={"nome"}
                             label={"Nome"}
                             type={"text"}
+                            bold={true}
                             value={data.nome}
                             autoFocus={true}
                             placeHolder={"Nome do paciente"}
@@ -172,6 +178,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                             id={"sobrenome"}
                             label={"Sobrenome"}
                             type={"text"}
+                            bold={true}
                             value={data.sobrenome}
                             placeHolder={"Sobrenome do paciente"}
                             required={true}
@@ -192,6 +199,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                             label={"Data de Nascimento"}
                             type={"text"}
                             mask={"99/99/9999"}
+                            bold={true}
                             value={data.data_nascimento}
                             placeHolder={"__/__/____"}
                             required={true}
@@ -211,6 +219,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                             id={"sexo"}
                             label={"Sexo"}
                             options={generos}
+                            bold={true}
                             value={data.genero_id}
                             required={true}
                             isInvalid={errors.genero_id}
@@ -227,6 +236,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                             label={"CPF"}
                             type={"text"}
                             mask={"999.999.999-99"}
+                            bold={true}
                             value={data.cpf}
                             placeHolder={"999.999.999-99"}
                             required={true}
@@ -244,6 +254,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                             label={"Telefone"}
                             type={"text"}
                             mask={"(99) 99999-9999"}
+                            bold={true}
                             value={data.telefone}
                             placeHolder={"(99) 99999-9999"}
                             required={true}
@@ -259,9 +270,26 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                     </Col>
 
                     <Col xs={12}>
+                        <Form.Group controlId="formFile">
+                            <Form.Label className="fw-semibold">
+                                Foto de perfil
+                            </Form.Label>
+
+                            <Form.Control
+                                type="file"
+                                accept="image/jpeg, image/png, image/jpg"
+                                onChange={(e) =>
+                                    setData("foto_perfil", e.target.files[0])
+                                }
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col xs={12}>
                         <FormSelect
                             id={"questionario"}
                             label={"Questionário"}
+                            bold={true}
                             options={questionarios}
                             value={data.questionario_id}
                             required={false}
@@ -278,6 +306,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                             id={"email"}
                             label={"E-mail"}
                             type={"email"}
+                            bold={true}
                             value={data.email}
                             placeHolder={"E-mail do paciente"}
                             required={true}
