@@ -137,7 +137,7 @@ const Pacientes = ({ generos, questionarios, pacientes }) => {
                         <ActionCard onClick={handleShow}>
                             <i
                                 className="bi bi-person-fill-add m-auto"
-                                style={{ fontSize: "120px" }}
+                                style={{ fontSize: "180px", lineHeight: 0 }}
                             ></i>
                         </ActionCard>
                     </Col>
