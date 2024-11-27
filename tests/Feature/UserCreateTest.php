@@ -29,7 +29,7 @@ class UserCreateTest extends TestCase
             'telefone' => '(11) 99999-9999',
             'nutricionista_id' => Nutricionista::factory()->create()->id,
             'sobrenome' => 'Silva',
-            'data_nascimento' => '13/10/2005',
+            'data_nascimento' => '2005-10-13',
             'genero_id' => Genero::factory()->create()->id
         ];
 
@@ -69,7 +69,7 @@ class UserCreateTest extends TestCase
             'cpf' => '987.654.321-00',
             'telefone' => '(11) 98888-8888',
             'sobrenome' => 'Silva',
-            'data_nascimento' => '13/10/2005',
+            'data_nascimento' => '2005-10-13',
             'genero_id' => Genero::factory()->create()->id,
             'crn' => '12343P'
         ];
