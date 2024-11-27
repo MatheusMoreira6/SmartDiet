@@ -73,27 +73,29 @@ const Exames = ({ pendentes, exames_finalizados }) => {
                 </Col>
             </Row>
 
-            <Row className="g-3 mt-3">
-                {exames_finalizados.length > 0 &&
-                    exames_finalizados.map((exame) => (
-                        <Col key={exame.id} xs={12} lg={6}>
-                            <h6>{exame.nome}</h6>
+            {exames_finalizados.length > 0 && (
+                <Row className="g-3 mt-3">
+                    {exames_finalizados.length > 0 &&
+                        exames_finalizados.map((exame) => (
+                            <Col key={exame.id} xs={12} lg={6}>
+                                <h6>{exame.nome}</h6>
 
-                            <Line
-                                data={{
-                                    labels: exame.datas_resultados,
-                                    datasets: [
-                                        {
-                                            label: `Resultado (${exame.unidade_medida})`,
-                                            data: exame.resultados,
-                                            tension: 0.1,
-                                        },
-                                    ],
-                                }}
-                            />
-                        </Col>
-                    ))}
-            </Row>
+                                <Line
+                                    data={{
+                                        labels: exame.datas_resultados,
+                                        datasets: [
+                                            {
+                                                label: `Resultado (${exame.unidade_medida})`,
+                                                data: exame.resultados,
+                                                tension: 0.1,
+                                            },
+                                        ],
+                                    }}
+                                />
+                            </Col>
+                        ))}
+                </Row>
+            )}
         </>
     );
 };
