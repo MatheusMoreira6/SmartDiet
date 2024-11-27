@@ -67,12 +67,22 @@ cd SmartDiet
    DB_PASSWORD=sua_senha
    ```
 
-3. Execute as migrações do banco de dados:
+3. Gere a chave do Laravel:
+   ```bash
+   php artisan key:generate
+   ```
+
+4. Crie o link simbólico da storage:
+   ```bash
+   php artisan storage:link
+   ```
+
+5. Execute as migrações do banco de dados:
    ```bash
    php artisan migrate
    ```
 
-4. Execute as seeds do banco de dados:
+6. Execute as seeds do banco de dados:
    ```bash
    php artisan db:seed
    ```
