@@ -56,26 +56,20 @@ class Dashboard extends Controller
         /**
          * Questionários e Exames Pendentes/Concluídos
          */
-        $pacientes = $nutricionista->pacientes()->get(['id', 'questionario_id'])->toArray();
+        $questionarioPendente = $nutricionista->pacientes()->whereNotNull('questionario_id')->get()->toArray();
+        $questionarioConcluido = $nutricionista->pacientes()->whereHas('respostas')->get()->toArray();
+
         $exames = $nutricionista->pedidosExame()->get(['id', 'data_resultado'])->toArray();
 
         $pendentes = [
-            'questionarios' => 0,
+            'questionarios' => count($questionarioPendente),
             'exames' => 0
         ];
 
         $concluidos = [
-            'questionarios' => 0,
+            'questionarios' => count($questionarioConcluido),
             'exames' => 0
         ];
-
-        foreach ($pacientes as $paciente) {
-            if ($paciente['questionario_id'] !== null) {
-                $pendentes['questionarios'] += 1;
-            } else {
-                $concluidos['questionarios'] += 1;
-            }
-        }
 
         foreach ($exames as $exame) {
             if ($exame['data_resultado'] === null) {
