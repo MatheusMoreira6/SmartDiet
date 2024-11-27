@@ -23,12 +23,15 @@ abstract class Controller
 
         if ($user && !$user->administrador) {
             $lockRoute = !empty($user->paciente->questionario_id);
+            $whatsapp_help = $user->paciente->nutricionista->telefone;
         } else {
             $lockRoute = false;
+            $whatsapp_help = null;
         }
 
         return Inertia::render($component, array_merge($props, [
             'user' =>  $user,
+            'whatsapp_help' => $whatsapp_help,
             'currentRoute' => Route::currentRouteName(),
             'lockRoute' => $lockRoute,
         ]));

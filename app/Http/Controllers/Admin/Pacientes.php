@@ -86,6 +86,7 @@ class Pacientes extends Controller
             'genero' => $dadosPaciente['genero']['descricao'],
             'cpf' => $dadosPaciente['cpf'],
             'telefone' => $dadosPaciente['telefone'],
+            'whatsapp' => '+55' . preg_replace('/\D/', '', $dadosPaciente['telefone']),
             'password_temp' => $dadosPaciente['user']['password_temp'],
         ];
 

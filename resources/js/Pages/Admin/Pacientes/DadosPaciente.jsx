@@ -59,6 +59,17 @@ const DadosPaciente = ({
                             <Col md={6}>
                                 <h5>Telefone:</h5>
                                 <span>{dados.telefone}</span>
+                                <a
+                                    href={`https://api.whatsapp.com/send?phone=${dados.whatsapp}&text=Oi,%20tudo%20bem?`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ marginLeft: "10px" }}
+                                >
+                                    <i
+                                        className="bi bi-whatsapp"
+                                        style={{ color: "#25D366" }}
+                                    ></i>
+                                </a>
                             </Col>
 
                             {dados.password_temp && (

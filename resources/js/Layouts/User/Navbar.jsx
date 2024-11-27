@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap";
 
 const NavbarUser = () => {
-    const { user, currentRoute, lockRoute } = usePage().props;
+    const { user, currentRoute, lockRoute, whatsapp_help } = usePage().props;
 
     function classLink(route) {
         if (lockRoute) {
@@ -90,6 +90,22 @@ const NavbarUser = () => {
                                 >
                                     Configurações
                                 </Link>
+
+                                <a
+                                    className="dropdown-item"
+                                    href={`https://api.whatsapp.com/send?phone=${whatsapp_help}&text=Oi,%20gostaria%20de%20tirar%20uma%20dúvida.`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Ajuda
+                                    <i
+                                        className="bi bi-whatsapp"
+                                        style={{
+                                            color: "#25D366",
+                                            marginLeft: "7px",
+                                        }}
+                                    ></i>
+                                </a>
 
                                 <NavDropdown.Divider />
 
