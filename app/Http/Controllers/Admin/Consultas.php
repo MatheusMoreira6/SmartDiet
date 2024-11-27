@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Libraries\LibConversion;
-use App\Mail\ConsultaAlterada;
 use App\Mail\ConsultaCadastradaMail;
 use App\Mail\ConsultaDesmarcada;
 use App\Models\AgendaConsulta;

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FormDataUserRequest;
 use App\Libraries\LibConversion;
-use App\Models\AgendaConsulta;
 use App\Models\DiarioAlimentar;
 use App\Models\Dieta;
 use App\Models\Genero;

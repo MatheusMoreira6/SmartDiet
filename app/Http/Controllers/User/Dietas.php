@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Dieta;
 use App\Models\Paciente;
 use App\Models\Refeicoes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
