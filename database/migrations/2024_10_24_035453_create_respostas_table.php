@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pergunta_id');
             $table->unsignedBigInteger('paciente_id');
-            $table->string('resposta');
+            $table->text('resposta');
             $table->timestamps();
 
             $table->foreign('pergunta_id')->references('id')->on('perguntas')->onDelete('cascade');
