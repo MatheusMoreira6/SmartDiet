@@ -9,7 +9,6 @@ use App\Models\HorarioDieta;
 use App\Models\TipoPorcao;
 use Database\Seeders\AlimentosSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Test;
@@ -26,7 +25,6 @@ class RefeicoesControllerTest extends TestCase
         $this->seed(AlimentosSeeder::class);
     }
 
-
     #[Test]
     public function test_busca_refeicoes(): void
     {
@@ -37,7 +35,6 @@ class RefeicoesControllerTest extends TestCase
 
     public function test_create_refeicap()
     {
-
         $alimento1 = Alimento::create(['nome' => 'Alimento 1', 'tipo_alimento' => 'fruto']);
 
         $porcao = TipoPorcao::create([
@@ -48,7 +45,6 @@ class RefeicoesControllerTest extends TestCase
             'carboidratos' => 22.8,
             'gorduras' => 0.3,
         ]);
-
 
         $dieta = Dieta::factory()->create();
         $diaRefeicao = GrupoDieta::factory()->create(['dieta_id' => $dieta->id]);
@@ -62,14 +58,14 @@ class RefeicoesControllerTest extends TestCase
             'dieta_id' => $dieta->id,
         ]);
 
-
-
         $response->assertStatus(200);
+
         $this->assertDatabaseHas('refeicoes', [
             'dieta_id' => $dieta->id,
             'horario_id' => $horarioRefeicao->id,
             'dia_semana_id' => $diaRefeicao->id,
         ]);
+
         $this->assertDatabaseHas('alimento_refeicao', [
             'alimento_id' =>  $alimento1->id,
             'porcao_id' => $porcao->id
@@ -78,7 +74,6 @@ class RefeicoesControllerTest extends TestCase
 
     public function test_edit_refeicao()
     {
-
         $this->seed();
 
         $dieta = Dieta::factory()->create();
@@ -125,8 +120,8 @@ class RefeicoesControllerTest extends TestCase
             'id' => $refeicaoId,
         ]);
 
-
         $response->assertStatus(200);
+
         $this->assertDatabaseHas('alimento_refeicao', [
             'alimento_id' => $alimento1->id,
             'refeicao_id' => $refeicaoId,

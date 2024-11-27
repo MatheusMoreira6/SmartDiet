@@ -6,8 +6,6 @@ use App\Models\Dieta;
 use App\Models\GrupoDieta;
 use App\Models\Paciente;
 use App\Models\Nutricionista;
-use App\Models\Refeicoes;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +15,6 @@ use Tests\TestCase;
 class DietaControllerTest extends TestCase
 {
     use RefreshDatabase, WithoutMiddleware;
-
 
     #[Test]
     public function test_create_dieta(): void
