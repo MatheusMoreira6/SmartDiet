@@ -46,7 +46,7 @@ class Pacientes extends Controller
                     $paciente['foto_perfil'] = asset('assets/imagens/default-perfil-outros.png');
                 }
             }
-        
+
             return $paciente;
         }, $pacientes);
 
@@ -65,10 +65,26 @@ class Pacientes extends Controller
             DB::raw("CONCAT(nome, ' ', sobrenome)"),
             'ilike',
             '%' . $nome . '%'
-        )->where('nutricionista_id', $nutricionista->id)->get(['id', 'nome', 'sobrenome'])->toArray();
+        )->where('nutricionista_id', $nutricionista->id)->get(['id', 'nome', 'sobrenome', 'genero_id', 'foto_perfil'])->toArray();
+
+        $auxPacientes = array_map(function ($paciente) {
+            if (!empty($paciente['foto_perfil'])) {
+                $paciente['foto_perfil'] = asset('storage/' . $paciente['foto_perfil']);
+            } else {
+                if ($paciente['genero_id'] == 1) {
+                    $paciente['foto_perfil'] = asset('assets/imagens/default-perfil-homem.png');
+                } else if ($paciente['genero_id'] == 2) {
+                    $paciente['foto_perfil'] = asset('assets/imagens/default-perfil-mulher.png');
+                } else {
+                    $paciente['foto_perfil'] = asset('assets/imagens/default-perfil-outros.png');
+                }
+            }
+
+            return $paciente;
+        }, $pacientes);
 
         return $this->response('admin.pacientes', [
-            'pacientes' => $pacientes,
+            'pacientes' => $auxPacientes,
         ]);
     }
 
